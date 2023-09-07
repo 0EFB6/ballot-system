@@ -1,5 +1,5 @@
 {
-  "name": "Create Parliament Seat",
+  "name": "Create State Seat",
   "methods": [
     {
       "name": "create_par_box",

@@ -12,7 +12,7 @@ handle_creation = Seq(
 )
 
 router = Router(
-	"Create Parliament Seat",
+	"Create State Seat",
 	BareCallActions(
 		no_op=OnCompleteAction.create_only(handle_creation),
 	),
