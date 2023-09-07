@@ -24,11 +24,20 @@ def create_par_box(par_no: abi.String):
 
 @router.method
 def create_par_seat(par_n: abi.String, area: abi.String, state: abi.String):
-	return Seq(
-		App.box_replace(Concat(Bytes("P"), par_n.get()), N_I, Concat(Bytes("P"), par_n.get())),
-		App.box_replace(Concat(Bytes("P"), par_n.get()), AREA_I, area.get()),
-		App.box_replace(Concat(Bytes("P"), par_n.get()), STATE_I, state.get()),
+	Seq(
+		Assert(Len(par_n.get()) > Int(0)),
+		Assert(Len(par_n.get()) <= Int(3)),
+		Assert(Len(area.get()) > Int(0)),
+		Assert(Len(area.get()) <= Int(25)),
+		Assert(Len(state.get()) > Int(0)),
+		Assert(Len(state.get()) <= Int(15))
 	)
+	ret = Seq(
+			App.box_replace(Concat(Bytes("P"), par_n.get()), N_I, Concat(Bytes("P"), par_n.get())),
+			App.box_replace(Concat(Bytes("P"), par_n.get()), AREA_I, area.get()),
+			App.box_replace(Concat(Bytes("P"), par_n.get()), STATE_I, state.get()),
+		)
+	return ret
 
 @router.method
 def read_par_no(box_no: abi.String, *, output: abi.String):
