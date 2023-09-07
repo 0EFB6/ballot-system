@@ -1,7 +1,7 @@
 from pyteal import *
 
-N_I = Int(0)
-N_LEN = Int(4)
+NO_I = Int(0)
+NO_LEN = Int(4)
 AREA_I= Int(5)
 AREA_LEN = Int(25)
 STATE_I = Int(31)
@@ -33,7 +33,7 @@ def create_par_seat(par_n: abi.String, area: abi.String, state: abi.String):
 		Assert(Len(state.get()) <= Int(15))
 	)
 	ret = Seq(
-			App.box_replace(Concat(Bytes("P"), par_n.get()), N_I, Concat(Bytes("P"), par_n.get())),
+			App.box_replace(Concat(Bytes("P"), par_n.get()), NO_I, Concat(Bytes("P"), par_n.get())),
 			App.box_replace(Concat(Bytes("P"), par_n.get()), AREA_I, area.get()),
 			App.box_replace(Concat(Bytes("P"), par_n.get()), STATE_I, state.get()),
 		)
@@ -41,7 +41,7 @@ def create_par_seat(par_n: abi.String, area: abi.String, state: abi.String):
 
 @router.method
 def read_par_no(box_no: abi.String, *, output: abi.String):
-	return output.set(App.box_extract(Concat(Bytes("P"), box_no.get()), N_I, N_LEN))
+	return output.set(App.box_extract(Concat(Bytes("P"), box_no.get()), NO_I, NO_LEN))
 
 @router.method
 def read_par_area(box_no: abi.String, *, output: abi.String):
