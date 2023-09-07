@@ -2,83 +2,145 @@
 txn NumAppArgs
 int 0
 ==
-bnz main_l6
+bnz main_l16
 txna ApplicationArgs 0
-method "vote(uint64,account)string"
+method "create_box(string)string"
 ==
-bnz main_l5
+bnz main_l15
 txna ApplicationArgs 0
-method "read_vote()uint8"
+method "test_box(string,string)void"
 ==
-bnz main_l4
-err
-main_l4:
-txn OnCompletion
-int NoOp
+bnz main_l14
+txna ApplicationArgs 0
+method "read_dun()string"
 ==
-txn ApplicationID
-int 0
-!=
-&&
-assert
-callsub readvotecaster_3
-int 1
-return
-main_l5:
-txn OnCompletion
-int NoOp
+bnz main_l13
+txna ApplicationArgs 0
+method "read_dun_no()string"
 ==
-txn ApplicationID
-int 0
-!=
-&&
-assert
-callsub votecaster_2
-int 1
-return
-main_l6:
-txn OnCompletion
-int NoOp
+bnz main_l12
+txna ApplicationArgs 0
+method "increment()void"
+==
+bnz main_l11
+txna ApplicationArgs 0
+method "decrement()void"
 ==
 bnz main_l10
-txn OnCompletion
-int OptIn
+txna ApplicationArgs 0
+method "read_count()uint64"
 ==
 bnz main_l9
 err
 main_l9:
+txn OnCompletion
+int NoOp
+==
 txn ApplicationID
 int 0
 !=
+&&
 assert
+callsub readcountcaster_13
 int 1
 return
 main_l10:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub decrementcaster_12
+int 1
+return
+main_l11:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub incrementcaster_11
+int 1
+return
+main_l12:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub readdunnocaster_10
+int 1
+return
+main_l13:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub readduncaster_9
+int 1
+return
+main_l14:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub testboxcaster_8
+int 1
+return
+main_l15:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub createboxcaster_7
+int 1
+return
+main_l16:
+txn OnCompletion
+int NoOp
+==
+bnz main_l18
+err
+main_l18:
 txn ApplicationID
 int 0
 ==
 assert
+byte "count"
+int 0
+app_global_put
 int 1
 return
 
-// vote
-vote_0:
-proto 2 1
+// create_box
+createbox_0:
+proto 1 1
 byte ""
-frame_dig -2
-int 0
->
-assert
-frame_dig -2
-int 8
-<
-assert
+byte "P"
 frame_dig -1
-txnas Accounts
-txn Sender
-==
-bnz vote_0_l2
-byte "Invalid key/id"
+extract 2 0
+concat
 frame_bury 0
 frame_dig 0
 len
@@ -87,45 +149,112 @@ extract 6 0
 frame_dig 0
 concat
 frame_bury 0
-b vote_0_l3
-vote_0_l2:
-txn Sender
-byte "vote_id_dun"
-frame_dig -2
-app_local_put
-vote_0_l3:
 retsub
 
-// read_vote
-readvote_1:
-proto 0 1
+// test_box
+testbox_1:
+proto 2 0
+byte "dun"
 int 0
-txn Sender
-byte "vote_id_dun"
-app_local_get
+frame_dig -2
+extract 2 0
+box_replace
+byte "dun_no"
+int 0
+frame_dig -1
+extract 2 0
+box_replace
+retsub
+
+// read_dun
+readdun_2:
+proto 0 1
+byte ""
+byte "dun"
+int 0
+int 10
+box_extract
 frame_bury 0
 frame_dig 0
-int 256
-<
-assert
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
 retsub
 
-// vote_caster
-votecaster_2:
+// read_dun_no
+readdunno_3:
+proto 0 1
+byte ""
+byte "dun_no"
+int 0
+int 10
+box_extract
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// increment
+increment_4:
+proto 0 0
+byte "count"
+app_global_get
+store 0
+byte "count"
+load 0
+int 1
++
+app_global_put
+retsub
+
+// decrement
+decrement_5:
+proto 0 0
+global GroupSize
+int 1
+==
+assert
+byte "count"
+app_global_get
+store 1
+load 1
+int 0
+>
+bz decrement_5_l2
+byte "count"
+load 1
+int 1
+-
+app_global_put
+decrement_5_l2:
+retsub
+
+// read_count
+readcount_6:
+proto 0 1
+int 0
+byte "count"
+app_global_get
+frame_bury 0
+retsub
+
+// create_box_caster
+createboxcaster_7:
 proto 0 0
 byte ""
-int 0
 dup
 txna ApplicationArgs 1
-btoi
 frame_bury 1
-txna ApplicationArgs 2
-int 0
-getbyte
-frame_bury 2
 frame_dig 1
-frame_dig 2
-callsub vote_0
+callsub createbox_0
 frame_bury 0
 byte 0x151f7c75
 frame_dig 0
@@ -133,17 +262,65 @@ concat
 log
 retsub
 
-// read_vote_caster
-readvotecaster_3:
+// test_box_caster
+testboxcaster_8:
 proto 0 0
-int 0
-callsub readvote_1
+byte ""
+dup
+txna ApplicationArgs 1
+frame_bury 0
+txna ApplicationArgs 2
+frame_bury 1
+frame_dig 0
+frame_dig 1
+callsub testbox_1
+retsub
+
+// read_dun_caster
+readduncaster_9:
+proto 0 0
+byte ""
+callsub readdun_2
 frame_bury 0
 byte 0x151f7c75
-byte 0x00
-int 0
 frame_dig 0
-setbyte
+concat
+log
+retsub
+
+// read_dun_no_caster
+readdunnocaster_10:
+proto 0 0
+byte ""
+callsub readdunno_3
+frame_bury 0
+byte 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// increment_caster
+incrementcaster_11:
+proto 0 0
+callsub increment_4
+retsub
+
+// decrement_caster
+decrementcaster_12:
+proto 0 0
+callsub decrement_5
+retsub
+
+// read_count_caster
+readcountcaster_13:
+proto 0 0
+int 0
+callsub readcount_6
+frame_bury 0
+byte 0x151f7c75
+frame_dig 0
+itob
 concat
 log
 retsub

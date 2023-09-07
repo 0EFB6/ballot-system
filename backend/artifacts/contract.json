@@ -1,16 +1,12 @@
 {
-  "name": "voting_area_initialisation",
+  "name": "testingg",
   "methods": [
     {
-      "name": "vote",
+      "name": "create_box",
       "args": [
         {
-          "type": "uint64",
-          "name": "id"
-        },
-        {
-          "type": "account",
-          "name": "voting_key"
+          "type": "string",
+          "name": "n"
         }
       ],
       "returns": {
@@ -18,10 +14,54 @@
       }
     },
     {
-      "name": "read_vote",
+      "name": "test_box",
+      "args": [
+        {
+          "type": "string",
+          "name": "dun"
+        },
+        {
+          "type": "string",
+          "name": "dun_no"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "read_dun",
       "args": [],
       "returns": {
-        "type": "uint8"
+        "type": "string"
+      }
+    },
+    {
+      "name": "read_dun_no",
+      "args": [],
+      "returns": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "increment",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "decrement",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "read_count",
+      "args": [],
+      "returns": {
+        "type": "uint64"
       }
     }
   ],
