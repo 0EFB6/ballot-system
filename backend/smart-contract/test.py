@@ -1,9 +1,12 @@
 from pyteal import *
 
+k_i = Bytes("index")
+
 handle_creation = Seq(
-	App.globalPut(Bytes("count"), Int(0)),
+	App.globalPut(k_i, Int(0)),
 	Approve()
 )
+
 
 router = Router(
 	"testingg",
@@ -13,31 +16,31 @@ router = Router(
 )
 
 @router.method
-def create_box(n: abi.String, *, output: abi.String):
+def create_par_box(n: abi.String, *, output: abi.String):
 	return Seq(
-		# Pop(App.box_create(Bytes(f"P{n.get()}"), Int(15)))
-	)
-	return output.set(Concat(Bytes("P"), n.get()))
-	# BOX = "Subang Jaya P166 Selangor Wilson PH Brendon BN"
-	# BOX2 = "Selangor Melaka"
-	# BOX_SELANGOR = "Subang P104\nPetaling Jaya"
-	# BOX_SUBANG_P104 = "Can1 Party1\nCan2 Party2"
-	# BOX_MELAKA = "Melaka Tengah\nAlor Gajah"
-
-@router.method
-def test_box(dun: abi.String, dun_no: abi.String):
-	return Seq(
-		App.box_replace(Bytes("dun"), Int(0), dun.get()),
-		App.box_replace(Bytes("dun_no"), Int(0), dun_no.get())
+		Pop(App.box_create(Concat(Bytes("P"), n.get()), Int(15)))
 	)
 
-@router.method
-def read_dun(*, output: abi.String):
-	return output.set(App.box_extract(Bytes("dun"), Int(0), Int(10)))
+# BOX = "Subang Jaya P166 Selangor Wilson PH Brendon BN"
+# BOX2 = "Selangor Melaka"
+# BOX_SELANGOR = "Subang P104\nPetaling Jaya"
+# BOX_SUBANG_P104 = "Can1 Party1\nCan2 Party2"
+# BOX_MELAKA = "Melaka Tengah\nAlor Gajah"
 
 @router.method
-def read_dun_no(*, output: abi.String):
-	return output.set(App.box_extract(Bytes("dun_no"), Int(0), Int(10)))
+def test_par_box(n: abi.String, str: abi.String):
+	return Seq(
+		App.box_replace(Concat(Bytes("P"), n.get()), App.globalGet(k_i), str.get()),
+		App.globalPut(k_i, App.globalGet(k_i) + str.length()),
+	)
+
+@router.method
+def read_par_box(n: abi.String, src: abi.Uint64, dst: abi.Uint64,  *, output: abi.String):
+	return output.set(App.box_extract(Concat(Bytes("P"), n.get()), src.get(), dst.get()))
+
+@router.method
+def read_index(*, output: abi.Uint64):
+	return output.set(App.globalGet(k_i))
 
 @router.method
 def increment():

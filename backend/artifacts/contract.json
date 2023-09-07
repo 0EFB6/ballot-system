@@ -2,7 +2,7 @@
   "name": "testingg",
   "methods": [
     {
-      "name": "create_box",
+      "name": "create_par_box",
       "args": [
         {
           "type": "string",
@@ -14,15 +14,15 @@
       }
     },
     {
-      "name": "test_box",
+      "name": "test_par_box",
       "args": [
         {
           "type": "string",
-          "name": "dun"
+          "name": "n"
         },
         {
           "type": "string",
-          "name": "dun_no"
+          "name": "str"
         }
       ],
       "returns": {
@@ -30,17 +30,30 @@
       }
     },
     {
-      "name": "read_dun",
-      "args": [],
+      "name": "read_par_box",
+      "args": [
+        {
+          "type": "string",
+          "name": "n"
+        },
+        {
+          "type": "uint64",
+          "name": "src"
+        },
+        {
+          "type": "uint64",
+          "name": "dst"
+        }
+      ],
       "returns": {
         "type": "string"
       }
     },
     {
-      "name": "read_dun_no",
+      "name": "read_index",
       "args": [],
       "returns": {
-        "type": "string"
+        "type": "uint64"
       }
     },
     {
