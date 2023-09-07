@@ -1,0 +1,29 @@
+{
+  "name": "voting_area_initialisation",
+  "methods": [
+    {
+      "name": "vote",
+      "args": [
+        {
+          "type": "uint64",
+          "name": "id"
+        },
+        {
+          "type": "account",
+          "name": "voting_key"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "read_vote",
+      "args": [],
+      "returns": {
+        "type": "uint8"
+      }
+    }
+  ],
+  "networks": {}
+}

@@ -1,0 +1,149 @@
+#pragma version 8
+txn NumAppArgs
+int 0
+==
+bnz main_l6
+txna ApplicationArgs 0
+method "vote(uint64,account)string"
+==
+bnz main_l5
+txna ApplicationArgs 0
+method "read_vote()uint8"
+==
+bnz main_l4
+err
+main_l4:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub readvotecaster_3
+int 1
+return
+main_l5:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub votecaster_2
+int 1
+return
+main_l6:
+txn OnCompletion
+int NoOp
+==
+bnz main_l10
+txn OnCompletion
+int OptIn
+==
+bnz main_l9
+err
+main_l9:
+txn ApplicationID
+int 0
+!=
+assert
+int 1
+return
+main_l10:
+txn ApplicationID
+int 0
+==
+assert
+int 1
+return
+
+// vote
+vote_0:
+proto 2 1
+byte ""
+frame_dig -2
+int 0
+>
+assert
+frame_dig -2
+int 8
+<
+assert
+frame_dig -1
+txnas Accounts
+txn Sender
+==
+bnz vote_0_l2
+byte "Invalid key/id"
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+b vote_0_l3
+vote_0_l2:
+txn Sender
+byte "vote_id_dun"
+frame_dig -2
+app_local_put
+vote_0_l3:
+retsub
+
+// read_vote
+readvote_1:
+proto 0 1
+int 0
+txn Sender
+byte "vote_id_dun"
+app_local_get
+frame_bury 0
+frame_dig 0
+int 256
+<
+assert
+retsub
+
+// vote_caster
+votecaster_2:
+proto 0 0
+byte ""
+int 0
+dup
+txna ApplicationArgs 1
+btoi
+frame_bury 1
+txna ApplicationArgs 2
+int 0
+getbyte
+frame_bury 2
+frame_dig 1
+frame_dig 2
+callsub vote_0
+frame_bury 0
+byte 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// read_vote_caster
+readvotecaster_3:
+proto 0 0
+int 0
+callsub readvote_1
+frame_bury 0
+byte 0x151f7c75
+byte 0x00
+int 0
+frame_dig 0
+setbyte
+concat
+log
+retsub
