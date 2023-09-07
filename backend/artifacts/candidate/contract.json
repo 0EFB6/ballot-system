@@ -1,0 +1,90 @@
+{
+  "name": "Add Candidates",
+  "methods": [
+    {
+      "name": "create_par_box",
+      "args": [
+        {
+          "type": "string",
+          "name": "par_no"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "add_par_candidate",
+      "args": [
+        {
+          "type": "string",
+          "name": "par_n"
+        },
+        {
+          "type": "string",
+          "name": "name"
+        },
+        {
+          "type": "string",
+          "name": "party"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "read_par_candidate_name",
+      "args": [
+        {
+          "type": "string",
+          "name": "box_no"
+        },
+        {
+          "type": "uint8",
+          "name": "candidate_id"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "read_par_candidate_party",
+      "args": [
+        {
+          "type": "string",
+          "name": "box_no"
+        },
+        {
+          "type": "uint8",
+          "name": "candidate_id"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "read_debug",
+      "args": [
+        {
+          "type": "string",
+          "name": "n"
+        },
+        {
+          "type": "uint64",
+          "name": "src"
+        },
+        {
+          "type": "uint64",
+          "name": "dst"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      }
+    }
+  ],
+  "networks": {}
+}

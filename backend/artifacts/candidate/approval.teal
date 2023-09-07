@@ -1,0 +1,335 @@
+#pragma version 8
+txn NumAppArgs
+int 0
+==
+bnz main_l12
+txna ApplicationArgs 0
+method "create_par_box(string)void"
+==
+bnz main_l11
+txna ApplicationArgs 0
+method "add_par_candidate(string,string,string)void"
+==
+bnz main_l10
+txna ApplicationArgs 0
+method "read_par_candidate_name(string,uint8)string"
+==
+bnz main_l9
+txna ApplicationArgs 0
+method "read_par_candidate_party(string,uint8)string"
+==
+bnz main_l8
+txna ApplicationArgs 0
+method "read_debug(string,uint64,uint64)string"
+==
+bnz main_l7
+err
+main_l7:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub readdebugcaster_9
+int 1
+return
+main_l8:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub readparcandidatepartycaster_8
+int 1
+return
+main_l9:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub readparcandidatenamecaster_7
+int 1
+return
+main_l10:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub addparcandidatecaster_6
+int 1
+return
+main_l11:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub createparboxcaster_5
+int 1
+return
+main_l12:
+txn OnCompletion
+int NoOp
+==
+bnz main_l14
+err
+main_l14:
+txn ApplicationID
+int 0
+==
+assert
+byte "Total Candidates"
+int 0
+app_global_put
+int 1
+return
+
+// create_par_box
+createparbox_0:
+proto 1 0
+byte "P"
+frame_dig -1
+extract 2 0
+concat
+byte "_CANDIDATES"
+concat
+int 90
+int 9
+*
+box_create
+pop
+retsub
+
+// add_par_candidate
+addparcandidate_1:
+proto 3 0
+byte "P"
+frame_dig -3
+extract 2 0
+concat
+byte "_CANDIDATES"
+concat
+int 90
+byte "Total Candidates"
+app_global_get
+*
+frame_dig -2
+extract 2 0
+box_replace
+byte "P"
+frame_dig -3
+extract 2 0
+concat
+byte "_CANDIDATES"
+concat
+int 65
+int 90
+byte "Total Candidates"
+app_global_get
+*
++
+frame_dig -1
+extract 2 0
+box_replace
+byte "Total Candidates"
+byte "Total Candidates"
+app_global_get
+int 1
++
+app_global_put
+retsub
+
+// read_par_candidate_name
+readparcandidatename_2:
+proto 2 1
+byte ""
+byte "P"
+frame_dig -2
+extract 2 0
+concat
+byte "_CANDIDATES"
+concat
+int 0
+int 90
+frame_dig -1
+int 1
+-
+*
++
+int 65
+box_extract
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// read_par_candidate_party
+readparcandidateparty_3:
+proto 2 1
+byte ""
+byte "P"
+frame_dig -2
+extract 2 0
+concat
+byte "_CANDIDATES"
+concat
+int 65
+int 90
+frame_dig -1
+int 1
+-
+*
++
+int 25
+box_extract
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// read_debug
+readdebug_4:
+proto 3 1
+byte ""
+byte "P"
+frame_dig -3
+extract 2 0
+concat
+byte "_CANDIDATES"
+concat
+frame_dig -2
+frame_dig -1
+box_extract
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// create_par_box_caster
+createparboxcaster_5:
+proto 0 0
+byte ""
+txna ApplicationArgs 1
+frame_bury 0
+frame_dig 0
+callsub createparbox_0
+retsub
+
+// add_par_candidate_caster
+addparcandidatecaster_6:
+proto 0 0
+byte ""
+dupn 2
+txna ApplicationArgs 1
+frame_bury 0
+txna ApplicationArgs 2
+frame_bury 1
+txna ApplicationArgs 3
+frame_bury 2
+frame_dig 0
+frame_dig 1
+frame_dig 2
+callsub addparcandidate_1
+retsub
+
+// read_par_candidate_name_caster
+readparcandidatenamecaster_7:
+proto 0 0
+byte ""
+dup
+int 0
+txna ApplicationArgs 1
+frame_bury 1
+txna ApplicationArgs 2
+int 0
+getbyte
+frame_bury 2
+frame_dig 1
+frame_dig 2
+callsub readparcandidatename_2
+frame_bury 0
+byte 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// read_par_candidate_party_caster
+readparcandidatepartycaster_8:
+proto 0 0
+byte ""
+dup
+int 0
+txna ApplicationArgs 1
+frame_bury 1
+txna ApplicationArgs 2
+int 0
+getbyte
+frame_bury 2
+frame_dig 1
+frame_dig 2
+callsub readparcandidateparty_3
+frame_bury 0
+byte 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// read_debug_caster
+readdebugcaster_9:
+proto 0 0
+byte ""
+dup
+int 0
+dup
+txna ApplicationArgs 1
+frame_bury 1
+txna ApplicationArgs 2
+btoi
+frame_bury 2
+txna ApplicationArgs 3
+btoi
+frame_bury 3
+frame_dig 1
+frame_dig 2
+frame_dig 3
+callsub readdebug_4
+frame_bury 0
+byte 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
