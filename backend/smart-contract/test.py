@@ -17,6 +17,8 @@ k_i = Bytes("index")
 
 handle_creation = Seq(
 	App.globalPut(k_i, Int(0)),
+	App.globalPut(Bytes("can1_votes"), Int(0)),
+	App.globalPut(Bytes("can2_votes"), Int(0)),
 	Approve()
 )
 
@@ -26,6 +28,18 @@ router = Router(
 		no_op=OnCompleteAction.create_only(handle_creation),
 	),
 )
+
+@router.method
+def vote(candidate_id: abi.Uint64, *, output: abi.String):
+	return Seq(
+		Pop(If(candidate_id.get() == Int(1), App.globalGet(Bytes("can1_votes")) + Int(1), App.globalGet(Bytes("can2_votes")) + Int(1))),
+		output.set(Bytes("Successfully voted"))
+	)
+
+@router.method
+def read_vote(*, output: abi.Uint64):
+	return output.set(App.globalGet(Bytes("can1_votes")))
+
 
 @router.method
 def create_par_box(n: abi.String):
