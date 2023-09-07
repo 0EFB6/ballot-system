@@ -10,23 +10,63 @@
         }
       ],
       "returns": {
-        "type": "string"
+        "type": "void"
       }
     },
     {
-      "name": "test_par_box",
+      "name": "add_par_box",
       "args": [
         {
           "type": "string",
-          "name": "n"
+          "name": "par_n"
         },
         {
           "type": "string",
-          "name": "str"
+          "name": "area"
+        },
+        {
+          "type": "string",
+          "name": "state"
         }
       ],
       "returns": {
         "type": "void"
+      }
+    },
+    {
+      "name": "read_par_no",
+      "args": [
+        {
+          "type": "string",
+          "name": "box_no"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "read_par_area",
+      "args": [
+        {
+          "type": "string",
+          "name": "box_no"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "read_par_state",
+      "args": [
+        {
+          "type": "string",
+          "name": "box_no"
+        }
+      ],
+      "returns": {
+        "type": "string"
       }
     },
     {
