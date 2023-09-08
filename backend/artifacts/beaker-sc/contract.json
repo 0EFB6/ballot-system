@@ -2,17 +2,8 @@
     "name": "Beaker Calculator",
     "methods": [
         {
-            "name": "add",
-            "args": [
-                {
-                    "type": "uint64",
-                    "name": "a"
-                },
-                {
-                    "type": "uint64",
-                    "name": "b"
-                }
-            ],
+            "name": "read_state",
+            "args": [],
             "returns": {
                 "type": "uint64"
             }

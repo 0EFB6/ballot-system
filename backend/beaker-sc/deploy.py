@@ -1,4 +1,4 @@
-from contract import app, add
+from contract import app, read_state
 from beaker import sandbox, client
 
 app.build().export("../artifacts/beaker-sc")
@@ -24,5 +24,5 @@ App Address: {addr}
 """
 )
 
-ret = app_client.call(add, a=69, b=1).return_value
-print(f"add => {ret}")
+ret = app_client.call(read_state).return_value
+print(f"Ret => {ret}")

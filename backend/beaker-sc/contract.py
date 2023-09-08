@@ -1,8 +1,16 @@
 from beaker import *
 from pyteal import *
 
-app = Application("Beaker Calculator")
+class InitState:
+	app_state = GlobalStateValue(
+		stack_type=TealType.uint64,
+		default=Int(69)
+	)
+
+app = Application("Beaker Calculator", state=InitState()).apply(
+	unconditional_create_approval, initialize_global_state=True
+)
 
 @app.external
-def add(a: abi.Uint64, b: abi.Uint64, *, output: abi.Uint64) -> Expr:
-	return output.set(a.get() + b.get())
+def read_state(*, output: abi.Uint64) -> Expr:
+	return output.set(app.state.app_state)
