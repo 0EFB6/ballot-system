@@ -7,6 +7,8 @@ AREA_LEN = Int(25)
 STATE_I = Int(31)
 STATE_LEN = Int(15)
 
+is_creator = Txn.sender() == Global.creator_address()
+
 handle_creation = Seq(
 	Approve()
 )
