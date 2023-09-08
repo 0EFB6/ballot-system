@@ -1,16 +1,20 @@
 #pragma version 8
 intcblock 0 1
-bytecblock 0x6170705f7374617465
+bytecblock 0x6d795f64657363 0x
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l4
+bnz main_l6
 txna ApplicationArgs 0
-pushbytes 0xcad70f1f // "read_state()uint64"
+pushbytes 0xf74e3c49 // "set_app_global_state_value(string)void"
 ==
-bnz main_l3
+bnz main_l5
+txna ApplicationArgs 0
+pushbytes 0x1ed3dc2d // "read_app_global_state_value()string"
+==
+bnz main_l4
 err
-main_l3:
+main_l4:
 txn OnCompletion
 intc_0 // NoOp
 ==
@@ -19,16 +23,28 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readstatecaster_2
+callsub readappglobalstatevaluecaster_4
 intc_1 // 1
 return
-main_l4:
+main_l5:
 txn OnCompletion
 intc_0 // NoOp
 ==
-bnz main_l6
-err
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub setappglobalstatevaluecaster_3
+intc_1 // 1
+return
 main_l6:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l8
+err
+main_l8:
 txn ApplicationID
 intc_0 // 0
 ==
@@ -40,29 +56,70 @@ return
 // create
 create_0:
 proto 0 0
-bytec_0 // "app_state"
-pushint 69 // 69
+intc_0 // 0
+bytec_0 // "my_desc"
+app_global_get_ex
+store 1
+store 0
+load 1
+!
+assert
+bytec_0 // "my_desc"
+pushbytes 0x48656c6c6f2c20576f726c642120596f752066756e6e7921 // "Hello, World! You funny!"
 app_global_put
 retsub
 
-// read_state
-readstate_1:
-proto 0 1
+// set_app_global_state_value
+setappglobalstatevalue_1:
+proto 1 0
 intc_0 // 0
-bytec_0 // "app_state"
+bytec_0 // "my_desc"
+app_global_get_ex
+store 3
+store 2
+load 3
+!
+assert
+bytec_0 // "my_desc"
+frame_dig -1
+extract 2 0
+app_global_put
+retsub
+
+// read_app_global_state_value
+readappglobalstatevalue_2:
+proto 0 1
+bytec_1 // ""
+bytec_0 // "my_desc"
 app_global_get
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
 frame_bury 0
 retsub
 
-// read_state_caster
-readstatecaster_2:
+// set_app_global_state_value_caster
+setappglobalstatevaluecaster_3:
 proto 0 0
-intc_0 // 0
-callsub readstate_1
+bytec_1 // ""
+txna ApplicationArgs 1
+frame_bury 0
+frame_dig 0
+callsub setappglobalstatevalue_1
+retsub
+
+// read_app_global_state_value_caster
+readappglobalstatevaluecaster_4:
+proto 0 0
+bytec_1 // ""
+callsub readappglobalstatevalue_2
 frame_bury 0
 pushbytes 0x151f7c75 // 0x151f7c75
 frame_dig 0
-itob
 concat
 log
 retsub

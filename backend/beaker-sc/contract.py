@@ -26,6 +26,6 @@ def set_app_global_state_value(str: abi.String) -> Expr:
 def read_app_global_state_value(*, output: abi.String) -> Expr:
 	return output.set(app.state.my_desc)
 
-@app.external
-def read_state(*, output: abi.Uint64) -> Expr:
-	return output.set(app.state.app_state)
+#@app.external
+#def read_state(*, output: abi.Uint64) -> Expr:
+#	return output.set(app.state.app_state)

@@ -1,4 +1,4 @@
-from contract import app, read_state
+from contract import app, read_app_global_state_value, set_app_global_state_value
 from beaker import sandbox, client
 
 app.build().export("../artifacts/beaker-sc")
@@ -24,5 +24,10 @@ App Address: {addr}
 """
 )
 
-ret = app_client.call(read_state).return_value
+try:
+	app_client.call(set_app_global_state_value, str="Lel!")
+except:
+	print("Error! State is static")
+
+ret = app_client.call(read_app_global_state_value).return_value
 print(f"Ret => {ret}")

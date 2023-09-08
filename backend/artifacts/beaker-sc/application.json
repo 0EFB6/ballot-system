@@ -1,19 +1,24 @@
 {
     "hints": {
-        "read_state()uint64": {
+        "set_app_global_state_value(string)void": {
+            "call_config": {
+                "no_op": "CALL"
+            }
+        },
+        "read_app_global_state_value()string": {
             "call_config": {
                 "no_op": "CALL"
             }
         }
     },
     "source": {
-        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMQpieXRlY2Jsb2NrIDB4NjE3MDcwNWY3Mzc0NjE3NDY1CnR4biBOdW1BcHBBcmdzCmludGNfMCAvLyAwCj09CmJueiBtYWluX2w0CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4Y2FkNzBmMWYgLy8gInJlYWRfc3RhdGUoKXVpbnQ2NCIKPT0KYm56IG1haW5fbDMKZXJyCm1haW5fbDM6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKIT0KJiYKYXNzZXJ0CmNhbGxzdWIgcmVhZHN0YXRlY2FzdGVyXzIKaW50Y18xIC8vIDEKcmV0dXJuCm1haW5fbDQ6CnR4biBPbkNvbXBsZXRpb24KaW50Y18wIC8vIE5vT3AKPT0KYm56IG1haW5fbDYKZXJyCm1haW5fbDY6CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCj09CmFzc2VydApjYWxsc3ViIGNyZWF0ZV8wCmludGNfMSAvLyAxCnJldHVybgoKLy8gY3JlYXRlCmNyZWF0ZV8wOgpwcm90byAwIDAKYnl0ZWNfMCAvLyAiYXBwX3N0YXRlIgpwdXNoaW50IDY5IC8vIDY5CmFwcF9nbG9iYWxfcHV0CnJldHN1YgoKLy8gcmVhZF9zdGF0ZQpyZWFkc3RhdGVfMToKcHJvdG8gMCAxCmludGNfMCAvLyAwCmJ5dGVjXzAgLy8gImFwcF9zdGF0ZSIKYXBwX2dsb2JhbF9nZXQKZnJhbWVfYnVyeSAwCnJldHN1YgoKLy8gcmVhZF9zdGF0ZV9jYXN0ZXIKcmVhZHN0YXRlY2FzdGVyXzI6CnByb3RvIDAgMAppbnRjXzAgLy8gMApjYWxsc3ViIHJlYWRzdGF0ZV8xCmZyYW1lX2J1cnkgMApwdXNoYnl0ZXMgMHgxNTFmN2M3NSAvLyAweDE1MWY3Yzc1CmZyYW1lX2RpZyAwCml0b2IKY29uY2F0CmxvZwpyZXRzdWI=",
+        "approval": "I3ByYWdtYSB2ZXJzaW9uIDgKaW50Y2Jsb2NrIDAgMQpieXRlY2Jsb2NrIDB4NmQ3OTVmNjQ2NTczNjMgMHgKdHhuIE51bUFwcEFyZ3MKaW50Y18wIC8vIDAKPT0KYm56IG1haW5fbDYKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMApwdXNoYnl0ZXMgMHhmNzRlM2M0OSAvLyAic2V0X2FwcF9nbG9iYWxfc3RhdGVfdmFsdWUoc3RyaW5nKXZvaWQiCj09CmJueiBtYWluX2w1CnR4bmEgQXBwbGljYXRpb25BcmdzIDAKcHVzaGJ5dGVzIDB4MWVkM2RjMmQgLy8gInJlYWRfYXBwX2dsb2JhbF9zdGF0ZV92YWx1ZSgpc3RyaW5nIgo9PQpibnogbWFpbl9sNAplcnIKbWFpbl9sNDoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQp0eG4gQXBwbGljYXRpb25JRAppbnRjXzAgLy8gMAohPQomJgphc3NlcnQKY2FsbHN1YiByZWFkYXBwZ2xvYmFsc3RhdGV2YWx1ZWNhc3Rlcl80CmludGNfMSAvLyAxCnJldHVybgptYWluX2w1Ogp0eG4gT25Db21wbGV0aW9uCmludGNfMCAvLyBOb09wCj09CnR4biBBcHBsaWNhdGlvbklECmludGNfMCAvLyAwCiE9CiYmCmFzc2VydApjYWxsc3ViIHNldGFwcGdsb2JhbHN0YXRldmFsdWVjYXN0ZXJfMwppbnRjXzEgLy8gMQpyZXR1cm4KbWFpbl9sNjoKdHhuIE9uQ29tcGxldGlvbgppbnRjXzAgLy8gTm9PcAo9PQpibnogbWFpbl9sOAplcnIKbWFpbl9sODoKdHhuIEFwcGxpY2F0aW9uSUQKaW50Y18wIC8vIDAKPT0KYXNzZXJ0CmNhbGxzdWIgY3JlYXRlXzAKaW50Y18xIC8vIDEKcmV0dXJuCgovLyBjcmVhdGUKY3JlYXRlXzA6CnByb3RvIDAgMAppbnRjXzAgLy8gMApieXRlY18wIC8vICJteV9kZXNjIgphcHBfZ2xvYmFsX2dldF9leApzdG9yZSAxCnN0b3JlIDAKbG9hZCAxCiEKYXNzZXJ0CmJ5dGVjXzAgLy8gIm15X2Rlc2MiCnB1c2hieXRlcyAweDQ4NjU2YzZjNmYyYzIwNTc2ZjcyNmM2NDIxMjA1OTZmNzUyMDY2NzU2ZTZlNzkyMSAvLyAiSGVsbG8sIFdvcmxkISBZb3UgZnVubnkhIgphcHBfZ2xvYmFsX3B1dApyZXRzdWIKCi8vIHNldF9hcHBfZ2xvYmFsX3N0YXRlX3ZhbHVlCnNldGFwcGdsb2JhbHN0YXRldmFsdWVfMToKcHJvdG8gMSAwCmludGNfMCAvLyAwCmJ5dGVjXzAgLy8gIm15X2Rlc2MiCmFwcF9nbG9iYWxfZ2V0X2V4CnN0b3JlIDMKc3RvcmUgMgpsb2FkIDMKIQphc3NlcnQKYnl0ZWNfMCAvLyAibXlfZGVzYyIKZnJhbWVfZGlnIC0xCmV4dHJhY3QgMiAwCmFwcF9nbG9iYWxfcHV0CnJldHN1YgoKLy8gcmVhZF9hcHBfZ2xvYmFsX3N0YXRlX3ZhbHVlCnJlYWRhcHBnbG9iYWxzdGF0ZXZhbHVlXzI6CnByb3RvIDAgMQpieXRlY18xIC8vICIiCmJ5dGVjXzAgLy8gIm15X2Rlc2MiCmFwcF9nbG9iYWxfZ2V0CmZyYW1lX2J1cnkgMApmcmFtZV9kaWcgMApsZW4KaXRvYgpleHRyYWN0IDYgMApmcmFtZV9kaWcgMApjb25jYXQKZnJhbWVfYnVyeSAwCnJldHN1YgoKLy8gc2V0X2FwcF9nbG9iYWxfc3RhdGVfdmFsdWVfY2FzdGVyCnNldGFwcGdsb2JhbHN0YXRldmFsdWVjYXN0ZXJfMzoKcHJvdG8gMCAwCmJ5dGVjXzEgLy8gIiIKdHhuYSBBcHBsaWNhdGlvbkFyZ3MgMQpmcmFtZV9idXJ5IDAKZnJhbWVfZGlnIDAKY2FsbHN1YiBzZXRhcHBnbG9iYWxzdGF0ZXZhbHVlXzEKcmV0c3ViCgovLyByZWFkX2FwcF9nbG9iYWxfc3RhdGVfdmFsdWVfY2FzdGVyCnJlYWRhcHBnbG9iYWxzdGF0ZXZhbHVlY2FzdGVyXzQ6CnByb3RvIDAgMApieXRlY18xIC8vICIiCmNhbGxzdWIgcmVhZGFwcGdsb2JhbHN0YXRldmFsdWVfMgpmcmFtZV9idXJ5IDAKcHVzaGJ5dGVzIDB4MTUxZjdjNzUgLy8gMHgxNTFmN2M3NQpmcmFtZV9kaWcgMApjb25jYXQKbG9nCnJldHN1Yg==",
         "clear": "I3ByYWdtYSB2ZXJzaW9uIDgKcHVzaGludCAwIC8vIDAKcmV0dXJu"
     },
     "state": {
         "global": {
-            "num_byte_slices": 0,
-            "num_uints": 1
+            "num_byte_slices": 1,
+            "num_uints": 0
         },
         "local": {
             "num_byte_slices": 0,
@@ -23,9 +28,9 @@
     "schema": {
         "global": {
             "declared": {
-                "app_state": {
-                    "type": "uint64",
-                    "key": "app_state",
+                "my_desc": {
+                    "type": "bytes",
+                    "key": "my_desc",
                     "descr": ""
                 }
             },
@@ -40,10 +45,22 @@
         "name": "Beaker Calculator",
         "methods": [
             {
-                "name": "read_state",
+                "name": "set_app_global_state_value",
+                "args": [
+                    {
+                        "type": "string",
+                        "name": "str"
+                    }
+                ],
+                "returns": {
+                    "type": "void"
+                }
+            },
+            {
+                "name": "read_app_global_state_value",
                 "args": [],
                 "returns": {
-                    "type": "uint64"
+                    "type": "string"
                 }
             }
         ],

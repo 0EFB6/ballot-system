@@ -2,10 +2,22 @@
     "name": "Beaker Calculator",
     "methods": [
         {
-            "name": "read_state",
+            "name": "set_app_global_state_value",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "str"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "read_app_global_state_value",
             "args": [],
             "returns": {
-                "type": "uint64"
+                "type": "string"
             }
         }
     ],
