@@ -1,97 +1,283 @@
 #pragma version 8
-intcblock 0 1
-bytecblock 0x6d795f64657363 0x
+intcblock 127 0 1
+bytecblock 0x 0x00
 txn NumAppArgs
-intc_0 // 0
+intc_1 // 0
 ==
 bnz main_l6
 txna ApplicationArgs 0
-pushbytes 0xf74e3c49 // "set_app_global_state_value(string)void"
+pushbytes 0xe0875206 // "write_blob(uint64,string)void"
 ==
 bnz main_l5
 txna ApplicationArgs 0
-pushbytes 0x1ed3dc2d // "read_app_global_state_value()string"
+pushbytes 0xfeb1b975 // "read_blob()string"
 ==
 bnz main_l4
 err
 main_l4:
 txn OnCompletion
-intc_0 // NoOp
+intc_1 // NoOp
 ==
 txn ApplicationID
-intc_0 // 0
+intc_1 // 0
 !=
 &&
 assert
-callsub readappglobalstatevaluecaster_4
-intc_1 // 1
+callsub readblobcaster_7
+intc_2 // 1
 return
 main_l5:
 txn OnCompletion
-intc_0 // NoOp
+intc_1 // NoOp
 ==
 txn ApplicationID
-intc_0 // 0
+intc_1 // 0
 !=
 &&
 assert
-callsub setappglobalstatevaluecaster_3
-intc_1 // 1
+callsub writeblobcaster_6
+intc_2 // 1
 return
 main_l6:
 txn OnCompletion
-intc_0 // NoOp
+intc_1 // NoOp
 ==
 bnz main_l8
 err
 main_l8:
 txn ApplicationID
-intc_0 // 0
+intc_1 // 0
 ==
 assert
-callsub create_0
-intc_1 // 1
+callsub create_3
+intc_2 // 1
 return
 
-// create
-create_0:
+// zero_impl
+zeroimpl_0:
 proto 0 0
-intc_0 // 0
-bytec_0 // "my_desc"
-app_global_get_ex
-store 1
-store 0
-load 1
-!
-assert
-bytec_0 // "my_desc"
-pushbytes 0x48656c6c6f2c20576f726c642120596f752066756e6e7921 // "Hello, World! You funny!"
-app_global_put
+intc_0 // 127
+bzero
+intc_2 // 1
+
+    zero_loop:
+        int 1
+        -               // ["00"*page_size, key-1]
+        dup2            // ["00"*page_size, key, "00"*page_size, key]
+        itob            // ["00"*page_size, key, "00"*page_size, itob(key)]
+        extract 7 1     // ["00"*page_size, key, "00"*page_size, itob(key)[-1]]
+        swap            // ["00"*page_size, key, itob(key)[-1], "00"*page_size]
+        app_global_put  // ["00"*page_size, key]  (removes top 2 elements)
+        dup             // ["00"*page_size, key-1, key-1]
+        bnz zero_loop   // start loop over if key-1>0
+        pop
+        pop             // take extra junk off the stack
+        retsub
+    callsub zero_loop
+            
 retsub
 
-// set_app_global_state_value
-setappglobalstatevalue_1:
-proto 1 0
-intc_0 // 0
-bytec_0 // "my_desc"
-app_global_get_ex
+// read_impl
+readimpl_1:
+proto 2 1
+bytec_0 // ""
+store 6
+frame_dig -2
+intc_0 // 127
+/
+store 5
+readimpl_1_l1:
+load 5
+frame_dig -1
+intc_0 // 127
+/
+<=
+bz readimpl_1_l9
+load 5
+frame_dig -2
+intc_0 // 127
+/
+==
+bnz readimpl_1_l8
+intc_1 // 0
+readimpl_1_l4:
+store 7
+load 5
+frame_dig -1
+intc_0 // 127
+/
+==
+bnz readimpl_1_l7
+intc_0 // 127
+readimpl_1_l6:
+store 8
+load 6
+bytec_1 // 0x00
+load 5
+intc_2 // 1
+extract3
+app_global_get
+load 7
+load 8
+substring3
+concat
+store 6
+load 5
+intc_2 // 1
++
+store 5
+b readimpl_1_l1
+readimpl_1_l7:
+frame_dig -1
+intc_0 // 127
+%
+b readimpl_1_l6
+readimpl_1_l8:
+frame_dig -2
+intc_0 // 127
+%
+b readimpl_1_l4
+readimpl_1_l9:
+load 6
+retsub
+
+// write_impl
+writeimpl_2:
+proto 2 0
+intc_1 // 0
 store 3
+frame_dig -2
+intc_0 // 127
+/
+store 0
+writeimpl_2_l1:
+load 0
+frame_dig -2
+frame_dig -1
+len
++
+intc_0 // 127
+/
+<=
+bz writeimpl_2_l12
+load 0
+frame_dig -2
+intc_0 // 127
+/
+==
+bnz writeimpl_2_l11
+intc_1 // 0
+writeimpl_2_l4:
+store 1
+load 0
+frame_dig -2
+frame_dig -1
+len
++
+intc_0 // 127
+/
+==
+bnz writeimpl_2_l10
+intc_0 // 127
+writeimpl_2_l6:
 store 2
+bytec_1 // 0x00
+load 0
+intc_2 // 1
+extract3
+load 2
+intc_0 // 127
+!=
+load 1
+intc_1 // 0
+!=
+||
+bnz writeimpl_2_l9
+intc_0 // 127
+store 4
+frame_dig -1
 load 3
-!
-assert
-bytec_0 // "my_desc"
+intc_0 // 127
+extract3
+writeimpl_2_l8:
+app_global_put
+load 3
+load 4
++
+store 3
+load 0
+intc_2 // 1
++
+store 0
+b writeimpl_2_l1
+writeimpl_2_l9:
+load 2
+load 1
+-
+store 4
+bytec_1 // 0x00
+load 0
+intc_2 // 1
+extract3
+app_global_get
+intc_1 // 0
+load 1
+substring3
+frame_dig -1
+load 3
+load 4
+extract3
+concat
+bytec_1 // 0x00
+load 0
+intc_2 // 1
+extract3
+app_global_get
+load 2
+intc_0 // 127
+substring3
+concat
+b writeimpl_2_l8
+writeimpl_2_l10:
+frame_dig -2
+frame_dig -1
+len
++
+intc_0 // 127
+%
+b writeimpl_2_l6
+writeimpl_2_l11:
+frame_dig -2
+intc_0 // 127
+%
+b writeimpl_2_l4
+writeimpl_2_l12:
+retsub
+
+// create
+create_3:
+proto 0 0
+callsub zeroimpl_0
+retsub
+
+// write_blob
+writeblob_4:
+proto 2 0
+frame_dig -2
 frame_dig -1
 extract 2 0
-app_global_put
+callsub writeimpl_2
 retsub
 
-// read_app_global_state_value
-readappglobalstatevalue_2:
+// read_blob
+readblob_5:
 proto 0 1
-bytec_1 // ""
-bytec_0 // "my_desc"
-app_global_get
+bytec_0 // ""
+intc_1 // 0
+intc_0 // 127
+intc_2 // 1
+-
+callsub readimpl_1
 frame_bury 0
 frame_dig 0
 len
@@ -102,21 +288,26 @@ concat
 frame_bury 0
 retsub
 
-// set_app_global_state_value_caster
-setappglobalstatevaluecaster_3:
+// write_blob_caster
+writeblobcaster_6:
 proto 0 0
-bytec_1 // ""
+intc_1 // 0
+bytec_0 // ""
 txna ApplicationArgs 1
+btoi
 frame_bury 0
+txna ApplicationArgs 2
+frame_bury 1
 frame_dig 0
-callsub setappglobalstatevalue_1
+frame_dig 1
+callsub writeblob_4
 retsub
 
-// read_app_global_state_value_caster
-readappglobalstatevaluecaster_4:
+// read_blob_caster
+readblobcaster_7:
 proto 0 0
-bytec_1 // ""
-callsub readappglobalstatevalue_2
+bytec_0 // ""
+callsub readblob_5
 frame_bury 0
 pushbytes 0x151f7c75 // 0x151f7c75
 frame_dig 0

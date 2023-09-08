@@ -2,8 +2,12 @@
     "name": "Beaker Calculator",
     "methods": [
         {
-            "name": "set_app_global_state_value",
+            "name": "write_blob",
             "args": [
+                {
+                    "type": "uint64",
+                    "name": "start"
+                },
                 {
                     "type": "string",
                     "name": "str"
@@ -14,7 +18,7 @@
             }
         },
         {
-            "name": "read_app_global_state_value",
+            "name": "read_blob",
             "args": [],
             "returns": {
                 "type": "string"
