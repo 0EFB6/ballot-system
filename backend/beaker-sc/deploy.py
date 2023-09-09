@@ -64,11 +64,6 @@ app_client1.call(addParliamentSeat, area="Puchong", no=101, state="Selangor", ca
 ret = app_client1.call(readParliamentItemState, area="Puchong", boxes=[(app_client.app_id, "Puchong")]).return_value
 print(f"Ret => {ret}")
 
-ret = app_client1.call(updateParliamentItem, area="Puchong", state="Melaka", boxes=[(app_client.app_id, "Puchong")]).return_value
-print(f"Ret => {ret}")
-
-ret = app_client1.call(readParliamentItemState, area="Puchong", boxes=[(app_client.app_id, "Puchong")]).return_value
-print(f"Ret => {ret}")
 '''app_client.opt_in()
 print("Opted in to app!")'''
 

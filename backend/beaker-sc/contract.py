@@ -62,12 +62,13 @@ def readParliamentItemState(area: abi.String, *, output: Parliament) -> Expr:
     #ret = output.set(app.state.par_seat[area.get()].get())
     #return ret
 
-@app.external
+# Borken Function
+'''@app.external
 def updateParliamentItem(area: abi.String, state: abi.String) -> Expr:
 	mr = Parliament()	
 	mr.decode(app.state.par_seat[area.get()].get())
 
-	(n_area := abi.String()).set(mr.area)
+	(n_area := abi.String()).get(mr.area)
 	(n_no := abi.Uint8()).set(mr.no)
 	(n_states := abi.String()).set(state.get())
 	(n_candidate_no := abi.Uint8()).set(mr.candidate_no)
@@ -78,8 +79,8 @@ def updateParliamentItem(area: abi.String, state: abi.String) -> Expr:
 		mr.set(n_area, n_no, n_states, n_candidate_no, n_candidate_name, n_candidate_party, n_votes),
 		app.state.par_seat[area.get()].set(mr)
 	)
-	return ret
-	
+	return ret'''
+
 
 '''@app.external
 def updateParliamentSeatVotes(area: abi.String, new_votes: abi.Uint64) -> Expr:
