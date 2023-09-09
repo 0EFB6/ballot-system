@@ -86,22 +86,6 @@
             "returns": {
                 "type": "(string,uint8,string,uint8,string,string,uint64)"
             }
-        },
-        {
-            "name": "updateParliamentItem",
-            "args": [
-                {
-                    "type": "string",
-                    "name": "area"
-                },
-                {
-                    "type": "string",
-                    "name": "state"
-                }
-            ],
-            "returns": {
-                "type": "void"
-            }
         }
     ],
     "networks": {}
