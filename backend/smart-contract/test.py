@@ -1,4 +1,6 @@
+from candidate import NAME_I, LEN_LIMIT, NAME_LEN, PARTY_I, PARTY_LEN
 from pyteal import *
+from utils import convert_uint_to_bytes, convert_bytes_to_uint
 
 N_I = Int(0)
 N_LEN = Int(4)
@@ -29,16 +31,40 @@ router = Router(
 	),
 )
 
-@router.method
-def vote(candidate_id: abi.Uint64, *, output: abi.String):
-	return Seq(
-		Pop(If(candidate_id.get() == Int(1), App.globalGet(Bytes("can1_votes")) + Int(1), App.globalGet(Bytes("can2_votes")) + Int(1))),
-		output.set(Bytes("Successfully voted"))
-	)
+NAME_LIMIT = Int(30)
 
 @router.method
-def read_vote(*, output: abi.Uint64):
-	return output.set(App.globalGet(Bytes("can1_votes")))
+def test(str: abi.String, *, output:abi.Uint16):
+	return output.set(convert_bytes_to_uint(str.get()))
+
+@router.method
+def create_votes_box(candidate_name: abi.String):
+	return Seq(
+		Assert(candidate_name.length() <= NAME_LIMIT),
+		Pop(App.box_create(candidate_name.get(), NAME_LIMIT)),
+    ) 
+
+@router.method
+def add_candidate_votes(candidate_name: abi.Byte):
+	return Seq(
+		Assert(candidate_name.length() <= NAME_LIMIT),
+        App.box_replace(candidate_name.get(), Int(0),  Bytes("0")),
+    )
+
+
+# @router.method
+# def vote(box_no: abi.String, candidate_id: abi.Uint8, *, output: abi.String):
+# 	return Seq(
+# 		If(candidate_id.get() == Int(1), App.globalPut(Bytes("can1_votes"), App.globalGet(Bytes("can1_votes")) + Int(1)), App.globalPut(Bytes("can2_votes"), App.globalGet(Bytes("can2_votes")) + Int(1))),
+# 		output.set(Bytes("Successfully voted"))
+# 	)
+
+@router.method
+def read_vote(*, output: abi.String):
+	can1_votes = convert_uint_to_bytes(App.globalGet(Bytes("can1_votes")))
+	can2_votes = convert_uint_to_bytes(App.globalGet(Bytes("can2_votes")))
+	
+	return output.set(Concat(Bytes("Can1 votes: "), can1_votes, Bytes(", Can2 votes: "), can2_votes))
 
 
 @router.method
