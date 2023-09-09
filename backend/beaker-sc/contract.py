@@ -2,65 +2,50 @@ from beaker import *
 from pyteal import *
 from beaker.lib.storage import BoxList, BoxMapping
 
-class Parliament(abi.NamedTuple):
-	area: abi.Field[abi.String]
-	no: abi.Field[abi.Uint8]
-	state: abi.Field[abi.String]
-	candidate_no: abi.Field[abi.Uint8]
-	candidate_name: abi.Field[abi.String]
-	candidate_party: abi.Field[abi.String]
-	votes: abi.Field[abi.Uint64]
-
 #[key1: value1, key2: value2, key3: value3, key4: value4, key5: value5]
-
 #key: P103 OR Subang
 #value: Area, No, State,        Candidate No, Candidate Name, Candidate Party, Votes
 #    (Subang) (103) (Selangor), (2),          (Wilson),        (Pakatan)
 
+class VoteChecker(abi.NamedTuple):
+	addr: abi.Field[abi.Address]
+
 class ParliamentItem:
-	votes = GlobalStateValue(
-		stack_type=TealType.uint64, default=Int(0), descr="Number of votes"
-	)
-	addr_list = BoxList(abi.Address, 10)
-	par_seat = BoxMapping(abi.String, Parliament)
+	vote_list = BoxMapping(abi.Address, VoteChecker)
 
-app = Application("Parliament Item", state=ParliamentItem())
+app = Application("Voting Beaker", state=ParliamentItem())
 
 @app.external
-def bootstrap() -> Expr:
+def addVote(addr: abi.Address) -> Expr:
+	vote_tuple = VoteChecker()
+	return Seq(vote_tuple.set(addr), app.state.vote_list[addr.get()].set(vote_tuple))
+
+@app.external
+def checkVote(addr: abi.Address, *, output: abi.String) -> Expr:
 	return Seq(
-		Pop(app.state.addr_list.create()),
-		app.initialize_global_state()
+		If(app.state.vote_list[addr.get()].exists(),
+	 output.set(Bytes("The owner of the address has voted!")),
+	 output.set(Bytes("The owner of the address has not voted!"))
+	 	)
 	)
 
 @app.external
-def vote(addr: abi.Address) -> Expr:
-	return Seq(app.state.addr_list[app.state.votes].set(addr), app.state.votes.increment())
+def createbox_votecount(seat: abi.String) -> Expr:
+	return Pop(BoxCreate(seat.get(), Int(6)))
 
 @app.external
-def readVote(vote: abi.Uint64, *, output: abi.Address) -> Expr:
-	return app.state.addr_list[vote.get()].store_into(output)
+def putbox_votecount(seat: abi.String, value: abi.String) -> Expr:
+	return BoxPut(seat.get(), value.get())
 
 @app.external
-def readGlobal(*, output: abi.Uint64) -> Expr:
-	return output.set(app.state.votes.get())
+def readbox_votecount(seat: abi.String, *, output: abi.String) -> Expr:
+	return output.set(BoxExtract(seat.get(), Int(0), Int(6)))
 
 
-@app.external
-def addParliamentSeat(area: abi.String, no: abi.Uint8, state: abi.String, candidate_no: abi.Uint8,
-					  candidate_name: abi.String, candidate_party: abi.String, votes: abi.Uint64) -> Expr:
-	box_tuple = Parliament()
-	ret = Seq(
-		box_tuple.set(area, no, state, candidate_no, candidate_name, candidate_party, votes),
-		app.state.par_seat[area.get()].set(box_tuple)
-	)
-	return ret
 
-@app.external
-def readParliamentItemState(area: abi.String, *, output: Parliament) -> Expr:
-	return app.state.par_seat[area.get()].store_into(output)
-    #ret = output.set(app.state.par_seat[area.get()].get())
-    #return ret
+
+
+
 
 # Borken Function
 '''@app.external

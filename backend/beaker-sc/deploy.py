@@ -31,38 +31,19 @@ App Address: {addr}
 
 app_client.fund(5 * algo)
 print("Funded 5 ALGO to app!")
-
-app_client.call(
-	bootstrap,
-	boxes=[(app_client.app_id, "addr_list")]
-)
-
+'''
 app_client1 = app_client.prepare(signer=accounts[0].signer)
 app_client2 = app_client.prepare(signer=accounts[1].signer)
 app_client3 = app_client.prepare(signer=accounts[2].signer)
 
-app_client1.call(vote, addr=accounts[0].address, boxes=[(app_client.app_id, "addr_list")])
-app_client2.call(vote, addr=accounts[1].address, boxes=[(app_client.app_id, "addr_list")])
-app_client3.call(vote, addr=accounts[2].address, boxes=[(app_client.app_id, "addr_list")])
+app_client1.call(addVote, boxes=[(app_client.app_id, "vote_list")])
+app_client2.call(addVote, boxes=[(app_client.app_id, "vote_list")])
+app_client3.call(addVote, boxes=[(app_client.app_id, "vote_list")])
 
-global_state = app_client.get_global_state()
-i = int(global_state["votes"])
-
-for x in range(i):
-	value = app_client.call(
-		readVote,
-		vote=x,
-		boxes=[(app_client.app_id, "addr_list")]
-	)
-	print("  - ", value.return_value)
 
 ret = app_client.call(readGlobal)
-print(f"Global => {ret.return_value}")
+print(f"Global => {ret.return_value}")'''
 
-app_client1.call(addParliamentSeat, area="Puchong", no=101, state="Selangor", candidate_no=2,
-				 candidate_name="Wilson", candidate_party="Harapan", votes=0, boxes=[(app_client.app_id, "Puchong")])
-ret = app_client1.call(readParliamentItemState, area="Puchong", boxes=[(app_client.app_id, "Puchong")]).return_value
-print(f"Ret => {ret}")
 
 '''app_client.opt_in()
 print("Opted in to app!")'''

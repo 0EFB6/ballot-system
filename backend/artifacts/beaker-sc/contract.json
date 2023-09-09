@@ -1,15 +1,8 @@
 {
-    "name": "Parliament Item",
+    "name": "Voting Beaker",
     "methods": [
         {
-            "name": "bootstrap",
-            "args": [],
-            "returns": {
-                "type": "void"
-            }
-        },
-        {
-            "name": "vote",
+            "name": "addVote",
             "args": [
                 {
                     "type": "address",
@@ -21,54 +14,23 @@
             }
         },
         {
-            "name": "readVote",
+            "name": "checkVote",
             "args": [
                 {
-                    "type": "uint64",
-                    "name": "vote"
+                    "type": "address",
+                    "name": "addr"
                 }
             ],
             "returns": {
-                "type": "address"
+                "type": "string"
             }
         },
         {
-            "name": "readGlobal",
-            "args": [],
-            "returns": {
-                "type": "uint64"
-            }
-        },
-        {
-            "name": "addParliamentSeat",
+            "name": "createbox_votecount",
             "args": [
                 {
                     "type": "string",
-                    "name": "area"
-                },
-                {
-                    "type": "uint8",
-                    "name": "no"
-                },
-                {
-                    "type": "string",
-                    "name": "state"
-                },
-                {
-                    "type": "uint8",
-                    "name": "candidate_no"
-                },
-                {
-                    "type": "string",
-                    "name": "candidate_name"
-                },
-                {
-                    "type": "string",
-                    "name": "candidate_party"
-                },
-                {
-                    "type": "uint64",
-                    "name": "votes"
+                    "name": "seat"
                 }
             ],
             "returns": {
@@ -76,15 +38,31 @@
             }
         },
         {
-            "name": "readParliamentItemState",
+            "name": "putbox_votecount",
             "args": [
                 {
                     "type": "string",
-                    "name": "area"
+                    "name": "seat"
+                },
+                {
+                    "type": "string",
+                    "name": "value"
                 }
             ],
             "returns": {
-                "type": "(string,uint8,string,uint8,string,string,uint64)"
+                "type": "void"
+            }
+        },
+        {
+            "name": "readbox_votecount",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
             }
         }
     ],
