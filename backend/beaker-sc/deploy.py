@@ -1,12 +1,9 @@
-from contract import (
-	app,
-	write_blob,
-	read_blob
-)
+from contract import *
 from beaker import sandbox, client
 
 app.build().export("../artifacts/beaker-sc")
-
+print("\nApp successfully exported to artifacts directory!")
+'''
 accounts = sandbox.kmd.get_accounts()
 sender = accounts[0]
 
@@ -27,8 +24,11 @@ App Id: {app_id}
 App Address: {addr}
 """
 )
+'''
 
-app_client.call(write_blob, start=0, str="Lel!")
+'''
+app_client.call(increase_local_state, v=1)
 
-ret = app_client.call(read_blob).return_value
+ret = app_client.call(get_local_state).return_value
 print(f"Ret => {ret}")
+'''

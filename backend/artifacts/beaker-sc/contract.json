@@ -5,12 +5,8 @@
             "name": "write_blob",
             "args": [
                 {
-                    "type": "uint64",
-                    "name": "start"
-                },
-                {
                     "type": "string",
-                    "name": "str"
+                    "name": "v"
                 }
             ],
             "returns": {
@@ -18,7 +14,7 @@
             }
         },
         {
-            "name": "read_blob",
+            "name": "read_local_blob",
             "args": [],
             "returns": {
                 "type": "string"

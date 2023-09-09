@@ -1,16 +1,16 @@
 #pragma version 8
 intcblock 127 0 1
-bytecblock 0x 0x00
+bytecblock 0x 0x0001
 txn NumAppArgs
 intc_1 // 0
 ==
 bnz main_l6
 txna ApplicationArgs 0
-pushbytes 0xe0875206 // "write_blob(uint64,string)void"
+pushbytes 0x653cf06c // "write_blob(string)void"
 ==
 bnz main_l5
 txna ApplicationArgs 0
-pushbytes 0xfeb1b975 // "read_blob()string"
+pushbytes 0x4fec0763 // "read_local_blob()string"
 ==
 bnz main_l4
 err
@@ -23,7 +23,7 @@ intc_1 // 0
 !=
 &&
 assert
-callsub readblobcaster_7
+callsub readlocalblobcaster_7
 intc_2 // 1
 return
 main_l5:
@@ -42,44 +42,46 @@ main_l6:
 txn OnCompletion
 intc_1 // NoOp
 ==
-bnz main_l8
+bnz main_l10
+txn OnCompletion
+intc_2 // OptIn
+==
+bnz main_l9
 err
-main_l8:
+main_l9:
+txn ApplicationID
+intc_1 // 0
+!=
+assert
+callsub optin_3
+intc_2 // 1
+return
+main_l10:
 txn ApplicationID
 intc_1 // 0
 ==
 assert
-callsub create_3
 intc_2 // 1
 return
 
 // zero_impl
 zeroimpl_0:
-proto 0 0
+proto 1 0
+frame_dig -1
+pushbytes 0x00 // 0x00
 intc_0 // 127
 bzero
-intc_2 // 1
-
-    zero_loop:
-        int 1
-        -               // ["00"*page_size, key-1]
-        dup2            // ["00"*page_size, key, "00"*page_size, key]
-        itob            // ["00"*page_size, key, "00"*page_size, itob(key)]
-        extract 7 1     // ["00"*page_size, key, "00"*page_size, itob(key)[-1]]
-        swap            // ["00"*page_size, key, itob(key)[-1], "00"*page_size]
-        app_global_put  // ["00"*page_size, key]  (removes top 2 elements)
-        dup             // ["00"*page_size, key-1, key-1]
-        bnz zero_loop   // start loop over if key-1>0
-        pop
-        pop             // take extra junk off the stack
-        retsub
-    callsub zero_loop
-            
+app_local_put
+frame_dig -1
+pushbytes 0x01 // 0x01
+intc_0 // 127
+bzero
+app_local_put
 retsub
 
 // read_impl
 readimpl_1:
-proto 2 1
+proto 3 1
 bytec_0 // ""
 store 6
 frame_dig -2
@@ -112,11 +114,12 @@ intc_0 // 127
 readimpl_1_l6:
 store 8
 load 6
-bytec_1 // 0x00
+frame_dig -3
+bytec_1 // 0x0001
 load 5
 intc_2 // 1
 extract3
-app_global_get
+app_local_get
 load 7
 load 8
 substring3
@@ -143,7 +146,7 @@ retsub
 
 // write_impl
 writeimpl_2:
-proto 2 0
+proto 3 0
 intc_1 // 0
 store 3
 frame_dig -2
@@ -181,7 +184,8 @@ bnz writeimpl_2_l10
 intc_0 // 127
 writeimpl_2_l6:
 store 2
-bytec_1 // 0x00
+frame_dig -3
+bytec_1 // 0x0001
 load 0
 intc_2 // 1
 extract3
@@ -200,7 +204,7 @@ load 3
 intc_0 // 127
 extract3
 writeimpl_2_l8:
-app_global_put
+app_local_put
 load 3
 load 4
 +
@@ -215,11 +219,12 @@ load 2
 load 1
 -
 store 4
-bytec_1 // 0x00
+frame_dig -3
+bytec_1 // 0x0001
 load 0
 intc_2 // 1
 extract3
-app_global_get
+app_local_get
 intc_1 // 0
 load 1
 substring3
@@ -228,11 +233,12 @@ load 3
 load 4
 extract3
 concat
-bytec_1 // 0x00
+frame_dig -3
+bytec_1 // 0x0001
 load 0
 intc_2 // 1
 extract3
-app_global_get
+app_local_get
 load 2
 intc_0 // 127
 substring3
@@ -254,27 +260,30 @@ b writeimpl_2_l4
 writeimpl_2_l12:
 retsub
 
-// create
-create_3:
+// opt_in
+optin_3:
 proto 0 0
+txn Sender
 callsub zeroimpl_0
 retsub
 
 // write_blob
 writeblob_4:
-proto 2 0
-frame_dig -2
+proto 1 0
+txn Sender
+intc_1 // 0
 frame_dig -1
 extract 2 0
 callsub writeimpl_2
 retsub
 
-// read_blob
-readblob_5:
+// read_local_blob
+readlocalblob_5:
 proto 0 1
 bytec_0 // ""
+txn Sender
 intc_1 // 0
-intc_0 // 127
+pushint 254 // 254
 intc_2 // 1
 -
 callsub readimpl_1
@@ -291,23 +300,18 @@ retsub
 // write_blob_caster
 writeblobcaster_6:
 proto 0 0
-intc_1 // 0
 bytec_0 // ""
 txna ApplicationArgs 1
-btoi
 frame_bury 0
-txna ApplicationArgs 2
-frame_bury 1
 frame_dig 0
-frame_dig 1
 callsub writeblob_4
 retsub
 
-// read_blob_caster
-readblobcaster_7:
+// read_local_blob_caster
+readlocalblobcaster_7:
 proto 0 0
 bytec_0 // ""
-callsub readblob_5
+callsub readlocalblob_5
 frame_bury 0
 pushbytes 0x151f7c75 // 0x151f7c75
 frame_dig 0
