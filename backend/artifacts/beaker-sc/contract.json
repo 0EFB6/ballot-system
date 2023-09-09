@@ -84,7 +84,7 @@
                 }
             ],
             "returns": {
-                "type": "string"
+                "type": "(string,uint8,string,uint8,string,string,uint64)"
             }
         },
         {

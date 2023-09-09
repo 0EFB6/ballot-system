@@ -1,6 +1,6 @@
 #pragma version 8
-intcblock 0 1 32 65536
-bytecblock 0x 0x766f746573 0x616464725f6c697374 0x151f7c75 0x00
+intcblock 0 1 65536 32
+bytecblock 0x 0x766f746573 0x00 0x616464725f6c697374 0x151f7c75
 txn NumAppArgs
 intc_0 // 0
 ==
@@ -26,7 +26,7 @@ pushbytes 0x9a398dbe // "addParliamentSeat(string,uint8,string,uint8,string,stri
 ==
 bnz main_l11
 txna ApplicationArgs 0
-pushbytes 0x332f08cb // "readParliamentItemState(string)string"
+pushbytes 0x05175f15 // "readParliamentItemState(string)(string,uint8,string,uint8,string,string,uint64)"
 ==
 bnz main_l10
 txna ApplicationArgs 0
@@ -135,7 +135,7 @@ return
 // bootstrap
 bootstrap_0:
 proto 0 0
-bytec_2 // "addr_list"
+bytec_3 // "addr_list"
 pushint 320 // 320
 box_create
 pop
@@ -147,8 +147,8 @@ retsub
 // vote
 vote_1:
 proto 1 0
-bytec_2 // "addr_list"
-intc_2 // 32
+bytec_3 // "addr_list"
+intc_3 // 32
 bytec_1 // "votes"
 app_global_get
 *
@@ -166,11 +166,11 @@ retsub
 readVote_2:
 proto 1 1
 bytec_0 // ""
-bytec_2 // "addr_list"
-intc_2 // 32
+bytec_3 // "addr_list"
+intc_3 // 32
 frame_dig -1
 *
-intc_2 // 32
+intc_3 // 32
 box_extract
 frame_bury 0
 retsub
@@ -204,13 +204,13 @@ len
 +
 frame_bury 2
 frame_dig 2
-intc_3 // 65536
+intc_2 // 65536
 <
 assert
 frame_dig 1
 itob
 extract 6 0
-bytec 4 // 0x00
+bytec_2 // 0x00
 intc_0 // 0
 frame_dig -6
 setbyte
@@ -229,14 +229,14 @@ len
 +
 frame_bury 2
 frame_dig 2
-intc_3 // 65536
+intc_2 // 65536
 <
 assert
 frame_dig 1
 itob
 extract 6 0
 concat
-bytec 4 // 0x00
+bytec_2 // 0x00
 intc_0 // 0
 frame_dig -4
 setbyte
@@ -255,7 +255,7 @@ len
 +
 frame_bury 2
 frame_dig 2
-intc_3 // 65536
+intc_2 // 65536
 <
 assert
 frame_dig 1
@@ -303,20 +303,13 @@ load 1
 assert
 load 0
 frame_bury 0
-frame_dig 0
-len
-itob
-extract 6 0
-frame_dig 0
-concat
-frame_bury 0
 retsub
 
 // updateParliamentItem
 updateParliamentItem_6:
 proto 2 0
 bytec_0 // ""
-dupn 2
+dup
 intc_0 // 0
 bytec_0 // ""
 intc_0 // 0
@@ -326,13 +319,101 @@ intc_0 // 0
 dupn 2
 bytec_0 // ""
 dup
+frame_dig 1
+frame_bury 11
+frame_dig 11
+frame_bury 10
+pushint 18 // 18
+frame_bury 8
+frame_dig 8
+frame_dig 11
+len
++
+frame_bury 9
+frame_dig 9
+intc_2 // 65536
+<
+assert
+frame_dig 8
+itob
+extract 6 0
+bytec_2 // 0x00
+intc_0 // 0
 frame_dig 2
+setbyte
+concat
+frame_dig 3
+frame_bury 11
+frame_dig 10
+frame_dig 11
+concat
+frame_bury 10
+frame_dig 9
+frame_bury 8
+frame_dig 8
+frame_dig 11
+len
++
+frame_bury 9
+frame_dig 9
+intc_2 // 65536
+<
+assert
+frame_dig 8
+itob
+extract 6 0
+concat
+bytec_2 // 0x00
+intc_0 // 0
+frame_dig 4
+setbyte
+concat
+frame_dig 5
+frame_bury 11
+frame_dig 10
+frame_dig 11
+concat
+frame_bury 10
+frame_dig 9
+frame_bury 8
+frame_dig 8
+frame_dig 11
+len
++
+frame_bury 9
+frame_dig 9
+intc_2 // 65536
+<
+assert
+frame_dig 8
+itob
+extract 6 0
+concat
+frame_dig 6
+frame_bury 11
+frame_dig 10
+frame_dig 11
+concat
+frame_bury 10
+frame_dig 9
+frame_bury 8
+frame_dig 8
+itob
+extract 6 0
+concat
+frame_dig 7
+itob
+concat
+frame_dig 10
+concat
+frame_bury 0
+frame_dig -2
 extract 2 0
 box_del
 pop
-frame_dig 2
+frame_dig -2
 extract 2 0
-frame_dig 1
+frame_dig 0
 box_put
 retsub
 
@@ -363,7 +444,7 @@ frame_bury 1
 frame_dig 1
 callsub readVote_2
 frame_bury 0
-bytec_3 // 0x151f7c75
+bytec 4 // 0x151f7c75
 frame_dig 0
 concat
 log
@@ -375,7 +456,7 @@ proto 0 0
 intc_0 // 0
 callsub readGlobal_3
 frame_bury 0
-bytec_3 // 0x151f7c75
+bytec 4 // 0x151f7c75
 frame_dig 0
 itob
 concat
@@ -431,7 +512,7 @@ frame_bury 1
 frame_dig 1
 callsub readParliamentItemState_5
 frame_bury 0
-bytec_3 // 0x151f7c75
+bytec 4 // 0x151f7c75
 frame_dig 0
 concat
 log
