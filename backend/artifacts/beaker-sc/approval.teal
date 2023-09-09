@@ -4,44 +4,36 @@ bytecblock 0x 0x766f746573 0x616464725f6c697374 0x151f7c75 0x00
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l14
+bnz main_l16
 txna ApplicationArgs 0
 pushbytes 0xbec76d87 // "bootstrap()void"
 ==
-bnz main_l13
+bnz main_l15
 txna ApplicationArgs 0
 pushbytes 0x628ce32d // "vote(address)void"
 ==
-bnz main_l12
+bnz main_l14
 txna ApplicationArgs 0
 pushbytes 0x9df891ac // "readVote(uint64)address"
 ==
-bnz main_l11
+bnz main_l13
 txna ApplicationArgs 0
 pushbytes 0xc8084c01 // "readGlobal()uint64"
 ==
-bnz main_l10
+bnz main_l12
 txna ApplicationArgs 0
 pushbytes 0x9a398dbe // "addParliamentSeat(string,uint8,string,uint8,string,string,uint64)void"
 ==
-bnz main_l9
+bnz main_l11
 txna ApplicationArgs 0
 pushbytes 0x332f08cb // "readParliamentItemState(string)string"
 ==
-bnz main_l8
-err
-main_l8:
-txn OnCompletion
-intc_0 // NoOp
+bnz main_l10
+txna ApplicationArgs 0
+pushbytes 0x6aa019ef // "updateParliamentItem(string,string)void"
 ==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub readParliamentItemStatecaster_11
-intc_1 // 1
-return
+bnz main_l9
+err
 main_l9:
 txn OnCompletion
 intc_0 // NoOp
@@ -51,7 +43,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub addParliamentSeatcaster_10
+callsub updateParliamentItemcaster_13
 intc_1 // 1
 return
 main_l10:
@@ -63,7 +55,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readGlobalcaster_9
+callsub readParliamentItemStatecaster_12
 intc_1 // 1
 return
 main_l11:
@@ -75,7 +67,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVotecaster_8
+callsub addParliamentSeatcaster_11
 intc_1 // 1
 return
 main_l12:
@@ -87,7 +79,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub votecaster_7
+callsub readGlobalcaster_10
 intc_1 // 1
 return
 main_l13:
@@ -99,16 +91,40 @@ intc_0 // 0
 !=
 &&
 assert
-callsub bootstrapcaster_6
+callsub readVotecaster_9
 intc_1 // 1
 return
 main_l14:
 txn OnCompletion
 intc_0 // NoOp
 ==
-bnz main_l16
-err
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub votecaster_8
+intc_1 // 1
+return
+main_l15:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub bootstrapcaster_7
+intc_1 // 1
+return
 main_l16:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l18
+err
+main_l18:
 txn ApplicationID
 intc_0 // 0
 ==
@@ -296,14 +312,38 @@ concat
 frame_bury 0
 retsub
 
+// updateParliamentItem
+updateParliamentItem_6:
+proto 2 0
+bytec_0 // ""
+dupn 2
+intc_0 // 0
+bytec_0 // ""
+intc_0 // 0
+bytec_0 // ""
+dup
+intc_0 // 0
+dupn 2
+bytec_0 // ""
+dup
+frame_dig 2
+extract 2 0
+box_del
+pop
+frame_dig 2
+extract 2 0
+frame_dig 1
+box_put
+retsub
+
 // bootstrap_caster
-bootstrapcaster_6:
+bootstrapcaster_7:
 proto 0 0
 callsub bootstrap_0
 retsub
 
 // vote_caster
-votecaster_7:
+votecaster_8:
 proto 0 0
 bytec_0 // ""
 txna ApplicationArgs 1
@@ -313,7 +353,7 @@ callsub vote_1
 retsub
 
 // readVote_caster
-readVotecaster_8:
+readVotecaster_9:
 proto 0 0
 bytec_0 // ""
 intc_0 // 0
@@ -330,7 +370,7 @@ log
 retsub
 
 // readGlobal_caster
-readGlobalcaster_9:
+readGlobalcaster_10:
 proto 0 0
 intc_0 // 0
 callsub readGlobal_3
@@ -343,7 +383,7 @@ log
 retsub
 
 // addParliamentSeat_caster
-addParliamentSeatcaster_10:
+addParliamentSeatcaster_11:
 proto 0 0
 bytec_0 // ""
 intc_0 // 0
@@ -382,7 +422,7 @@ callsub addParliamentSeat_4
 retsub
 
 // readParliamentItemState_caster
-readParliamentItemStatecaster_11:
+readParliamentItemStatecaster_12:
 proto 0 0
 bytec_0 // ""
 dup
@@ -395,4 +435,18 @@ bytec_3 // 0x151f7c75
 frame_dig 0
 concat
 log
+retsub
+
+// updateParliamentItem_caster
+updateParliamentItemcaster_13:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 0
+txna ApplicationArgs 2
+frame_bury 1
+frame_dig 0
+frame_dig 1
+callsub updateParliamentItem_6
 retsub

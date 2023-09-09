@@ -54,6 +54,22 @@ def readParliamentItemState(area: abi.String, *, output: abi.String) -> Expr:
     ret = output.set(app.state.par_seat[area.get()].get())
     return ret
 
+@app.external
+def updateParliamentItem(area: abi.String, state: abi.String) -> Expr:
+	tmp = Parliament()
+	app.state.par_seat[area.get()].store_into(tmp)
+	(mr := Parliament()).decode(app.state.par_seat[area.get()].get())
+	(area := abi.String()).set(mr.area)
+	(no := abi.Uint8()).set(mr.no)
+	(state := abi.String()).set(state.get())
+	(candidate_no := abi.Uint8()).set(mr.candidate_no)
+	(candidate_name := abi.String()).set(mr.candidate_name)
+	(candidate_party := abi.String()).set(mr.candidate_party)
+	(votes := abi.Uint64()).set(mr.votes)
+	mr.set(area, no, state, candidate_no, candidate_name, candidate_party, votes)
+	return app.state.par_seat[area.get()].set(mr)
+	
+
 '''@app.external
 def updateParliamentSeatVotes(area: abi.String, new_votes: abi.Uint64) -> Expr:
     current_item = ParliamentItem()

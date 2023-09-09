@@ -86,6 +86,22 @@
             "returns": {
                 "type": "string"
             }
+        },
+        {
+            "name": "updateParliamentItem",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "area"
+                },
+                {
+                    "type": "string",
+                    "name": "state"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
         }
     ],
     "networks": {}
