@@ -1,16 +1,19 @@
 {
-    "name": "Beaker Calculator",
+    "name": "Parliament Item",
     "methods": [
         {
-            "name": "write_blob",
+            "name": "bootstrap",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "vote",
             "args": [
                 {
-                    "type": "uint64",
-                    "name": "start"
-                },
-                {
-                    "type": "string",
-                    "name": "str"
+                    "type": "address",
+                    "name": "addr"
                 }
             ],
             "returns": {
@@ -18,10 +21,86 @@
             }
         },
         {
-            "name": "read_blob",
+            "name": "readVote",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "vote"
+                }
+            ],
+            "returns": {
+                "type": "address"
+            }
+        },
+        {
+            "name": "readGlobal",
             "args": [],
             "returns": {
-                "type": "string"
+                "type": "uint64"
+            }
+        },
+        {
+            "name": "addParliamentSeat",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "area"
+                },
+                {
+                    "type": "uint8",
+                    "name": "no"
+                },
+                {
+                    "type": "string",
+                    "name": "state"
+                },
+                {
+                    "type": "uint8",
+                    "name": "candidate_no"
+                },
+                {
+                    "type": "string",
+                    "name": "candidate_name"
+                },
+                {
+                    "type": "string",
+                    "name": "candidate_party"
+                },
+                {
+                    "type": "uint64",
+                    "name": "votes"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "readParliamentItemState",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "area"
+                }
+            ],
+            "returns": {
+                "type": "(string,uint8,string,uint8,string,string,uint64)"
+            }
+        },
+        {
+            "name": "updateParliamentItem",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "area"
+                },
+                {
+                    "type": "string",
+                    "name": "state"
+                }
+            ],
+            "returns": {
+                "type": "void"
             }
         }
     ],
