@@ -271,6 +271,11 @@ retsub
 writeblob_4:
 proto 1 0
 txn Sender
+global CurrentApplicationID
+app_opted_in
+// unauthorized
+assert
+txn Sender
 intc_1 // 0
 frame_dig -1
 extract 2 0

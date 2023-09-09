@@ -103,8 +103,12 @@ class LocalStateBlob:
 		keys=2,
 		descr="A blob of 254 bytes"
 	)
-'''
-@app.external
+
+app = Application("LocalState Blob", state=LocalStateBlob()).apply(
+	unconditional_opt_in_approval, initialize_local_state=True
+)
+
+@app.external(authorize=Authorize.opted_in())
 def write_blob(v: abi.String) -> Expr:
 	return app.state.blob.write(Int(0), v.get())
 
@@ -115,8 +119,17 @@ def read_local_blob(*, output: abi.String) -> Expr:
 			Int(0), app.state.blob.blob.max_bytes - Int(1)
 		)
 	)
-'''
 
-app = Application("Beaker Calculator", state=LocalStateBlob()).apply(
-	unconditional_opt_in_approval, initialize_local_state=True
-)
+'''
+@app.opt_in
+def opt_in() -> Expr:
+	return Approve()
+
+@app.close_out
+def close_out() -> Expr:
+	return Reject()
+
+@app.clear_state
+def clear_state() -> Expr:
+	return Approve()
+'''

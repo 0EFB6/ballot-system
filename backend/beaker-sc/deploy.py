@@ -24,6 +24,9 @@ App Id: {app_id}
 App Address: {addr}
 """
 )
+
+app_client.opt_in()
+print("Opted in to app!")
 '''
 
 '''

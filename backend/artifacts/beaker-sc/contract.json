@@ -1,5 +1,5 @@
 {
-    "name": "Beaker Calculator",
+    "name": "LocalState Blob",
     "methods": [
         {
             "name": "write_blob",
