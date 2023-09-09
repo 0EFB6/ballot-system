@@ -64,7 +64,8 @@ def readParliamentItemState(area: abi.String, *, output: Parliament) -> Expr:
 
 @app.external
 def updateParliamentItem(area: abi.String, state: abi.String) -> Expr:
-	(mr := Parliament()).decode(app.state.par_seat[area.get()].get())
+	mr = Parliament()	
+	mr.decode(app.state.par_seat[area.get()].get())
 
 	(n_area := abi.String()).set(mr.area)
 	(n_no := abi.Uint8()).set(mr.no)
