@@ -2,6 +2,18 @@
   "name": "testingg",
   "methods": [
     {
+      "name": "test",
+      "args": [
+        {
+          "type": "string",
+          "name": "str"
+        }
+      ],
+      "returns": {
+        "type": "uint16"
+      }
+    },
+    {
       "name": "create_votes_box",
       "args": [
         {

@@ -40,14 +40,14 @@ def test(str: abi.String, *, output:abi.Uint16):
 @router.method
 def create_votes_box(candidate_name: abi.String):
 	return Seq(
-		Assert(candidate_name.length() <= NAME_LIMIT),
+		# Assert(Len(candidate_name.get()) <= NAME_LIMIT),
 		Pop(App.box_create(candidate_name.get(), NAME_LIMIT)),
     ) 
 
 @router.method
-def add_candidate_votes(candidate_name: abi.Byte):
+def add_candidate_votes(candidate_name: abi.String):
 	return Seq(
-		Assert(candidate_name.length() <= NAME_LIMIT),
+		# Assert(Len(candidate_name.get()) <= NAME_LIMIT),
         App.box_replace(candidate_name.get(), Int(0),  Bytes("0")),
     )
 
