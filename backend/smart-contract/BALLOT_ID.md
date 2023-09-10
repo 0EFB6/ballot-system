@@ -1,11 +1,11 @@
 # Ballot ID (27 digits)
-*** ** 000 *** ** **************
-Before 000 divider
-- DUN:
--   Area, state 
-After 000 divider
-- Parliament:
--   Area, no., state
+*** ** 000 *** ** **************  
+Before 000 divider  
+DUN:
+-   Area, state  
+After 000 divider  
+Parliament:
+-   Area, no., state  
 Last 14 digits are hash digits created from ic number
 
 ## Custom number as identifier
@@ -64,26 +64,22 @@ Last 14 digits are hash digits created from ic number
 - 16	Federal Territory of Putrajaya 
 
 ## Test Cases
-- Ballot ID: 0311000010810**************
-DUN, Subang Jaya, Selangor
-Parliament, Shah Alam, SelangorSelangor; Parliament,Shah Alam, Selangor
+- Ballot ID: 0311000010810**************  
+DUN: Subang Jaya, Selangor  
+Parliament: Shah Alam, Selangor  
 
-- Ballot ID: 0311000010810**************
-DUN, Subang Jaya, Selangor
-Parliament, Shah Alam, Selangor
+- Ballot ID: 0301000010610**************  
+DUN: Kinrara, Selangor  
+Parliament: Damansara, Selangor  
 
-- Ballot ID: 0301000010610**************
-DUN, Kinrara, Selangor
-Parliament, Damansara, Selangor
+- Ballot ID: 0361000010710**************  
+DUN: Bandar Utama, Selangor  
+Parliament: Sungai Buloh, Selangor  
 
-- Ballot ID: 0361000010710**************
-DUN, Bandar Utama, Selangor
-Parliament, Sungai Buloh, Selangor
+- Ballot ID: 0481000011010**************  
+DUN: Sentosa, Selangor  
+Parliament: Klang, Selangor  
 
-- Ballot ID: 0481000011010**************
-DUN, Sentosa, Selangor
-Parliament, Klang, Selangor
-
-- Ballot ID: 0251000010610**************
-DUN, Kajang, Selangor
-Parliament, Damansara, Selangor
+- Ballot ID: 0251000010610**************  
+DUN: Kajang, Selangor  
+Parliament: Damansara, Selangor  
