@@ -7,44 +7,42 @@ from beaker.lib.storage import BoxList, BoxMapping
 #value: Area, No, State,        Candidate No, Candidate Name, Candidate Party, Votes
 #    (Subang) (103) (Selangor), (2),          (Wilson),        (Pakatan)
 
-class VoteChecker(abi.NamedTuple):
-	addr: abi.Field[abi.Address]
-
-class ParliamentItem:
-	vote_list = BoxMapping(abi.Address, VoteChecker)
-
-app = Application("Voting Beaker", state=ParliamentItem())
-
-@app.external
-def addVote(addr: abi.Address) -> Expr:
-	vote_tuple = VoteChecker()
-	return Seq(vote_tuple.set(addr), app.state.vote_list[addr.get()].set(vote_tuple))
-
-@app.external
-def checkVote(addr: abi.Address, *, output: abi.String) -> Expr:
-	return Seq(
-		If(app.state.vote_list[addr.get()].exists(),
-	 output.set(Bytes("The owner of the address has voted!")),
-	 output.set(Bytes("The owner of the address has not voted!"))
-	 	)
+class ParliamentSeat:
+	global_state = GlobalStateValue(
+		stack_type=TealType.bytes,
+		default=Bytes("Testing"),
+		descr="Global state for Parliament Seat"
 	)
+
+app = Application("Voting Beaker", state=ParliamentSeat())
 
 @app.external
 def createbox_votecount(seat: abi.String) -> Expr:
-	return Pop(BoxCreate(seat.get(), Int(6)))
+	return Pop(BoxCreate(seat.get(), Int(15)))
 
 @app.external
-def putbox_votecount(seat: abi.String, value: abi.String) -> Expr:
-	return BoxPut(seat.get(), value.get())
+def putbox_votecount(seat: abi.String, value: abi.String, i: abi.Uint16) -> Expr:
+	return BoxReplace(seat.get(), i.get(), value.get())
 
 @app.external
 def readbox_votecount(seat: abi.String, *, output: abi.String) -> Expr:
-	return output.set(BoxExtract(seat.get(), Int(0), Int(6)))
+	return output.set(BoxExtract(seat.get(), Int(0), Int(15)))
 
 
+NO_I = Int(0)
+NO_LEN = Int(4)
+AREA_I= Int(5)
+AREA_LEN = Int(25)
+STATE_I = Int(31)
+STATE_LEN = Int(15)
 
+@app.external
+def set_app_global_state_value(str: abi.String) -> Expr:
+	return app.state.global_state.set(str.get())
 
-
+@app.external
+def readGlobal(*, output: abi.String) -> Expr:
+	return output.set(app.state.global_state)
 
 
 # Borken Function

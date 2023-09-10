@@ -2,30 +2,6 @@
     "name": "Voting Beaker",
     "methods": [
         {
-            "name": "addVote",
-            "args": [
-                {
-                    "type": "address",
-                    "name": "addr"
-                }
-            ],
-            "returns": {
-                "type": "void"
-            }
-        },
-        {
-            "name": "checkVote",
-            "args": [
-                {
-                    "type": "address",
-                    "name": "addr"
-                }
-            ],
-            "returns": {
-                "type": "string"
-            }
-        },
-        {
             "name": "createbox_votecount",
             "args": [
                 {
@@ -47,6 +23,10 @@
                 {
                     "type": "string",
                     "name": "value"
+                },
+                {
+                    "type": "uint16",
+                    "name": "i"
                 }
             ],
             "returns": {
@@ -61,6 +41,25 @@
                     "name": "seat"
                 }
             ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "set_app_global_state_value",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "str"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "readGlobal",
+            "args": [],
             "returns": {
                 "type": "string"
             }

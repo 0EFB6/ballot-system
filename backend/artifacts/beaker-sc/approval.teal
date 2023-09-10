@@ -1,28 +1,28 @@
 #pragma version 8
-intcblock 0 1
-bytecblock 0x 0x151f7c75
+intcblock 0 1 15
+bytecblock 0x 0x676c6f62616c5f7374617465 0x151f7c75
 txn NumAppArgs
 intc_0 // 0
 ==
 bnz main_l12
 txna ApplicationArgs 0
-pushbytes 0x9e5bef52 // "addVote(address)void"
+pushbytes 0x7f296bba // "createbox_votecount(string)void"
 ==
 bnz main_l11
 txna ApplicationArgs 0
-pushbytes 0xe8c9ee32 // "checkVote(address)string"
+pushbytes 0x7b5f2f27 // "putbox_votecount(string,string,uint16)void"
 ==
 bnz main_l10
 txna ApplicationArgs 0
-pushbytes 0x7f296bba // "createbox_votecount(string)void"
+pushbytes 0x529e978c // "readbox_votecount(string)string"
 ==
 bnz main_l9
 txna ApplicationArgs 0
-pushbytes 0x2edc0d2f // "putbox_votecount(string,string)void"
+pushbytes 0xf74e3c49 // "set_app_global_state_value(string)void"
 ==
 bnz main_l8
 txna ApplicationArgs 0
-pushbytes 0x529e978c // "readbox_votecount(string)string"
+pushbytes 0x320ca674 // "readGlobal()string"
 ==
 bnz main_l7
 err
@@ -35,7 +35,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readboxvotecountcaster_9
+callsub readGlobalcaster_9
 intc_1 // 1
 return
 main_l8:
@@ -47,7 +47,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub putboxvotecountcaster_8
+callsub setappglobalstatevaluecaster_8
 intc_1 // 1
 return
 main_l9:
@@ -59,7 +59,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub createboxvotecountcaster_7
+callsub readboxvotecountcaster_7
 intc_1 // 1
 return
 main_l10:
@@ -71,7 +71,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub checkVotecaster_6
+callsub putboxvotecountcaster_6
 intc_1 // 1
 return
 main_l11:
@@ -83,7 +83,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub addVotecaster_5
+callsub createboxvotecountcaster_5
 intc_1 // 1
 return
 main_l12:
@@ -100,85 +100,35 @@ assert
 intc_1 // 1
 return
 
-// addVote
-addVote_0:
-proto 1 0
-bytec_0 // ""
-intc_0 // 0
-dup
-bytec_0 // ""
-dup
-frame_dig -1
-frame_bury 0
-frame_dig -1
-box_del
-pop
-frame_dig -1
-frame_dig 0
-box_put
-retsub
-
-// checkVote
-checkVote_1:
-proto 1 1
-bytec_0 // ""
-frame_dig -1
-box_len
-store 1
-store 0
-load 1
-bnz checkVote_1_l2
-pushbytes 0x546865206f776e6572206f6620746865206164647265737320686173206e6f7420766f74656421 // "The owner of the address has not voted!"
-frame_bury 0
-frame_dig 0
-len
-itob
-extract 6 0
-frame_dig 0
-concat
-frame_bury 0
-b checkVote_1_l3
-checkVote_1_l2:
-pushbytes 0x546865206f776e6572206f662074686520616464726573732068617320766f74656421 // "The owner of the address has voted!"
-frame_bury 0
-frame_dig 0
-len
-itob
-extract 6 0
-frame_dig 0
-concat
-frame_bury 0
-checkVote_1_l3:
-retsub
-
 // createbox_votecount
-createboxvotecount_2:
+createboxvotecount_0:
 proto 1 0
 frame_dig -1
 extract 2 0
-pushint 6 // 6
+intc_2 // 15
 box_create
 pop
 retsub
 
 // putbox_votecount
-putboxvotecount_3:
-proto 2 0
-frame_dig -2
+putboxvotecount_1:
+proto 3 0
+frame_dig -3
 extract 2 0
 frame_dig -1
+frame_dig -2
 extract 2 0
-box_put
+box_replace
 retsub
 
 // readbox_votecount
-readboxvotecount_4:
+readboxvotecount_2:
 proto 1 1
 bytec_0 // ""
 frame_dig -1
 extract 2 0
 intc_0 // 0
-pushint 3 // 3
+intc_2 // 15
 box_extract
 frame_bury 0
 frame_dig 0
@@ -190,67 +140,94 @@ concat
 frame_bury 0
 retsub
 
-// addVote_caster
-addVotecaster_5:
+// set_app_global_state_value
+setappglobalstatevalue_3:
+proto 1 0
+bytec_1 // "global_state"
+frame_dig -1
+extract 2 0
+app_global_put
+retsub
+
+// readGlobal
+readGlobal_4:
+proto 0 1
+bytec_0 // ""
+bytec_1 // "global_state"
+app_global_get
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// createbox_votecount_caster
+createboxvotecountcaster_5:
 proto 0 0
 bytec_0 // ""
 txna ApplicationArgs 1
 frame_bury 0
 frame_dig 0
-callsub addVote_0
+callsub createboxvotecount_0
 retsub
 
-// checkVote_caster
-checkVotecaster_6:
+// putbox_votecount_caster
+putboxvotecountcaster_6:
+proto 0 0
+bytec_0 // ""
+dup
+intc_0 // 0
+txna ApplicationArgs 1
+frame_bury 0
+txna ApplicationArgs 2
+frame_bury 1
+txna ApplicationArgs 3
+intc_0 // 0
+extract_uint16
+frame_bury 2
+frame_dig 0
+frame_dig 1
+frame_dig 2
+callsub putboxvotecount_1
+retsub
+
+// readbox_votecount_caster
+readboxvotecountcaster_7:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub checkVote_1
+callsub readboxvotecount_2
 frame_bury 0
-bytec_1 // 0x151f7c75
+bytec_2 // 0x151f7c75
 frame_dig 0
 concat
 log
 retsub
 
-// createbox_votecount_caster
-createboxvotecountcaster_7:
+// set_app_global_state_value_caster
+setappglobalstatevaluecaster_8:
 proto 0 0
 bytec_0 // ""
 txna ApplicationArgs 1
 frame_bury 0
 frame_dig 0
-callsub createboxvotecount_2
+callsub setappglobalstatevalue_3
 retsub
 
-// putbox_votecount_caster
-putboxvotecountcaster_8:
+// readGlobal_caster
+readGlobalcaster_9:
 proto 0 0
 bytec_0 // ""
-dup
-txna ApplicationArgs 1
+callsub readGlobal_4
 frame_bury 0
-txna ApplicationArgs 2
-frame_bury 1
-frame_dig 0
-frame_dig 1
-callsub putboxvotecount_3
-retsub
-
-// readbox_votecount_caster
-readboxvotecountcaster_9:
-proto 0 0
-bytec_0 // ""
-dup
-txna ApplicationArgs 1
-frame_bury 1
-frame_dig 1
-callsub readboxvotecount_4
-frame_bury 0
-bytec_1 // 0x151f7c75
+bytec_2 // 0x151f7c75
 frame_dig 0
 concat
 log
