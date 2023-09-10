@@ -2,7 +2,7 @@
     "name": "Voting Beaker",
     "methods": [
         {
-            "name": "createbox_votecount",
+            "name": "createBox",
             "args": [
                 {
                     "type": "string",
@@ -14,27 +14,7 @@
             }
         },
         {
-            "name": "putbox_votecount",
-            "args": [
-                {
-                    "type": "string",
-                    "name": "seat"
-                },
-                {
-                    "type": "string",
-                    "name": "value"
-                },
-                {
-                    "type": "uint16",
-                    "name": "i"
-                }
-            ],
-            "returns": {
-                "type": "void"
-            }
-        },
-        {
-            "name": "readbox_votecount",
+            "name": "readWholeBox",
             "args": [
                 {
                     "type": "string",
@@ -155,6 +135,26 @@
             ],
             "returns": {
                 "type": "string"
+            }
+        },
+        {
+            "name": "putBoxDebug",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                },
+                {
+                    "type": "string",
+                    "name": "value"
+                },
+                {
+                    "type": "uint16",
+                    "name": "i"
+                }
+            ],
+            "returns": {
+                "type": "void"
             }
         },
         {
