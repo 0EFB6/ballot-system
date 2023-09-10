@@ -77,6 +77,14 @@ def convert_bytes_to_uint(str):
 #     h = hashlib.shake_256(str_to_bytes)
 #     return h.hexdigest(7)
 
-def get_uuid():
+# state should be same for both no matter how?
+def get_uuid(dun_area_no , par_area_no , state_no):
     unique_id = uuid.uuid4().hex
-    return unique_id
+    # decide what will be pass in when getting the uuid (name of area and state in bytes or no. of area and state)
+    print(unique_id)
+    unique_id = dun_area_no + state_no + "000" + par_area_no + state_no + unique_id
+    print(unique_id)
+    
+    # return unique_id
+
+get_uuid("@","@","*")
