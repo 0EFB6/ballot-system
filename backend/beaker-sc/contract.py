@@ -112,12 +112,16 @@ def updateVote(seat:abi.String, i: abi.Uint8) -> Expr:
 	current_vote_uint = btoi(current_vote_byte)
 	new_vote_uint = current_vote_uint + Int(6969)
 	new_vote_byte = itob(new_vote_uint)
-	nbrlen = byteLength(new_vote_byte)
-	#idx = (Int(6) - nbrlen)
+	# nbrlen = byteLength(new_vote_byte)
+	nbrlen = Len(new_vote_byte)
+
+	idx = Int(6) - nbrlen
 	#return output.set(idx)
 	return BoxReplace(
 				seat.get(),
-				CANDIDATE_VOTES_1 + LEN_SUM * (i.get() - Int(1)) + Int(2),
+				# CANDIDATE_VOTES_1 + LEN_SUM * (i.get() - Int(1)) + Int(2),
+				CANDIDATE_VOTES_1 + LEN_SUM * (i.get() - Int(1)) + idx,
+
 				new_vote_byte
 			)
 

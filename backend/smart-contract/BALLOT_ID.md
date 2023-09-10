@@ -7,6 +7,7 @@ DUN:
 After 000 divider:  
 Parliament:
 -   Area, no., state  
+
 Last 14 digits are hash digits created from ic number
 
 ## Custom number as identifier
