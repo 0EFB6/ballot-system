@@ -126,3 +126,21 @@ def close_out() -> Expr:
 def clear_state() -> Expr:
 	return Approve()
 '''
+
+
+@Subroutine(TealType.uint64)
+def byteLength(byte_str):
+    length = ScratchVar(TealType.uint64)
+    i = ScratchVar(TealType.uint64)
+    
+    return Seq([
+        length.store(Int(0)),
+        i.store(Int(0)),
+        While(i.load() < Len(byte_str)).Do(
+            Seq([
+                length.store(length.load() + Int(1)),
+                i.store(i.load() + Int(1))
+            ])
+        ),
+        length.load()
+    ])

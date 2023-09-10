@@ -1,12 +1,68 @@
 #pragma version 8
-intcblock 0 6 1 65 135
+intcblock 0 1 6 65 135
 bytecblock 0x 0x151f7c75 0x30 0x676c6f62616c5f7374617465
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l26
+bnz main_l40
 txna ApplicationArgs 0
 pushbytes 0x0b02a774 // "createBox(string)void"
+==
+bnz main_l39
+txna ApplicationArgs 0
+pushbytes 0x4beeac05 // "addSeat(string,string,string)void"
+==
+bnz main_l38
+txna ApplicationArgs 0
+pushbytes 0xc8c12289 // "addCandidate(string,string,string,uint8)void"
+==
+bnz main_l37
+txna ApplicationArgs 0
+pushbytes 0xe1aaaa81 // "initVote(string)void"
+==
+bnz main_l36
+txna ApplicationArgs 0
+pushbytes 0x754cb8d9 // "updateVote(string,uint8)void"
+==
+bnz main_l35
+txna ApplicationArgs 0
+pushbytes 0x5f35582d // "readSeat(string)string"
+==
+bnz main_l34
+txna ApplicationArgs 0
+pushbytes 0x42181e67 // "readCandidate(string,uint8)string"
+==
+bnz main_l33
+txna ApplicationArgs 0
+pushbytes 0x1a2d2c5a // "readVote1(string)string"
+==
+bnz main_l32
+txna ApplicationArgs 0
+pushbytes 0x91aa0826 // "readVote2(string)string"
+==
+bnz main_l31
+txna ApplicationArgs 0
+pushbytes 0x0974a9cc // "readVote3(string)string"
+==
+bnz main_l30
+txna ApplicationArgs 0
+pushbytes 0x53c205bd // "readVote4(string)string"
+==
+bnz main_l29
+txna ApplicationArgs 0
+pushbytes 0xb9b2a03c // "readVote5(string)string"
+==
+bnz main_l28
+txna ApplicationArgs 0
+pushbytes 0x8101b548 // "readVote6(string)string"
+==
+bnz main_l27
+txna ApplicationArgs 0
+pushbytes 0x17d7d3c7 // "readVote7(string)string"
+==
+bnz main_l26
+txna ApplicationArgs 0
+pushbytes 0x4b1a45e9 // "readVote8(string)string"
 ==
 bnz main_l25
 txna ApplicationArgs 0
@@ -14,130 +70,18 @@ pushbytes 0x1a5a2817 // "readWholeBox(string)string"
 ==
 bnz main_l24
 txna ApplicationArgs 0
-pushbytes 0xc8c12289 // "addCandidate(string,string,string,uint8)void"
+pushbytes 0x90932589 // "putBoxDebug(string,string,uint16)void"
 ==
 bnz main_l23
 txna ApplicationArgs 0
-pushbytes 0x42181e67 // "readCandidate(string,uint8)string"
+pushbytes 0xf74e3c49 // "set_app_global_state_value(string)void"
 ==
 bnz main_l22
 txna ApplicationArgs 0
-pushbytes 0x4beeac05 // "addSeat(string,string,string)void"
-==
-bnz main_l21
-txna ApplicationArgs 0
-pushbytes 0x5f35582d // "readSeat(string)string"
-==
-bnz main_l20
-txna ApplicationArgs 0
-pushbytes 0xe1aaaa81 // "initVote(string)void"
-==
-bnz main_l19
-txna ApplicationArgs 0
-pushbytes 0x754cb8d9 // "updateVote(string,uint8)void"
-==
-bnz main_l18
-txna ApplicationArgs 0
-pushbytes 0x158e73e7 // "readVote(string)string"
-==
-bnz main_l17
-txna ApplicationArgs 0
-pushbytes 0x90932589 // "putBoxDebug(string,string,uint16)void"
-==
-bnz main_l16
-txna ApplicationArgs 0
-pushbytes 0xf74e3c49 // "set_app_global_state_value(string)void"
-==
-bnz main_l15
-txna ApplicationArgs 0
 pushbytes 0x320ca674 // "readGlobal()string"
 ==
-bnz main_l14
+bnz main_l21
 err
-main_l14:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub readGlobalcaster_25
-intc_2 // 1
-return
-main_l15:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub setappglobalstatevaluecaster_24
-intc_2 // 1
-return
-main_l16:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub putBoxDebugcaster_23
-intc_2 // 1
-return
-main_l17:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub readVotecaster_22
-intc_2 // 1
-return
-main_l18:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub updateVotecaster_21
-intc_2 // 1
-return
-main_l19:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub initVotecaster_20
-intc_2 // 1
-return
-main_l20:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub readSeatcaster_19
-intc_2 // 1
-return
 main_l21:
 txn OnCompletion
 intc_0 // NoOp
@@ -147,8 +91,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub addSeatcaster_18
-intc_2 // 1
+callsub readGlobalcaster_39
+intc_1 // 1
 return
 main_l22:
 txn OnCompletion
@@ -159,8 +103,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readCandidatecaster_17
-intc_2 // 1
+callsub setappglobalstatevaluecaster_38
+intc_1 // 1
 return
 main_l23:
 txn OnCompletion
@@ -171,8 +115,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub addCandidatecaster_16
-intc_2 // 1
+callsub putBoxDebugcaster_37
+intc_1 // 1
 return
 main_l24:
 txn OnCompletion
@@ -183,8 +127,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readWholeBoxcaster_15
-intc_2 // 1
+callsub readWholeBoxcaster_36
+intc_1 // 1
 return
 main_l25:
 txn OnCompletion
@@ -195,21 +139,189 @@ intc_0 // 0
 !=
 &&
 assert
-callsub createBoxcaster_14
-intc_2 // 1
+callsub readVote8caster_35
+intc_1 // 1
 return
 main_l26:
 txn OnCompletion
 intc_0 // NoOp
 ==
-bnz main_l28
-err
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub readVote7caster_34
+intc_1 // 1
+return
+main_l27:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub readVote6caster_33
+intc_1 // 1
+return
 main_l28:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub readVote5caster_32
+intc_1 // 1
+return
+main_l29:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub readVote4caster_31
+intc_1 // 1
+return
+main_l30:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub readVote3caster_30
+intc_1 // 1
+return
+main_l31:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub readVote2caster_29
+intc_1 // 1
+return
+main_l32:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub readVote1caster_28
+intc_1 // 1
+return
+main_l33:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub readCandidatecaster_27
+intc_1 // 1
+return
+main_l34:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub readSeatcaster_26
+intc_1 // 1
+return
+main_l35:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub updateVotecaster_25
+intc_1 // 1
+return
+main_l36:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub initVotecaster_24
+intc_1 // 1
+return
+main_l37:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub addCandidatecaster_23
+intc_1 // 1
+return
+main_l38:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub addSeatcaster_22
+intc_1 // 1
+return
+main_l39:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub createBoxcaster_21
+intc_1 // 1
+return
+main_l40:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l42
+err
+main_l42:
 txn ApplicationID
 intc_0 // 0
 ==
 assert
-intc_2 // 1
+intc_1 // 1
 return
 
 // itob
@@ -238,7 +350,7 @@ store 3
 pushbytes 0x30313233343536373839 // "0123456789"
 load 3
 load 3
-intc_2 // 1
+intc_1 // 1
 +
 substring3
 load 1
@@ -289,7 +401,7 @@ load 5
 +
 store 4
 load 7
-intc_2 // 1
+intc_1 // 1
 +
 store 7
 b btoi_1_l2
@@ -308,113 +420,8 @@ box_create
 pop
 retsub
 
-// readWholeBox
-readWholeBox_3:
-proto 1 1
-bytec_0 // ""
-frame_dig -1
-extract 2 0
-intc_0 // 0
-pushint 1000 // 1000
-box_extract
-frame_bury 0
-frame_dig 0
-len
-itob
-extract 6 0
-frame_dig 0
-concat
-frame_bury 0
-retsub
-
-// addCandidate
-addCandidate_4:
-proto 4 0
-frame_dig -4
-extract 2 0
-pushint 45 // 45
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-frame_dig -1
-intc_2 // 1
--
-*
-+
-frame_dig -3
-extract 2 0
-box_replace
-frame_dig -4
-extract 2 0
-pushint 110 // 110
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-frame_dig -1
-intc_2 // 1
--
-*
-+
-frame_dig -2
-extract 2 0
-box_replace
-retsub
-
-// readCandidate
-readCandidate_5:
-proto 2 1
-bytec_0 // ""
-pushbytes 0x4e616d653a20 // "Name: "
-frame_dig -2
-extract 2 0
-pushint 45 // 45
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-frame_dig -1
-intc_2 // 1
--
-*
-+
-intc_3 // 65
-box_extract
-concat
-pushbytes 0x090950617274793a20 // "\t\tParty: "
-concat
-frame_dig -2
-extract 2 0
-pushint 110 // 110
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-frame_dig -1
-intc_2 // 1
--
-*
-+
-pushint 25 // 25
-box_extract
-concat
-frame_bury 0
-frame_dig 0
-len
-itob
-extract 6 0
-frame_dig 0
-concat
-frame_bury 0
-retsub
-
 // addSeat
-addSeat_6:
+addSeat_3:
 proto 3 0
 frame_dig -3
 extract 2 0
@@ -433,6 +440,141 @@ extract 2 0
 pushint 30 // 30
 frame_dig -1
 extract 2 0
+box_replace
+retsub
+
+// addCandidate
+addCandidate_4:
+proto 4 0
+frame_dig -4
+extract 2 0
+pushint 45 // 45
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+frame_dig -1
+intc_1 // 1
+-
+*
++
+frame_dig -3
+extract 2 0
+box_replace
+frame_dig -4
+extract 2 0
+pushint 110 // 110
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+frame_dig -1
+intc_1 // 1
+-
+*
++
+frame_dig -2
+extract 2 0
+box_replace
+retsub
+
+// initVote
+initVote_5:
+proto 1 0
+intc 4 // 135
+store 0
+initVote_5_l1:
+load 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+pushint 9 // 9
+*
++
+intc_1 // 1
++
+<
+bz initVote_5_l3
+frame_dig -1
+extract 2 0
+load 0
+pushbytes 0x303030303030 // "000000"
+box_replace
+load 0
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
++
+store 0
+b initVote_5_l1
+initVote_5_l3:
+retsub
+
+// updateVote
+updateVote_6:
+proto 2 0
+frame_dig -2
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+frame_dig -1
+intc_1 // 1
+-
+*
++
+intc_2 // 6
+frame_dig -2
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+frame_dig -1
+intc_1 // 1
+-
+*
++
+intc_2 // 6
+box_extract
+callsub btoi_1
+intc_1 // 1
++
+callsub itob_0
+len
+-
++
+frame_dig -2
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+frame_dig -1
+intc_1 // 1
+-
+*
++
+intc_2 // 6
+box_extract
+callsub btoi_1
+intc_1 // 1
++
+callsub itob_0
 box_replace
 retsub
 
@@ -473,202 +615,43 @@ concat
 frame_bury 0
 retsub
 
-// initVote
-initVote_8:
-proto 1 0
-intc 4 // 135
-store 0
-initVote_8_l1:
-load 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-pushint 9 // 9
-*
-+
-intc_2 // 1
-+
-<
-bz initVote_8_l3
-frame_dig -1
-extract 2 0
-load 0
-pushbytes 0x303030303030 // "000000"
-box_replace
-load 0
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-+
-store 0
-b initVote_8_l1
-initVote_8_l3:
-retsub
-
-// updateVote
-updateVote_9:
-proto 2 0
-frame_dig -2
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-frame_dig -1
-intc_2 // 1
--
-*
-+
-pushint 2 // 2
-+
-frame_dig -2
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-frame_dig -1
-intc_2 // 1
--
-*
-+
-intc_1 // 6
-box_extract
-callsub btoi_1
-pushint 6969 // 6969
-+
-callsub itob_0
-box_replace
-retsub
-
-// readVote
-readVote_10:
-proto 1 1
+// readCandidate
+readCandidate_8:
+proto 2 1
 bytec_0 // ""
-pushbytes 0x313a20 // "1: "
-frame_dig -1
+pushbytes 0x4e616d653a20 // "Name: "
+frame_dig -2
 extract 2 0
-intc 4 // 135
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20323a20 // " 2: "
-concat
-frame_dig -1
-extract 2 0
-intc 4 // 135
+pushint 45 // 45
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
-+
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20333a20 // " 3: "
-concat
 frame_dig -1
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-pushint 2 // 2
+intc_1 // 1
+-
 *
 +
-intc_1 // 6
+intc_3 // 65
 box_extract
 concat
-pushbytes 0x20343a20 // " 4: "
+pushbytes 0x090950617274793a20 // "\t\tParty: "
 concat
-frame_dig -1
+frame_dig -2
 extract 2 0
-intc 4 // 135
+pushint 110 // 110
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
-pushint 3 // 3
-*
-+
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20353a20 // " 5: "
-concat
 frame_dig -1
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-pushint 4 // 4
+intc_1 // 1
+-
 *
 +
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20363a20 // " 6: "
-concat
-frame_dig -1
-extract 2 0
-intc 4 // 135
-intc_3 // 65
 pushint 25 // 25
-+
-intc_1 // 6
-+
-pushint 5 // 5
-*
-+
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20373a20 // " 7: "
-concat
-frame_dig -1
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-intc_1 // 6
-*
-+
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20383a20 // " 8: "
-concat
-frame_dig -1
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-pushint 7 // 7
-*
-+
-intc_1 // 6
 box_extract
 concat
 frame_bury 0
@@ -681,8 +664,265 @@ concat
 frame_bury 0
 retsub
 
+// readVote1
+readVote1_9:
+proto 1 1
+bytec_0 // ""
+pushbytes 0x313a20 // "1: "
+frame_dig -1
+extract 2 0
+intc 4 // 135
+intc_2 // 6
+box_extract
+callsub btoi_1
+callsub itob_0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// readVote2
+readVote2_10:
+proto 1 1
+bytec_0 // ""
+pushbytes 0x323a20 // "2: "
+frame_dig -1
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
++
+intc_2 // 6
+box_extract
+callsub btoi_1
+callsub itob_0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// readVote3
+readVote3_11:
+proto 1 1
+bytec_0 // ""
+pushbytes 0x333a20 // "3: "
+frame_dig -1
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+pushint 2 // 2
+*
++
+intc_2 // 6
+box_extract
+callsub btoi_1
+callsub itob_0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// readVote4
+readVote4_12:
+proto 1 1
+bytec_0 // ""
+pushbytes 0x343a20 // "4: "
+frame_dig -1
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+pushint 3 // 3
+*
++
+intc_2 // 6
+box_extract
+callsub btoi_1
+callsub itob_0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// readVote5
+readVote5_13:
+proto 1 1
+bytec_0 // ""
+pushbytes 0x353a20 // "5: "
+frame_dig -1
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+pushint 4 // 4
+*
++
+intc_2 // 6
+box_extract
+callsub btoi_1
+callsub itob_0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// readVote6
+readVote6_14:
+proto 1 1
+bytec_0 // ""
+pushbytes 0x363a20 // "6: "
+frame_dig -1
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+pushint 5 // 5
+*
++
+intc_2 // 6
+box_extract
+callsub btoi_1
+callsub itob_0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// readVote7
+readVote7_15:
+proto 1 1
+bytec_0 // ""
+pushbytes 0x373a20 // "7: "
+frame_dig -1
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+intc_2 // 6
+*
++
+intc_2 // 6
+box_extract
+callsub btoi_1
+callsub itob_0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// readVote8
+readVote8_16:
+proto 1 1
+bytec_0 // ""
+pushbytes 0x383a20 // "8: "
+frame_dig -1
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_2 // 6
++
+pushint 7 // 7
+*
++
+intc_2 // 6
+box_extract
+callsub btoi_1
+callsub itob_0
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
+// readWholeBox
+readWholeBox_17:
+proto 1 1
+bytec_0 // ""
+frame_dig -1
+extract 2 0
+intc_0 // 0
+pushint 1000 // 1000
+box_extract
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
 // putBoxDebug
-putBoxDebug_11:
+putBoxDebug_18:
 proto 3 0
 frame_dig -3
 extract 2 0
@@ -693,7 +933,7 @@ box_replace
 retsub
 
 // set_app_global_state_value
-setappglobalstatevalue_12:
+setappglobalstatevalue_19:
 proto 1 0
 bytec_3 // "global_state"
 frame_dig -1
@@ -702,7 +942,7 @@ app_global_put
 retsub
 
 // readGlobal
-readGlobal_13:
+readGlobal_20:
 proto 0 1
 bytec_0 // ""
 bytec_3 // "global_state"
@@ -718,7 +958,7 @@ frame_bury 0
 retsub
 
 // createBox_caster
-createBoxcaster_14:
+createBoxcaster_21:
 proto 0 0
 bytec_0 // ""
 txna ApplicationArgs 1
@@ -727,24 +967,25 @@ frame_dig 0
 callsub createBox_2
 retsub
 
-// readWholeBox_caster
-readWholeBoxcaster_15:
+// addSeat_caster
+addSeatcaster_22:
 proto 0 0
 bytec_0 // ""
-dup
+dupn 2
 txna ApplicationArgs 1
-frame_bury 1
-frame_dig 1
-callsub readWholeBox_3
 frame_bury 0
-bytec_1 // 0x151f7c75
+txna ApplicationArgs 2
+frame_bury 1
+txna ApplicationArgs 3
+frame_bury 2
 frame_dig 0
-concat
-log
+frame_dig 1
+frame_dig 2
+callsub addSeat_3
 retsub
 
 // addCandidate_caster
-addCandidatecaster_16:
+addCandidatecaster_23:
 proto 0 0
 bytec_0 // ""
 dupn 2
@@ -766,47 +1007,34 @@ frame_dig 3
 callsub addCandidate_4
 retsub
 
-// readCandidate_caster
-readCandidatecaster_17:
+// initVote_caster
+initVotecaster_24:
 proto 0 0
 bytec_0 // ""
-dup
+txna ApplicationArgs 1
+frame_bury 0
+frame_dig 0
+callsub initVote_5
+retsub
+
+// updateVote_caster
+updateVotecaster_25:
+proto 0 0
+bytec_0 // ""
 intc_0 // 0
 txna ApplicationArgs 1
-frame_bury 1
+frame_bury 0
 txna ApplicationArgs 2
 intc_0 // 0
 getbyte
-frame_bury 2
-frame_dig 1
-frame_dig 2
-callsub readCandidate_5
-frame_bury 0
-bytec_1 // 0x151f7c75
-frame_dig 0
-concat
-log
-retsub
-
-// addSeat_caster
-addSeatcaster_18:
-proto 0 0
-bytec_0 // ""
-dupn 2
-txna ApplicationArgs 1
-frame_bury 0
-txna ApplicationArgs 2
 frame_bury 1
-txna ApplicationArgs 3
-frame_bury 2
 frame_dig 0
 frame_dig 1
-frame_dig 2
-callsub addSeat_6
+callsub updateVote_6
 retsub
 
 // readSeat_caster
-readSeatcaster_19:
+readSeatcaster_26:
 proto 0 0
 bytec_0 // ""
 dup
@@ -821,41 +1049,165 @@ concat
 log
 retsub
 
-// initVote_caster
-initVotecaster_20:
+// readCandidate_caster
+readCandidatecaster_27:
 proto 0 0
 bytec_0 // ""
-txna ApplicationArgs 1
-frame_bury 0
-frame_dig 0
-callsub initVote_8
-retsub
-
-// updateVote_caster
-updateVotecaster_21:
-proto 0 0
-bytec_0 // ""
+dup
 intc_0 // 0
 txna ApplicationArgs 1
-frame_bury 0
+frame_bury 1
 txna ApplicationArgs 2
 intc_0 // 0
 getbyte
-frame_bury 1
-frame_dig 0
+frame_bury 2
 frame_dig 1
-callsub updateVote_9
+frame_dig 2
+callsub readCandidate_8
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
 retsub
 
-// readVote_caster
-readVotecaster_22:
+// readVote1_caster
+readVote1caster_28:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readVote_10
+callsub readVote1_9
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// readVote2_caster
+readVote2caster_29:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub readVote2_10
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// readVote3_caster
+readVote3caster_30:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub readVote3_11
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// readVote4_caster
+readVote4caster_31:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub readVote4_12
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// readVote5_caster
+readVote5caster_32:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub readVote5_13
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// readVote6_caster
+readVote6caster_33:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub readVote6_14
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// readVote7_caster
+readVote7caster_34:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub readVote7_15
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// readVote8_caster
+readVote8caster_35:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub readVote8_16
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// readWholeBox_caster
+readWholeBoxcaster_36:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub readWholeBox_17
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -864,7 +1216,7 @@ log
 retsub
 
 // putBoxDebug_caster
-putBoxDebugcaster_23:
+putBoxDebugcaster_37:
 proto 0 0
 bytec_0 // ""
 dup
@@ -880,24 +1232,24 @@ frame_bury 2
 frame_dig 0
 frame_dig 1
 frame_dig 2
-callsub putBoxDebug_11
+callsub putBoxDebug_18
 retsub
 
 // set_app_global_state_value_caster
-setappglobalstatevaluecaster_24:
+setappglobalstatevaluecaster_38:
 proto 0 0
 bytec_0 // ""
 txna ApplicationArgs 1
 frame_bury 0
 frame_dig 0
-callsub setappglobalstatevalue_12
+callsub setappglobalstatevalue_19
 retsub
 
 // readGlobal_caster
-readGlobalcaster_25:
+readGlobalcaster_39:
 proto 0 0
 bytec_0 // ""
-callsub readGlobal_13
+callsub readGlobal_20
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0

@@ -19,7 +19,7 @@ app_client = client.ApplicationClient(
 )
 
 app_id, addr, txid = app_client.create()
-app_client.fund(10 * algo)
+app_client.fund(100 * algo)
 print(
 	f"""
 App Deployed!
@@ -28,7 +28,7 @@ Txid        : {txid}
 App Id      : {app_id}
 App Address : {addr}
 
-Funded 10 ALGO to app!")
+Funded 100 ALGO to app!")
 """
 )
 
@@ -83,22 +83,34 @@ print(f"Candidate 4 => {ret}")
 ret = app_client1.call(readCandidate, seat=AMPANG, i=5, boxes=[(app_client.app_id, AMPANG)]).return_value
 print(f"Candidate 5 => {ret}\n")
 
-ret = app_client1.call(readVote, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value
-print(f"\nVote (BEFORE) => \n{ret}\n")
+print(f"Vote (BEFORE) ==>\n")
+print(f"{app_client1.call(readVote1, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote2, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote3, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote4, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote5, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote6, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote7, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
 app_client1.call(updateVote, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)])
 app_client1.call(updateVote, seat=AMPANG, i=3, boxes=[(app_client.app_id, AMPANG)])
 app_client1.call(updateVote, seat=AMPANG, i=1, boxes=[(app_client.app_id, AMPANG)])
 app_client1.call(updateVote, seat=AMPANG, i=4, boxes=[(app_client.app_id, AMPANG)])
 app_client1.call(updateVote, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)])
+app_client1.call(updateVote, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)])
 
+print(f"Vote (AFTER) ==>")
+print(f"{app_client1.call(readVote1, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote2, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote3, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote4, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote5, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote6, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote7, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
-ret = app_client1.call(readVote, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value
-print(f"Vote (AFTER) => \n{ret}")
-
-
-
-
+print(f"{app_client1.call(readWholeBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
 
 
