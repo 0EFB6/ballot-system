@@ -118,7 +118,7 @@ def updateVote(seat:abi.String, i: abi.Uint8):
 	new_vote_uint = current_vote_uint + Int(1)
 	ret = abi.String()
 	If (And(new_vote_uint >= Int(0), new_vote_uint <= Int(9)),
-        ret.set(Concat(Bytes("013020"), Bytes(("F"))))
+        ret.set(Bytes("013020"))
     )
 	new_vote_uint = If (
 		And(new_vote_uint >= Int(0), new_vote_uint <= Int(9)),
