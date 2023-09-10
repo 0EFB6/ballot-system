@@ -1,23 +1,5 @@
 from pyteal import *
 
-@Subroutine(TealType.uint64)
-def byteLength(byte_str):
-    length = ScratchVar(TealType.uint64)
-    i = ScratchVar(TealType.uint64)
-    
-    return Seq([
-        length.store(Int(0)),
-        i.store(Int(0)),
-        While(i.load() < Len(byte_str)).Do(
-            Seq([
-                length.store(length.load() + Int(1)),
-                i.store(i.load() + Int(1))
-            ])
-        ),
-        length.load()
-    ])
-
-
 @Subroutine(TealType.bytes)
 def itob(arg):
 
@@ -74,16 +56,4 @@ def btoi(str):
             ),
             num.load()
         ])
-    )
-
-# Ignore this func()
-@Subroutine(TealType.bytes)
-def fill_bytes(arg: abi.Uint64):
-    string = ScratchVar(TealType.bytes)
-
-    string.store(Concat(Bytes("00"), itob(arg.get())))
-    return If (
-        arg.get() == Int(0),
-        Bytes("GG"),
-        Bytes("ZXDSAS")
     )

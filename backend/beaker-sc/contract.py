@@ -37,33 +37,6 @@ def createBox(seat: abi.String) -> Expr:
 	return Pop(BoxCreate(seat.get(), Int(1024)))
 
 @app.external
-def readWholeBox(seat: abi.String, *, output: abi.String) -> Expr:
-	return output.set(BoxExtract(seat.get(), Int(0), Int(1000)))
-
-@app.external
-def addCandidate(seat:abi.String, name: abi.String, party: abi.String, i: abi.Uint8) -> Expr:
-	Seq(
-		Assert(Len(name.get()) > Int(0)),
-		Assert(Len(name.get()) <= LEN_CANDIDATE_NAME),
-		Assert(Len(party.get()) > Int(0)),
-		Assert(Len(party.get()) <= LEN_PARTY)
-	)
-	return Seq(
-		BoxReplace(seat.get(), CANDIDATE_NAME_1 + LEN_SUM * (i.get() - Int(1)), name.get()),
-		BoxReplace(seat.get(), CANDIDATE_PARTY_1 + LEN_SUM * (i.get() - Int(1)), party.get())
-	)
-
-@app.external
-def readCandidate(seat:abi.String, i: abi.Uint8, *, output: abi.String) -> Expr:
-	ret = Concat(
-		Bytes("Name: "),
-		BoxExtract(seat.get(), CANDIDATE_NAME_1 + LEN_SUM * (i.get() - Int(1)), LEN_CANDIDATE_NAME),
-		Bytes("\t\tParty: "),
-		BoxExtract(seat.get(), CANDIDATE_PARTY_1 + LEN_SUM * (i.get() - Int(1)), LEN_PARTY)
-	)
-	return output.set(ret)
-
-@app.external
 def addSeat(seat: abi.String, area: abi.String, state: abi.String) -> Expr:
 	Seq(
 		Assert(Len(seat.get()) > Int(0)),
@@ -81,16 +54,17 @@ def addSeat(seat: abi.String, area: abi.String, state: abi.String) -> Expr:
 	return ret
 
 @app.external
-def readSeat(seat: abi.String, *, output: abi.String) -> Expr:
-	ret = Concat(
-		Bytes("Seat No: "),
-		BoxExtract(seat.get(), SEAT_NO_I, LEN_SEAT_NO),
-		Bytes("\nArea: "),
-		BoxExtract(seat.get(), SEAT_AREA_I, LEN_SEAT_AREA),
-		Bytes("\nState: "),
-		BoxExtract(seat.get(), SEAT_STATE_I, LEN_SEAT_STATE)
+def addCandidate(seat:abi.String, name: abi.String, party: abi.String, i: abi.Uint8) -> Expr:
+	Seq(
+		Assert(Len(name.get()) > Int(0)),
+		Assert(Len(name.get()) <= LEN_CANDIDATE_NAME),
+		Assert(Len(party.get()) > Int(0)),
+		Assert(Len(party.get()) <= LEN_PARTY)
 	)
-	return output.set(ret)
+	return Seq(
+		BoxReplace(seat.get(), CANDIDATE_NAME_1 + LEN_SUM * (i.get() - Int(1)), name.get()),
+		BoxReplace(seat.get(), CANDIDATE_PARTY_1 + LEN_SUM * (i.get() - Int(1)), party.get())
+	)
 
 @app.external
 def initVote(seat: abi.String):
@@ -103,51 +77,95 @@ def initVote(seat: abi.String):
 			BoxReplace(seat.get(), tmp.load(), Bytes("000000"))
 		)
 	)
-'''
-, *, output: abi.Uint64
-'''
+
 @app.external
 def updateVote(seat:abi.String, i: abi.Uint8) -> Expr:
 	current_vote_byte = BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (i.get() - Int(1)), LEN_VOTECOUNT)
 	current_vote_uint = btoi(current_vote_byte)
 	new_vote_uint = current_vote_uint + Int(1)
 	new_vote_byte = itob(new_vote_uint)
-	# nbrlen = byteLength(new_vote_byte)
-	nbrlen = Len(new_vote_byte)
-
-	idx = Int(6) - nbrlen
-	#return output.set(idx)
+	idx = Int(6) - Len(new_vote_byte)
 	return BoxReplace(
 				seat.get(),
-				# CANDIDATE_VOTES_1 + LEN_SUM * (i.get() - Int(1)) + Int(2),
 				CANDIDATE_VOTES_1 + LEN_SUM * (i.get() - Int(1)) + idx,
-
 				new_vote_byte
 			)
 
 @app.external
-def readVote(seat: abi.String, *, output: abi.String) -> Expr:
+def readSeat(seat: abi.String, *, output: abi.String) -> Expr:
 	ret = Concat(
-		Bytes("1: "),
-		BoxExtract(seat.get(), CANDIDATE_VOTES_1, LEN_VOTECOUNT),
-		Bytes(" 2: "),
-		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM, LEN_VOTECOUNT),
-		Bytes(" 3: "),
-		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(2), LEN_VOTECOUNT),
-		Bytes(" 4: "),
-		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(3), LEN_VOTECOUNT),
-		Bytes(" 5: "),
-		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(4), LEN_VOTECOUNT),
-		Bytes(" 6: "),
-		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(5), LEN_VOTECOUNT),
-		Bytes(" 7: "),
-		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(6), LEN_VOTECOUNT),
-		Bytes(" 8: "),
-		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(7), LEN_VOTECOUNT)
+		Bytes("Seat No: "),
+		BoxExtract(seat.get(), SEAT_NO_I, LEN_SEAT_NO),
+		Bytes("\nArea: "),
+		BoxExtract(seat.get(), SEAT_AREA_I, LEN_SEAT_AREA),
+		Bytes("\nState: "),
+		BoxExtract(seat.get(), SEAT_STATE_I, LEN_SEAT_STATE)
 	)
 	return output.set(ret)
 
+@app.external
+def readCandidate(seat:abi.String, i: abi.Uint8, *, output: abi.String) -> Expr:
+	ret = Concat(
+		Bytes("Name: "),
+		BoxExtract(seat.get(), CANDIDATE_NAME_1 + LEN_SUM * (i.get() - Int(1)), LEN_CANDIDATE_NAME),
+		Bytes("\t\tParty: "),
+		BoxExtract(seat.get(), CANDIDATE_PARTY_1 + LEN_SUM * (i.get() - Int(1)), LEN_PARTY)
+	)
+	return output.set(ret)
 
+@app.external
+def readVote1(seat: abi.String, *, output: abi.String) -> Expr:
+	vote = itob(btoi(BoxExtract(seat.get(), CANDIDATE_VOTES_1, LEN_VOTECOUNT)))
+	return output.set(Concat(Bytes("1: "), vote))
+
+@app.external
+def readVote2(seat: abi.String, *, output: abi.String) -> Expr:
+	vote = itob(btoi(BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM, LEN_VOTECOUNT)))
+	return output.set(Concat(Bytes("2: "), vote))
+
+@app.external
+def readVote3(seat: abi.String, *, output: abi.String) -> Expr:
+	vote = itob(btoi(BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(2), LEN_VOTECOUNT)))
+	return output.set(Concat(Bytes("3: "), vote))
+
+@app.external
+def readVote4(seat: abi.String, *, output: abi.String) -> Expr:
+	vote = itob(btoi(BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(3), LEN_VOTECOUNT)))
+	return output.set(Concat(Bytes("4: "), vote))
+
+@app.external
+def readVote5(seat: abi.String, *, output: abi.String) -> Expr:
+	vote = itob(btoi(BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(4), LEN_VOTECOUNT)))
+	return output.set(Concat(Bytes("5: "), vote))
+
+@app.external
+def readVote6(seat: abi.String, *, output: abi.String) -> Expr:
+	vote = itob(btoi(BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(5), LEN_VOTECOUNT)))
+	return output.set(Concat(Bytes("6: "), vote))
+
+@app.external
+def readVote7(seat: abi.String, *, output: abi.String) -> Expr:
+	vote = itob(btoi(BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(6), LEN_VOTECOUNT)))
+	return output.set(Concat(Bytes("7: "), vote))
+
+@app.external
+def readVote8(seat: abi.String, *, output: abi.String) -> Expr:
+	vote = itob(btoi(BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(7), LEN_VOTECOUNT)))
+	return output.set(Concat(Bytes("8: "), vote))
+
+#@app.external
+#def readVote(seat: abi.String, *, output: abi.String) -> Expr:
+#	ret = Concat(
+#		Bytes(" 7: "),
+#		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(6), LEN_VOTECOUNT),
+#		Bytes(" 8: "),
+#		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(7), LEN_VOTECOUNT)
+#	)
+#	return output.set(ret)
+
+@app.external
+def readWholeBox(seat: abi.String, *, output: abi.String) -> Expr:
+	return output.set(BoxExtract(seat.get(), Int(0), Int(1000)))
 
 
 
@@ -171,7 +189,6 @@ def set_app_global_state_value(str: abi.String) -> Expr:
 @app.external
 def readGlobal(*, output: abi.String) -> Expr:
 	return output.set(app.state.global_state)
-
 
 # Borken Function
 '''@app.external
