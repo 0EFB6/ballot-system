@@ -1,6 +1,8 @@
 from candidate import NAME_I, LEN_LIMIT, NAME_LEN, PARTY_I, PARTY_LEN
 from pyteal import *
-from utils import convert_uint_to_bytes, convert_bytes_to_uint
+from utils import convert_uint_to_bytes, convert_bytes_to_uint, hash_ic
+
+print(hash_ic("041103145678"))
 
 N_I = Int(0)
 N_LEN = Int(4)
@@ -32,10 +34,6 @@ router = Router(
 )
 
 NAME_LIMIT = Int(30)
-
-@router.method
-def test(str: abi.String, *, output:abi.Uint16):
-	return output.set(convert_bytes_to_uint(str.get()))
 
 @router.method
 def create_votes_box(candidate_name: abi.String):

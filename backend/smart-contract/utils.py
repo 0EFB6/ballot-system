@@ -1,4 +1,5 @@
 from pyteal import *
+import hashlib
 
 @Subroutine(TealType.bytes)
 def convert_uint_to_bytes(arg):
@@ -57,3 +58,19 @@ def convert_bytes_to_uint(str):
             num.load()
         ])
     )
+
+# @Subroutine(TealType.uint64)
+# def str_length(str):
+
+#     str_length = ScratchVar(TealType.uint64)
+
+#     return Seq([
+#             str_length.store(Len(str)),
+#             str_length.load()
+#         ])
+
+
+def hash_ic(ic_num: str):
+    str_to_bytes = ic_num.encode('UTF-8')
+    h = hashlib.shake_256(str_to_bytes)
+    return h.hexdigest(7)
