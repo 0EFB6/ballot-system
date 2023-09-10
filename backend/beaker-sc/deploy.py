@@ -88,8 +88,7 @@ print(f"Candidate 4 => \n{ret}")
 ret = app_client1.call(readCandidate, seat=AMPANG, i=5, boxes=[(app_client.app_id, AMPANG)]).return_value
 print(f"Candidate 5 => \n{ret}")
 
-ret = app_client1.call(updateVote, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)]).return_value
-print(f"DEBUG => {ret}")
+ret = app_client1.call(updateVote, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)])
 ret = app_client1.call(readVote, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value
 print(f"Vote 2 => \n{ret}")
 '''app_client.opt_in()

@@ -57,3 +57,15 @@ def btoi(str):
             num.load()
         ])
     )
+
+@Subroutine(TealType.bytes)
+def fill_bytes(arg):
+    string = ScratchVar(TealType.bytes)
+    num = ScratchVar(TealType.uint64)
+
+    num.store(arg)
+    string.store(Bytes("00000"))
+    If (And(num >= Int(0), num <= Int(9)),
+        string.store(Concat(string.load(), itob(num.load())))
+    )
+    return string.load()

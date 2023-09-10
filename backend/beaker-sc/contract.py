@@ -112,13 +112,21 @@ def initVote(seat: abi.String):
 	)
 
 @app.external
-def updateVote(seat:abi.String, i: abi.Uint8, *, output: abi.Uint64):
+def updateVote(seat:abi.String, i: abi.Uint8):
 	current_vote_byte = BoxExtract(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * (i.get() - Int(1)), VOTECOUNT_LEN)
 	current_vote_uint = btoi(current_vote_byte)
 	new_vote_uint = current_vote_uint + Int(1)
-	new_vote_byte = itob(new_vote_uint)
-	BoxReplace(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * (i.get() - Int(1)), new_vote_byte)
-	return output.set(new_vote_uint)
+	ret = abi.String()
+	If (And(new_vote_uint >= Int(0), new_vote_uint <= Int(9)),
+        ret.set(Concat(Bytes("013020"), Bytes(("F"))))
+    )
+	new_vote_uint = If (
+		And(new_vote_uint >= Int(0), new_vote_uint <= Int(9)),
+		Int(66),
+		Int(69)
+	)
+	return BoxReplace(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * (i.get() - Int(1)),
+			Bytes("haha"))
 
 
 
