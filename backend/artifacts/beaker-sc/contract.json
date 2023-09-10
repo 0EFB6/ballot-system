@@ -46,6 +46,118 @@
             }
         },
         {
+            "name": "addCandidate",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                },
+                {
+                    "type": "string",
+                    "name": "name"
+                },
+                {
+                    "type": "string",
+                    "name": "party"
+                },
+                {
+                    "type": "uint8",
+                    "name": "i"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "readCandidate",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                },
+                {
+                    "type": "uint8",
+                    "name": "i"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "addSeat",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                },
+                {
+                    "type": "string",
+                    "name": "area"
+                },
+                {
+                    "type": "string",
+                    "name": "state"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "readSeat",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "initVote",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "updateVote",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                },
+                {
+                    "type": "uint8",
+                    "name": "i"
+                }
+            ],
+            "returns": {
+                "type": "uint64"
+            }
+        },
+        {
+            "name": "readVote",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
             "name": "set_app_global_state_value",
             "args": [
                 {
