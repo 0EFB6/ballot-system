@@ -32,38 +32,66 @@ App Address: {addr}
 app_client.fund(5 * algo)
 print("Funded 5 ALGO to app!")
 
-app_client.call(
-	bootstrap,
-	boxes=[(app_client.app_id, "addr_list")]
-)
-
 app_client1 = app_client.prepare(signer=accounts[0].signer)
 app_client2 = app_client.prepare(signer=accounts[1].signer)
 app_client3 = app_client.prepare(signer=accounts[2].signer)
 
-app_client1.call(vote, addr=accounts[0].address, boxes=[(app_client.app_id, "addr_list")])
-app_client2.call(vote, addr=accounts[1].address, boxes=[(app_client.app_id, "addr_list")])
-app_client3.call(vote, addr=accounts[2].address, boxes=[(app_client.app_id, "addr_list")])
+SUBANG = "P102"
+PUCHONG = "P103"
+AMPANG = "P106"
 
-global_state = app_client.get_global_state()
-i = int(global_state["votes"])
-
-for x in range(i):
-	value = app_client.call(
-		readVote,
-		vote=x,
-		boxes=[(app_client.app_id, "addr_list")]
-	)
-	print("  - ", value.return_value)
-
+app_client.call(set_app_global_state_value, str="Hello World!")
 ret = app_client.call(readGlobal)
-print(f"Global => {ret.return_value}")
+print(f"Global State Value=> {ret.return_value}")
 
-app_client1.call(addParliamentSeat, area="Puchong", no=101, state="Selangor", candidate_no=2,
-				 candidate_name="Wilson", candidate_party="Harapan", votes=0, boxes=[(app_client.app_id, "Puchong")])
-ret = app_client1.call(readParliamentItemState, area="Puchong", boxes=[(app_client.app_id, "Puchong")]).return_value
-print(f"Ret => {ret}")
+app_client1.call(createbox_votecount, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)])
+app_client2.call(createbox_votecount, seat=PUCHONG, boxes=[(app_client.app_id, PUCHONG)])
+app_client3.call(createbox_votecount, seat=SUBANG, boxes=[(app_client.app_id, SUBANG)])
+#app_client1.call(putbox_votecount, seat=AMPANG, value="012345", i=0, boxes=[(app_client.app_id, AMPANG)])
+app_client2.call(putbox_votecount, seat=PUCHONG, value="666999", i=0, boxes=[(app_client.app_id, PUCHONG)])
+app_client3.call(putbox_votecount, seat=SUBANG, value="777333", i=0, boxes=[(app_client.app_id, SUBANG)])
+#app_client1.call(putbox_votecount, seat=AMPANG, value="Wilson", i=6, boxes=[(app_client.app_id, AMPANG)])
 
+ret = app_client1.call(readbox_votecount, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)])
+print(f"Ret 1 => {ret.return_value}")
+ret = app_client2.call(readbox_votecount, seat=PUCHONG, boxes=[(app_client.app_id, PUCHONG)])
+print(f"Ret 2 => {ret.return_value}")
+ret = app_client3.call(readbox_votecount, seat=SUBANG, boxes=[(app_client.app_id, SUBANG)])
+print(f"Ret 3 => {ret.return_value}")
+
+
+app_client1.call(initVote, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)])
+ret = app_client1.call(readVote, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value
+print(f"Vote 1 => \n{ret}")
+
+app_client1.call(addSeat, seat=AMPANG, area="Ampang", state="Selangor", boxes=[(app_client.app_id, AMPANG)])
+ret = app_client1.call(readSeat, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value
+print(f"Seat 1 => \n{ret}")
+
+ret = app_client1.call(readbox_votecount, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)])
+print(f"Ret 0-100 => {ret.return_value}\n")
+
+app_client1.call(addCandidate, seat=AMPANG, name="Brian", party="Testingg", i=1, boxes=[(app_client.app_id, AMPANG)])
+app_client1.call(addCandidate, seat=AMPANG, name="Wilson", party="Perpaduan", i=2, boxes=[(app_client.app_id, AMPANG)])
+app_client1.call(addCandidate, seat=AMPANG, name="Hao", party="Nasional", i=3, boxes=[(app_client.app_id, AMPANG)])
+app_client1.call(addCandidate, seat=AMPANG, name="Dunno", party="Harapan", i=4, boxes=[(app_client.app_id, AMPANG)])
+
+
+ret = app_client1.call(readCandidate, seat=AMPANG, i=1, boxes=[(app_client.app_id, AMPANG)]).return_value
+print(f"Candidate 1 => \n{ret}")
+ret = app_client1.call(readCandidate, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)]).return_value
+print(f"Candidate 2 => \n{ret}")
+ret = app_client1.call(readCandidate, seat=AMPANG, i=3, boxes=[(app_client.app_id, AMPANG)]).return_value
+print(f"Candidate 3 => \n{ret}")
+ret = app_client1.call(readCandidate, seat=AMPANG, i=4, boxes=[(app_client.app_id, AMPANG)]).return_value
+print(f"Candidate 4 => \n{ret}")
+ret = app_client1.call(readCandidate, seat=AMPANG, i=5, boxes=[(app_client.app_id, AMPANG)]).return_value
+print(f"Candidate 5 => \n{ret}")
+
+ret = app_client1.call(updateVote, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)]).return_value
+print(f"DEBUG => {ret}")
+ret = app_client1.call(readVote, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value
+print(f"Vote 2 => \n{ret}")
 '''app_client.opt_in()
 print("Opted in to app!")'''
 

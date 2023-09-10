@@ -1,66 +1,170 @@
+from utils import *
 from beaker import *
 from pyteal import *
 from beaker.lib.storage import BoxList, BoxMapping
 
-class Parliament(abi.NamedTuple):
-	area: abi.Field[abi.String]
-	no: abi.Field[abi.Uint8]
-	state: abi.Field[abi.String]
-	candidate_no: abi.Field[abi.Uint8]
-	candidate_name: abi.Field[abi.String]
-	candidate_party: abi.Field[abi.String]
-	votes: abi.Field[abi.Uint64]
-
 #[key1: value1, key2: value2, key3: value3, key4: value4, key5: value5]
-
 #key: P103 OR Subang
 #value: Area, No, State,        Candidate No, Candidate Name, Candidate Party, Votes
 #    (Subang) (103) (Selangor), (2),          (Wilson),        (Pakatan)
 
-class ParliamentItem:
-	votes = GlobalStateValue(
-		stack_type=TealType.uint64, default=Int(0), descr="Number of votes"
+class ParliamentSeat:
+	global_state = GlobalStateValue(
+		stack_type=TealType.bytes,
+		default=Bytes("Testing"),
+		descr="Global state for Parliament Seat"
 	)
-	addr_list = BoxList(abi.Address, 10)
-	par_seat = BoxMapping(abi.String, Parliament)
 
-app = Application("Parliament Item", state=ParliamentItem())
+app = Application("Voting Beaker", state=ParliamentSeat())
 
 @app.external
-def bootstrap() -> Expr:
+def createbox_votecount(seat: abi.String) -> Expr:
+	return Pop(BoxCreate(seat.get(), Int(1023)))
+
+@app.external
+def putbox_votecount(seat: abi.String, value: abi.String, i: abi.Uint16) -> Expr:
+	return BoxReplace(seat.get(), i.get(), value.get())
+
+@app.external
+def readbox_votecount(seat: abi.String, *, output: abi.String) -> Expr:
+	return output.set(BoxExtract(seat.get(), Int(0), Int(100)))
+
+
+SEAT_NO_I = Int(0)
+SEAT_NO_LEN = Int(4)
+SEAT_AREA_I = Int(4)
+SEAT_AREA_LEN = Int(26)
+SEAT_STATE_I = Int(30)
+SEAT_STATE_LEN = Int(15)
+
+CANDIDATE_NAME_LEN = Int(65)
+PARTY_LEN = Int(25)
+VOTECOUNT_LEN = Int(6)
+SUM_LEN = CANDIDATE_NAME_LEN + PARTY_LEN + VOTECOUNT_LEN
+
+CANDIDATE_NAME_1 = Int(45)
+CANDIDATE_PARTY_1 = Int(110)
+CANDIDATE_VOTES_1 = Int(135)
+
+
+@app.external
+def addCandidate(seat:abi.String, name: abi.String, party: abi.String, i: abi.Uint8) -> Expr:
+	Seq(
+		Assert(Len(name.get()) > Int(0)),
+		Assert(Len(name.get()) <= CANDIDATE_NAME_LEN),
+		Assert(Len(party.get()) > Int(0)),
+		Assert(Len(party.get()) <= PARTY_LEN)
+	)
 	return Seq(
-		Pop(app.state.addr_list.create()),
-		app.initialize_global_state()
+		BoxReplace(seat.get(), CANDIDATE_NAME_1 + SUM_LEN * (i.get() - Int(1)), name.get()),
+		BoxReplace(seat.get(), CANDIDATE_PARTY_1 + SUM_LEN * (i.get() - Int(1)), party.get())
 	)
 
 @app.external
-def vote(addr: abi.Address) -> Expr:
-	return Seq(app.state.addr_list[app.state.votes].set(addr), app.state.votes.increment())
+def readCandidate(seat:abi.String, i: abi.Uint8, *, output: abi.String) -> Expr:
+	ret = Concat(
+		Bytes("Name: "),
+		BoxExtract(seat.get(), CANDIDATE_NAME_1 + SUM_LEN * (i.get() - Int(1)), CANDIDATE_NAME_LEN),
+		Bytes("\nParty: "),
+		BoxExtract(seat.get(), CANDIDATE_PARTY_1 + SUM_LEN * (i.get() - Int(1)), PARTY_LEN)
+	)
+	return output.set(ret)
 
 @app.external
-def readVote(vote: abi.Uint64, *, output: abi.Address) -> Expr:
-	return app.state.addr_list[vote.get()].store_into(output)
-
-@app.external
-def readGlobal(*, output: abi.Uint64) -> Expr:
-	return output.set(app.state.votes.get())
-
-
-@app.external
-def addParliamentSeat(area: abi.String, no: abi.Uint8, state: abi.String, candidate_no: abi.Uint8,
-					  candidate_name: abi.String, candidate_party: abi.String, votes: abi.Uint64) -> Expr:
-	box_tuple = Parliament()
+def addSeat(seat: abi.String, area: abi.String, state: abi.String) -> Expr:
+	Seq(
+		Assert(Len(seat.get()) > Int(0)),
+		Assert(Len(seat.get()) <= SEAT_NO_LEN),
+		Assert(Len(area.get()) > Int(0)),
+		Assert(Len(area.get()) <= SEAT_AREA_LEN),
+		Assert(Len(state.get()) > Int(0)),
+		Assert(Len(state.get()) <= SEAT_STATE_LEN)
+	)
 	ret = Seq(
-		box_tuple.set(area, no, state, candidate_no, candidate_name, candidate_party, votes),
-		app.state.par_seat[area.get()].set(box_tuple)
+		BoxReplace(seat.get(), SEAT_NO_I, seat.get()),
+		BoxReplace(seat.get(), SEAT_AREA_I, area.get()),
+		BoxReplace(seat.get(), SEAT_STATE_I, state.get())
 	)
 	return ret
 
 @app.external
-def readParliamentItemState(area: abi.String, *, output: Parliament) -> Expr:
-	return app.state.par_seat[area.get()].store_into(output)
-    #ret = output.set(app.state.par_seat[area.get()].get())
-    #return ret
+def readSeat(seat: abi.String, *, output: abi.String) -> Expr:
+	ret = Concat(
+		Bytes("Seat No: "),
+		BoxExtract(seat.get(), SEAT_NO_I, SEAT_NO_LEN),
+		Bytes("\nArea: "),
+		BoxExtract(seat.get(), SEAT_AREA_I, SEAT_AREA_LEN),
+		Bytes("\nState: "),
+		BoxExtract(seat.get(), SEAT_STATE_I, SEAT_STATE_LEN)
+	)
+	return output.set(ret)
+
+@app.external
+def initVote(seat: abi.String):
+	tmp = ScratchVar(TealType.uint64)
+
+	return Seq(
+		For(tmp.store(CANDIDATE_VOTES_1),
+	  tmp.load() < (CANDIDATE_VOTES_1 + SUM_LEN * Int(9) + Int(1)),
+	  tmp.store(tmp.load() + SUM_LEN)).Do(
+			BoxReplace(seat.get(), tmp.load(), Bytes("000000"))
+		)
+	)
+
+@app.external
+def updateVote(seat:abi.String, i: abi.Uint8, *, output: abi.Uint64):
+	current_vote_byte = BoxExtract(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * (i.get() - Int(1)), VOTECOUNT_LEN)
+	current_vote_uint = btoi(current_vote_byte)
+	new_vote_uint = current_vote_uint + Int(1)
+	new_vote_byte = itob(new_vote_uint)
+	BoxReplace(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * (i.get() - Int(1)), new_vote_byte)
+	return output.set(new_vote_uint)
+
+
+
+@app.external
+def readVote(seat: abi.String, *, output: abi.String) -> Expr:
+	ret = Concat(
+		Bytes("1: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1, VOTECOUNT_LEN),
+		Bytes("\n2: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN, VOTECOUNT_LEN),
+		Bytes("\n3: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * Int(2), VOTECOUNT_LEN),
+		Bytes("\n4: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * Int(3), VOTECOUNT_LEN),
+		Bytes("\n5: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * Int(4), VOTECOUNT_LEN),
+		Bytes("\n6: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * Int(5), VOTECOUNT_LEN),
+		Bytes("\n7: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * Int(6), VOTECOUNT_LEN),
+		Bytes("\n8: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + SUM_LEN * Int(7), VOTECOUNT_LEN)
+	)
+	return output.set(ret)
+
+
+
+
+
+
+
+
+
+
+
+
+
+# others
+@app.external
+def set_app_global_state_value(str: abi.String) -> Expr:
+	return app.state.global_state.set(str.get())
+
+@app.external
+def readGlobal(*, output: abi.String) -> Expr:
+	return output.set(app.state.global_state)
+
 
 # Borken Function
 '''@app.external
