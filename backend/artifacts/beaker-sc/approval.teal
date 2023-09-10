@@ -526,7 +526,28 @@ intc_2 // 1
 -
 *
 +
-pushint 2 // 2
+intc_1 // 6
+frame_dig -2
+extract 2 0
+intc 4 // 135
+intc_3 // 65
+pushint 25 // 25
++
+intc_1 // 6
++
+frame_dig -1
+intc_2 // 1
+-
+*
++
+intc_1 // 6
+box_extract
+callsub btoi_1
+intc_2 // 1
++
+callsub itob_0
+len
+-
 +
 frame_dig -2
 extract 2 0
@@ -544,7 +565,7 @@ intc_2 // 1
 intc_1 // 6
 box_extract
 callsub btoi_1
-pushint 6969 // 6969
+intc_2 // 1
 +
 callsub itob_0
 box_replace

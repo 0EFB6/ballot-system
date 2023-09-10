@@ -110,7 +110,7 @@ def initVote(seat: abi.String):
 def updateVote(seat:abi.String, i: abi.Uint8) -> Expr:
 	current_vote_byte = BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (i.get() - Int(1)), LEN_VOTECOUNT)
 	current_vote_uint = btoi(current_vote_byte)
-	new_vote_uint = current_vote_uint + Int(6969)
+	new_vote_uint = current_vote_uint + Int(1)
 	new_vote_byte = itob(new_vote_uint)
 	# nbrlen = byteLength(new_vote_byte)
 	nbrlen = Len(new_vote_byte)
