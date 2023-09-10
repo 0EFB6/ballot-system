@@ -1,5 +1,5 @@
 # Ballot ID (27 digits)
-*** ** 000 *** ** **************  
+*** ** 000 *** ** (32 *)  
 Before 000 divider:  
 DUN:
 -   Area, state  
@@ -8,7 +8,7 @@ After 000 divider:
 Parliament:
 -   Area, no., state  
 
-Last 14 digits are hash digits created from ic number
+Last 32 digits are uuid
 
 ## Custom number as identifier
 ### DUN

@@ -1,8 +1,7 @@
 from candidate import NAME_I, LEN_LIMIT, NAME_LEN, PARTY_I, PARTY_LEN
 from pyteal import *
-from utils import convert_uint_to_bytes, convert_bytes_to_uint, hash_ic
+from utils import convert_uint_to_bytes, convert_bytes_to_uint, get_uuid
 
-print(hash_ic("041103145678"))
 
 N_I = Int(0)
 N_LEN = Int(4)

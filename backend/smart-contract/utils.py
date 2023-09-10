@@ -1,5 +1,7 @@
 from pyteal import *
-import hashlib
+import uuid
+# import hashlib
+
 
 @Subroutine(TealType.bytes)
 def convert_uint_to_bytes(arg):
@@ -69,8 +71,12 @@ def convert_bytes_to_uint(str):
 #             str_length.load()
 #         ])
 
+# using uuid prob better cause hashing ppl just need ur ic info to get ur id
+# def hash_ic(ic_num: str):
+#     str_to_bytes = ic_num.encode('UTF-8')
+#     h = hashlib.shake_256(str_to_bytes)
+#     return h.hexdigest(7)
 
-def hash_ic(ic_num: str):
-    str_to_bytes = ic_num.encode('UTF-8')
-    h = hashlib.shake_256(str_to_bytes)
-    return h.hexdigest(7)
+def get_uuid():
+    unique_id = uuid.uuid4().hex
+    return unique_id
