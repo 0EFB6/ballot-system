@@ -101,3 +101,33 @@ Parliament: Damansara, Selangor
 - N36-10 Bandar Utama
 - N48-10 Sentosa
 - N25-10 Kajang
+
+## Candidates Details
+### P108 Shah Alam
+- Candidate 1: Wilson, Party: Testingg
+- Candidate 2: Bryan, Party: Perpaduan
+- Candidate 3: Hao, Party: Nasional
+- Candidate 4: Yee Ling, Party: Kesatuan
+- Candidate 5: Ahmad, Party: Harapan
+- Candidate 6: Mahatir, Party: Keadilan
+- Candidate 7: Rahman, Party: Perikatan
+- Candidate 8: Muhammad Zul, Party: Barisan
+### P106 Damansara
+- Candidate 1: Brendon, Party: Perpaduan
+- Candidate 2: Luis, Party: Barisan
+- Candidate 3: Joshua, Party: Harapan
+- Candidate 4: Joe, Party: Keadilan
+- Candidate 5: Zack, Party: Perikatan
+- Candidate 6: Jay, Party: Nasional
+### P107 Sungai Buloh
+- Candidate 1: Lucas, Party: Harapan
+- Candidate 2: Nigel Tan, Party: Barisan
+- Candidate 3: Lee Sin Loo, Party: Perpaduan
+- Candidate 4: Tay Yee Ling, Party: Kesatuan
+### P110 Klang
+- Candidate 1: Micheal, Party: Barisan
+- Candidate 2: Thomas, Party: Harapan
+- Candidate 3: Olivia, Party: Perikatan
+### P106 Damansara
+- Candidate 1: Charles, Party: Harapan
+- Candidate 2: Jack, Party: Barisan
