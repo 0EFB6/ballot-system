@@ -3,6 +3,7 @@ from beaker import *
 from pyteal import *
 from beaker.lib.storage import BoxList, BoxMapping
 import uuid
+# import hashlib
 
 # Constant Vlaues
 LEN_SEAT_NO 		= Int(4)
@@ -225,25 +226,37 @@ def readWholeBox(seat: abi.String, *, output: abi.String) -> Expr:
 @app.external
 def verify_acc_init(account: abi.Account, seats_no: abi.String, app_id: abi.Uint64) -> Expr:
     return Seq(
-		# Assert(Global.creator_address() == Txn.sender()), # supposingly gov official will have the account that creates the app (admin acc)
+		# Assert(Global.creator_address() == Txn.sender()), # supposingly only gov official can add using the account that creates the app (admin acc)
         # Don't know how to auto opt in from here
+        # Need add state that store verified account? 
 
-        # Check if account is opted in dk if necessary since if not opt in will err too cause can't read local
+        # Check if account is opted in, dk if necessary since if not opt in will err too cause can't read local
         Assert(App.optedIn(account.address(), app_id.get())),
 	    App.localPut(account.address(), Bytes("seats_no"), seats_no.get())	
     )
 	
+@Subroutine(TealType.bytes)
+def hash_ballot(ballot_id):
+    return Sha256(ballot_id)
+    # str_to_bytes = ballot_id.encode('UTF-8')
+    # h = hashlib.shake_256(str_to_bytes)
+    # return h.hexdigest(45)
 
 @app.external
 def get_uuid(*, output: abi.String) -> Expr:
     unique_id = Bytes(uuid.uuid4().hex)
-
+    # How to store the uuid though, if onchain everyone can see? 
+    # (solution: store the hash uuid, when verifying hash the input uuid to see if it is the same)
+    #  verify account too
     # Verified account will have their seats_no updated and not empty
     return If(app.state.seats_no[Txn.sender()] == Bytes(""), 
                 output.set(Bytes("Unverified Account")),
                 Seq(
                     app.state.seats_no[Txn.sender()].set(Concat(app.state.seats_no[Txn.sender()], unique_id)),
-                    output.set(app.state.seats_no[Txn.sender()])
+                     # got ex sha256 create a base32 16 digits value Bytes("base32", "2323232323232323")
+                    # output.set(abi.String.decode(Sha256(app.state.seats_no[Txn.sender()]))),
+                    # If output the id without hashing is already working
+                    output.set(hash_ballot(app.state.seats_no[Txn.sender()])) # dk how to decode the hash so it could be stored or do we not need to decode?
                 )
             )
 

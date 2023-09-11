@@ -1,4 +1,4 @@
-# Ballot ID (27 digits)
+# Ballot ID (45 digits)
 *** ** 000 *** ** (32 *)  
 Before 000 divider:  
 DUN:
