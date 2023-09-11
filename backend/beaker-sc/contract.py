@@ -37,7 +37,9 @@ class ParliamentSeat:
         descr="The seats voter gonna vote for"
     )
 
-app = Application("Voting Beaker", state=ParliamentSeat())
+app = (Application("Voting Beaker", state=ParliamentSeat())
+	   .apply(unconditional_create_approval, initialize_global_state=True)
+	   .apply(unconditional_opt_in_approval, initialize_local_state=True))
 
 @app.external
 def createBox(seat: abi.String, *, output: abi.String) -> Expr:
@@ -220,26 +222,28 @@ def readWholeBox(seat: abi.String, *, output: abi.String) -> Expr:
 
 # WIP
 # A function to store where the voter is voting after they verify themselves at gov office
-@app.opt_in
+@app.external
 def verify_acc_init(account: abi.Account, seats_no: abi.String, app_id: abi.Uint64) -> Expr:
     return Seq(
-		app.initialize_local_state(),
-		Assert(Global.creator_address() == Txn.sender()), # supposingly gov official will have the account that creates the app (admin acc)
+		# Assert(Global.creator_address() == Txn.sender()), # supposingly gov official will have the account that creates the app (admin acc)
         # Don't know how to opt in from here
         Assert(App.optedIn(account.address(), app_id.get())),
 	    App.localPut(account.address(), Bytes("seats_no"), seats_no.get())	
     )
 	
 
-@app.opt_in
+@app.external
 def get_uuid(*, output: abi.String) -> Expr:
     unique_id = Bytes(uuid.uuid4().hex)
-    # unique_id = voting_seat_no[account_address] + unique_id
-    # seat = Bytes(voting_seat_no[account_address.get()])
-    return If(app.state.seats_no[Txn.sender()] != Bytes(""), 
-		   output.set(Concat(app.state.seats_no[Txn.sender()], unique_id)),
-		   output.set(Bytes("Invalid Account"))
-        )
+
+    return If(app.state.seats_no[Txn.sender()] == Bytes(""), 
+                output.set(Bytes("Invalid Account")),
+                Seq(
+                    app.state.seats_no[Txn.sender()].set(Concat(app.state.seats_no[Txn.sender()], unique_id)),
+                    output.set(app.state.seats_no[Txn.sender()])
+                )
+            )
+
     
 
 
