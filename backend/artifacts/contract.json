@@ -2,6 +2,34 @@
   "name": "testingg",
   "methods": [
     {
+      "name": "verify_acc_init",
+      "args": [
+        {
+          "type": "string",
+          "name": "acc_address"
+        },
+        {
+          "type": "string",
+          "name": "seats_no"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "get_uuid",
+      "args": [
+        {
+          "type": "string",
+          "name": "account_address"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      }
+    },
+    {
       "name": "create_votes_box",
       "args": [
         {

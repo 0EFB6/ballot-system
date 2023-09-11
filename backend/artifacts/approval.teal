@@ -2,84 +2,68 @@
 txn NumAppArgs
 int 0
 ==
-bnz main_l28
+bnz main_l32
+txna ApplicationArgs 0
+method "verify_acc_init(string,string)void"
+==
+bnz main_l31
+txna ApplicationArgs 0
+method "get_uuid(string)string"
+==
+bnz main_l30
 txna ApplicationArgs 0
 method "create_votes_box(string)void"
 ==
-bnz main_l27
+bnz main_l29
 txna ApplicationArgs 0
 method "add_candidate_votes(string)void"
 ==
-bnz main_l26
+bnz main_l28
 txna ApplicationArgs 0
 method "read_vote()string"
 ==
-bnz main_l25
+bnz main_l27
 txna ApplicationArgs 0
 method "create_par_box(string)void"
 ==
-bnz main_l24
+bnz main_l26
 txna ApplicationArgs 0
 method "add_par_box(string,string,string)void"
 ==
-bnz main_l23
+bnz main_l25
 txna ApplicationArgs 0
 method "read_par_no(string)string"
 ==
-bnz main_l22
+bnz main_l24
 txna ApplicationArgs 0
 method "read_par_area(string)string"
 ==
-bnz main_l21
+bnz main_l23
 txna ApplicationArgs 0
 method "read_par_state(string)string"
 ==
-bnz main_l20
+bnz main_l22
 txna ApplicationArgs 0
 method "read_debug(string,uint64,uint64)string"
 ==
-bnz main_l19
+bnz main_l21
 txna ApplicationArgs 0
 method "read_index()uint64"
 ==
-bnz main_l18
+bnz main_l20
 txna ApplicationArgs 0
 method "increment()void"
 ==
-bnz main_l17
+bnz main_l19
 txna ApplicationArgs 0
 method "decrement()void"
 ==
-bnz main_l16
+bnz main_l18
 txna ApplicationArgs 0
 method "read_count()uint64"
 ==
-bnz main_l15
+bnz main_l17
 err
-main_l15:
-txn OnCompletion
-int NoOp
-==
-txn ApplicationID
-int 0
-!=
-&&
-assert
-callsub readcountcaster_26
-int 1
-return
-main_l16:
-txn OnCompletion
-int NoOp
-==
-txn ApplicationID
-int 0
-!=
-&&
-assert
-callsub decrementcaster_25
-int 1
-return
 main_l17:
 txn OnCompletion
 int NoOp
@@ -89,7 +73,7 @@ int 0
 !=
 &&
 assert
-callsub incrementcaster_24
+callsub readcountcaster_30
 int 1
 return
 main_l18:
@@ -101,7 +85,7 @@ int 0
 !=
 &&
 assert
-callsub readindexcaster_23
+callsub decrementcaster_29
 int 1
 return
 main_l19:
@@ -113,7 +97,7 @@ int 0
 !=
 &&
 assert
-callsub readdebugcaster_22
+callsub incrementcaster_28
 int 1
 return
 main_l20:
@@ -125,7 +109,7 @@ int 0
 !=
 &&
 assert
-callsub readparstatecaster_21
+callsub readindexcaster_27
 int 1
 return
 main_l21:
@@ -137,7 +121,7 @@ int 0
 !=
 &&
 assert
-callsub readparareacaster_20
+callsub readdebugcaster_26
 int 1
 return
 main_l22:
@@ -149,7 +133,7 @@ int 0
 !=
 &&
 assert
-callsub readparnocaster_19
+callsub readparstatecaster_25
 int 1
 return
 main_l23:
@@ -161,7 +145,7 @@ int 0
 !=
 &&
 assert
-callsub addparboxcaster_18
+callsub readparareacaster_24
 int 1
 return
 main_l24:
@@ -173,7 +157,7 @@ int 0
 !=
 &&
 assert
-callsub createparboxcaster_17
+callsub readparnocaster_23
 int 1
 return
 main_l25:
@@ -185,7 +169,7 @@ int 0
 !=
 &&
 assert
-callsub readvotecaster_16
+callsub addparboxcaster_22
 int 1
 return
 main_l26:
@@ -197,7 +181,7 @@ int 0
 !=
 &&
 assert
-callsub addcandidatevotescaster_15
+callsub createparboxcaster_21
 int 1
 return
 main_l27:
@@ -209,16 +193,64 @@ int 0
 !=
 &&
 assert
-callsub createvotesboxcaster_14
+callsub readvotecaster_20
 int 1
 return
 main_l28:
 txn OnCompletion
 int NoOp
 ==
-bnz main_l30
-err
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub addcandidatevotescaster_19
+int 1
+return
+main_l29:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub createvotesboxcaster_18
+int 1
+return
 main_l30:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub getuuidcaster_17
+int 1
+return
+main_l31:
+txn OnCompletion
+int NoOp
+==
+txn ApplicationID
+int 0
+!=
+&&
+assert
+callsub verifyaccinitcaster_16
+int 1
+return
+main_l32:
+txn OnCompletion
+int NoOp
+==
+bnz main_l34
+err
+main_l34:
 txn ApplicationID
 int 0
 ==
@@ -277,8 +309,38 @@ byte "0"
 convertuinttobytes_0_l6:
 retsub
 
+// verify_acc_init
+verifyaccinit_1:
+proto 2 0
+global CreatorAddress
+txn Sender
+==
+assert
+frame_dig -2
+extract 2 0
+byte "seats_no"
+frame_dig -1
+extract 2 0
+app_local_put
+retsub
+
+// get_uuid
+getuuid_2:
+proto 1 1
+byte ""
+byte "c25ba79d6cb8464b93a9bdb8f5494ac0"
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+retsub
+
 // create_votes_box
-createvotesbox_1:
+createvotesbox_3:
 proto 1 0
 frame_dig -1
 extract 2 0
@@ -288,7 +350,7 @@ pop
 retsub
 
 // add_candidate_votes
-addcandidatevotes_2:
+addcandidatevotes_4:
 proto 1 0
 frame_dig -1
 extract 2 0
@@ -298,7 +360,7 @@ box_replace
 retsub
 
 // read_vote
-readvote_3:
+readvote_5:
 proto 0 1
 byte ""
 byte "Can1 votes: "
@@ -323,7 +385,7 @@ frame_bury 0
 retsub
 
 // create_par_box
-createparbox_4:
+createparbox_6:
 proto 1 0
 byte "P"
 frame_dig -1
@@ -335,7 +397,7 @@ pop
 retsub
 
 // add_par_box
-addparbox_5:
+addparbox_7:
 proto 3 0
 byte "P"
 frame_dig -3
@@ -366,7 +428,7 @@ box_replace
 retsub
 
 // read_par_no
-readparno_6:
+readparno_8:
 proto 1 1
 byte ""
 byte "P"
@@ -387,7 +449,7 @@ frame_bury 0
 retsub
 
 // read_par_area
-readpararea_7:
+readpararea_9:
 proto 1 1
 byte ""
 byte "P"
@@ -408,7 +470,7 @@ frame_bury 0
 retsub
 
 // read_par_state
-readparstate_8:
+readparstate_10:
 proto 1 1
 byte ""
 byte "P"
@@ -429,7 +491,7 @@ frame_bury 0
 retsub
 
 // read_debug
-readdebug_9:
+readdebug_11:
 proto 3 1
 byte ""
 byte "P"
@@ -450,7 +512,7 @@ frame_bury 0
 retsub
 
 // read_index
-readindex_10:
+readindex_12:
 proto 0 1
 int 0
 byte "index"
@@ -459,7 +521,7 @@ frame_bury 0
 retsub
 
 // increment
-increment_11:
+increment_13:
 proto 0 0
 byte "count"
 app_global_get
@@ -472,7 +534,7 @@ app_global_put
 retsub
 
 // decrement
-decrement_12:
+decrement_14:
 proto 0 0
 global GroupSize
 int 1
@@ -484,17 +546,17 @@ store 4
 load 4
 int 0
 >
-bz decrement_12_l2
+bz decrement_14_l2
 byte "count"
 load 4
 int 1
 -
 app_global_put
-decrement_12_l2:
+decrement_14_l2:
 retsub
 
 // read_count
-readcount_13:
+readcount_15:
 proto 0 1
 int 0
 byte "count"
@@ -502,31 +564,61 @@ app_global_get
 frame_bury 0
 retsub
 
+// verify_acc_init_caster
+verifyaccinitcaster_16:
+proto 0 0
+byte ""
+dup
+txna ApplicationArgs 1
+frame_bury 0
+txna ApplicationArgs 2
+frame_bury 1
+frame_dig 0
+frame_dig 1
+callsub verifyaccinit_1
+retsub
+
+// get_uuid_caster
+getuuidcaster_17:
+proto 0 0
+byte ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub getuuid_2
+frame_bury 0
+byte 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
 // create_votes_box_caster
-createvotesboxcaster_14:
+createvotesboxcaster_18:
 proto 0 0
 byte ""
 txna ApplicationArgs 1
 frame_bury 0
 frame_dig 0
-callsub createvotesbox_1
+callsub createvotesbox_3
 retsub
 
 // add_candidate_votes_caster
-addcandidatevotescaster_15:
+addcandidatevotescaster_19:
 proto 0 0
 byte ""
 txna ApplicationArgs 1
 frame_bury 0
 frame_dig 0
-callsub addcandidatevotes_2
+callsub addcandidatevotes_4
 retsub
 
 // read_vote_caster
-readvotecaster_16:
+readvotecaster_20:
 proto 0 0
 byte ""
-callsub readvote_3
+callsub readvote_5
 frame_bury 0
 byte 0x151f7c75
 frame_dig 0
@@ -535,17 +627,17 @@ log
 retsub
 
 // create_par_box_caster
-createparboxcaster_17:
+createparboxcaster_21:
 proto 0 0
 byte ""
 txna ApplicationArgs 1
 frame_bury 0
 frame_dig 0
-callsub createparbox_4
+callsub createparbox_6
 retsub
 
 // add_par_box_caster
-addparboxcaster_18:
+addparboxcaster_22:
 proto 0 0
 byte ""
 dupn 2
@@ -558,18 +650,18 @@ frame_bury 2
 frame_dig 0
 frame_dig 1
 frame_dig 2
-callsub addparbox_5
+callsub addparbox_7
 retsub
 
 // read_par_no_caster
-readparnocaster_19:
+readparnocaster_23:
 proto 0 0
 byte ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readparno_6
+callsub readparno_8
 frame_bury 0
 byte 0x151f7c75
 frame_dig 0
@@ -578,14 +670,14 @@ log
 retsub
 
 // read_par_area_caster
-readparareacaster_20:
+readparareacaster_24:
 proto 0 0
 byte ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readpararea_7
+callsub readpararea_9
 frame_bury 0
 byte 0x151f7c75
 frame_dig 0
@@ -594,14 +686,14 @@ log
 retsub
 
 // read_par_state_caster
-readparstatecaster_21:
+readparstatecaster_25:
 proto 0 0
 byte ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readparstate_8
+callsub readparstate_10
 frame_bury 0
 byte 0x151f7c75
 frame_dig 0
@@ -610,7 +702,7 @@ log
 retsub
 
 // read_debug_caster
-readdebugcaster_22:
+readdebugcaster_26:
 proto 0 0
 byte ""
 dup
@@ -627,7 +719,7 @@ frame_bury 3
 frame_dig 1
 frame_dig 2
 frame_dig 3
-callsub readdebug_9
+callsub readdebug_11
 frame_bury 0
 byte 0x151f7c75
 frame_dig 0
@@ -636,10 +728,10 @@ log
 retsub
 
 // read_index_caster
-readindexcaster_23:
+readindexcaster_27:
 proto 0 0
 int 0
-callsub readindex_10
+callsub readindex_12
 frame_bury 0
 byte 0x151f7c75
 frame_dig 0
@@ -649,22 +741,22 @@ log
 retsub
 
 // increment_caster
-incrementcaster_24:
+incrementcaster_28:
 proto 0 0
-callsub increment_11
+callsub increment_13
 retsub
 
 // decrement_caster
-decrementcaster_25:
+decrementcaster_29:
 proto 0 0
-callsub decrement_12
+callsub decrement_14
 retsub
 
 // read_count_caster
-readcountcaster_26:
+readcountcaster_30:
 proto 0 0
 int 0
-callsub readcount_13
+callsub readcount_15
 frame_bury 0
 byte 0x151f7c75
 frame_dig 0

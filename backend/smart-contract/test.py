@@ -1,6 +1,7 @@
 from candidate import NAME_I, LEN_LIMIT, NAME_LEN, PARTY_I, PARTY_LEN
 from pyteal import *
-from utils import convert_uint_to_bytes, convert_bytes_to_uint, get_uuid
+from utils import convert_uint_to_bytes, convert_bytes_to_uint
+import uuid
 
 
 N_I = Int(0)
@@ -33,6 +34,14 @@ router = Router(
 )
 
 NAME_LIMIT = Int(30)
+
+# Fake database that stores account address of verified voter and the seat they will vote
+# voting_seat_no = {
+#     "KC7ZZZVICU4VFJYT6SR6BYHLOC5CYPO64WRVN34ATESFHZEA36DU2YFV5A": "0311000010810",
+#     "7UHNTAEP5WWAIALSW3DMBVXSAJ6BJOZJ4QE4IHWPHLTINVN6KINM5EDSPI": "0301000010610",
+# }
+
+
 
 @router.method
 def create_votes_box(candidate_name: abi.String):

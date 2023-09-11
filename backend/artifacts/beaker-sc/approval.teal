@@ -1,111 +1,95 @@
 #pragma version 8
 intcblock 0 1 6 65 135
-bytecblock 0x 0x151f7c75 0x30 0x676c6f62616c5f7374617465
+bytecblock 0x 0x151f7c75 0x73656174735f6e6f 0x30 0x676c6f62616c5f7374617465
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l40
+bnz main_l44
 txna ApplicationArgs 0
 pushbytes 0x0b02a774 // "createBox(string)void"
 ==
-bnz main_l39
+bnz main_l43
 txna ApplicationArgs 0
 pushbytes 0x4beeac05 // "addSeat(string,string,string)void"
 ==
-bnz main_l38
+bnz main_l42
 txna ApplicationArgs 0
 pushbytes 0xc8c12289 // "addCandidate(string,string,string,uint8)void"
 ==
-bnz main_l37
+bnz main_l41
 txna ApplicationArgs 0
 pushbytes 0xe1aaaa81 // "initVote(string)void"
 ==
-bnz main_l36
+bnz main_l40
 txna ApplicationArgs 0
 pushbytes 0x754cb8d9 // "updateVote(string,uint8)void"
 ==
-bnz main_l35
+bnz main_l39
 txna ApplicationArgs 0
 pushbytes 0x5f35582d // "readSeat(string)string"
 ==
-bnz main_l34
+bnz main_l38
 txna ApplicationArgs 0
 pushbytes 0x42181e67 // "readCandidate(string,uint8)string"
 ==
-bnz main_l33
+bnz main_l37
 txna ApplicationArgs 0
 pushbytes 0x1a2d2c5a // "readVote1(string)string"
 ==
-bnz main_l32
+bnz main_l36
 txna ApplicationArgs 0
 pushbytes 0x91aa0826 // "readVote2(string)string"
 ==
-bnz main_l31
+bnz main_l35
 txna ApplicationArgs 0
 pushbytes 0x0974a9cc // "readVote3(string)string"
 ==
-bnz main_l30
+bnz main_l34
 txna ApplicationArgs 0
 pushbytes 0x53c205bd // "readVote4(string)string"
 ==
-bnz main_l29
+bnz main_l33
 txna ApplicationArgs 0
 pushbytes 0xb9b2a03c // "readVote5(string)string"
 ==
-bnz main_l28
+bnz main_l32
 txna ApplicationArgs 0
 pushbytes 0x8101b548 // "readVote6(string)string"
 ==
-bnz main_l27
+bnz main_l31
 txna ApplicationArgs 0
 pushbytes 0x17d7d3c7 // "readVote7(string)string"
 ==
-bnz main_l26
+bnz main_l30
 txna ApplicationArgs 0
 pushbytes 0x4b1a45e9 // "readVote8(string)string"
 ==
-bnz main_l25
+bnz main_l29
 txna ApplicationArgs 0
 pushbytes 0x1a5a2817 // "readWholeBox(string)string"
 ==
-bnz main_l24
+bnz main_l28
+txna ApplicationArgs 0
+pushbytes 0x43f76add // "verify_acc_init(account,string,uint64)void"
+==
+bnz main_l27
+txna ApplicationArgs 0
+pushbytes 0xd3ac843f // "get_uuid()string"
+==
+bnz main_l26
 txna ApplicationArgs 0
 pushbytes 0x90932589 // "putBoxDebug(string,string,uint16)void"
 ==
-bnz main_l23
+bnz main_l25
 txna ApplicationArgs 0
 pushbytes 0xf74e3c49 // "set_app_global_state_value(string)void"
 ==
-bnz main_l22
+bnz main_l24
 txna ApplicationArgs 0
 pushbytes 0x320ca674 // "readGlobal()string"
 ==
-bnz main_l21
+bnz main_l23
 err
-main_l21:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub readGlobalcaster_39
-intc_1 // 1
-return
-main_l22:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub setappglobalstatevaluecaster_38
-intc_1 // 1
-return
 main_l23:
 txn OnCompletion
 intc_0 // NoOp
@@ -115,7 +99,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub putBoxDebugcaster_37
+callsub readGlobalcaster_43
 intc_1 // 1
 return
 main_l24:
@@ -127,7 +111,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readWholeBoxcaster_36
+callsub setappglobalstatevaluecaster_42
 intc_1 // 1
 return
 main_l25:
@@ -139,31 +123,31 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote8caster_35
+callsub putBoxDebugcaster_41
 intc_1 // 1
 return
 main_l26:
 txn OnCompletion
-intc_0 // NoOp
+intc_1 // OptIn
 ==
 txn ApplicationID
 intc_0 // 0
 !=
 &&
 assert
-callsub readVote7caster_34
+callsub getuuidcaster_40
 intc_1 // 1
 return
 main_l27:
 txn OnCompletion
-intc_0 // NoOp
+intc_1 // OptIn
 ==
 txn ApplicationID
 intc_0 // 0
 !=
 &&
 assert
-callsub readVote6caster_33
+callsub verifyaccinitcaster_39
 intc_1 // 1
 return
 main_l28:
@@ -175,7 +159,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote5caster_32
+callsub readWholeBoxcaster_38
 intc_1 // 1
 return
 main_l29:
@@ -187,7 +171,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote4caster_31
+callsub readVote8caster_37
 intc_1 // 1
 return
 main_l30:
@@ -199,7 +183,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote3caster_30
+callsub readVote7caster_36
 intc_1 // 1
 return
 main_l31:
@@ -211,7 +195,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote2caster_29
+callsub readVote6caster_35
 intc_1 // 1
 return
 main_l32:
@@ -223,7 +207,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote1caster_28
+callsub readVote5caster_34
 intc_1 // 1
 return
 main_l33:
@@ -235,7 +219,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readCandidatecaster_27
+callsub readVote4caster_33
 intc_1 // 1
 return
 main_l34:
@@ -247,7 +231,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readSeatcaster_26
+callsub readVote3caster_32
 intc_1 // 1
 return
 main_l35:
@@ -259,7 +243,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub updateVotecaster_25
+callsub readVote2caster_31
 intc_1 // 1
 return
 main_l36:
@@ -271,7 +255,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub initVotecaster_24
+callsub readVote1caster_30
 intc_1 // 1
 return
 main_l37:
@@ -283,7 +267,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub addCandidatecaster_23
+callsub readCandidatecaster_29
 intc_1 // 1
 return
 main_l38:
@@ -295,7 +279,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub addSeatcaster_22
+callsub readSeatcaster_28
 intc_1 // 1
 return
 main_l39:
@@ -307,16 +291,64 @@ intc_0 // 0
 !=
 &&
 assert
-callsub createBoxcaster_21
+callsub updateVotecaster_27
 intc_1 // 1
 return
 main_l40:
 txn OnCompletion
 intc_0 // NoOp
 ==
-bnz main_l42
-err
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub initVotecaster_26
+intc_1 // 1
+return
+main_l41:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub addCandidatecaster_25
+intc_1 // 1
+return
 main_l42:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub addSeatcaster_24
+intc_1 // 1
+return
+main_l43:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub createBoxcaster_23
+intc_1 // 1
+return
+main_l44:
+txn OnCompletion
+intc_0 // NoOp
+==
+bnz main_l46
+err
+main_l46:
 txn ApplicationID
 intc_0 // 0
 ==
@@ -362,7 +394,7 @@ pushint 10 // 10
 store 2
 b itob_0_l2
 itob_0_l5:
-bytec_2 // "0"
+bytec_3 // "0"
 itob_0_l6:
 retsub
 
@@ -370,7 +402,7 @@ retsub
 btoi_1:
 proto 1 1
 frame_dig -1
-bytec_2 // "0"
+bytec_3 // "0"
 ==
 bnz btoi_1_l5
 intc_0 // 0
@@ -638,29 +670,6 @@ box_extract
 concat
 pushbytes 0x090950617274793a20 // "\t\tParty: "
 concat
-intc_1 // 6
-frame_dig -2
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-frame_dig -1
-intc_2 // 1
--
-*
-+
-intc_1 // 6
-box_extract
-callsub btoi_1
-intc_2 // 1
-+
-callsub itob_0
-len
--
-+
 frame_dig -2
 extract 2 0
 pushint 110 // 110
@@ -676,11 +685,15 @@ intc_1 // 1
 +
 pushint 25 // 25
 box_extract
-callsub btoi_1
-pushint 6969 // 6969
-+
-callsub itob_0
-box_replace
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
 retsub
 
 // readVote1
@@ -940,8 +953,69 @@ concat
 frame_bury 0
 retsub
 
+// verify_acc_init
+verifyaccinit_18:
+proto 3 0
+txn Sender
+bytec_2 // "seats_no"
+bytec_0 // ""
+app_local_put
+global CreatorAddress
+txn Sender
+==
+assert
+frame_dig -3
+txnas Accounts
+frame_dig -1
+app_opted_in
+assert
+frame_dig -3
+txnas Accounts
+bytec_2 // "seats_no"
+frame_dig -2
+extract 2 0
+app_local_put
+retsub
+
+// get_uuid
+getuuid_19:
+proto 0 1
+bytec_0 // ""
+txn Sender
+bytec_2 // "seats_no"
+app_local_get
+bytec_0 // ""
+!=
+bnz getuuid_19_l2
+pushbytes 0x496e76616c6964204163636f756e74 // "Invalid Account"
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+b getuuid_19_l3
+getuuid_19_l2:
+txn Sender
+bytec_2 // "seats_no"
+app_local_get
+pushbytes 0x3934336336633738643639313431313362613031616431646138656364313461 // "943c6c78d6914113ba01ad1da8ecd14a"
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+getuuid_19_l3:
+retsub
+
 // putBoxDebug
-putBoxDebug_18:
+putBoxDebug_20:
 proto 3 0
 frame_dig -3
 extract 2 0
@@ -952,19 +1026,19 @@ box_replace
 retsub
 
 // set_app_global_state_value
-setappglobalstatevalue_19:
+setappglobalstatevalue_21:
 proto 1 0
-bytec_3 // "global_state"
+bytec 4 // "global_state"
 frame_dig -1
 extract 2 0
 app_global_put
 retsub
 
 // readGlobal
-readGlobal_20:
+readGlobal_22:
 proto 0 1
 bytec_0 // ""
-bytec_3 // "global_state"
+bytec 4 // "global_state"
 app_global_get
 frame_bury 0
 frame_dig 0
@@ -977,7 +1051,7 @@ frame_bury 0
 retsub
 
 // createBox_caster
-createBoxcaster_21:
+createBoxcaster_23:
 proto 0 0
 bytec_0 // ""
 txna ApplicationArgs 1
@@ -987,7 +1061,7 @@ callsub createBox_2
 retsub
 
 // addSeat_caster
-addSeatcaster_22:
+addSeatcaster_24:
 proto 0 0
 bytec_0 // ""
 dupn 2
@@ -1004,7 +1078,7 @@ callsub addSeat_3
 retsub
 
 // addCandidate_caster
-addCandidatecaster_23:
+addCandidatecaster_25:
 proto 0 0
 bytec_0 // ""
 dupn 2
@@ -1027,7 +1101,7 @@ callsub addCandidate_4
 retsub
 
 // initVote_caster
-initVotecaster_24:
+initVotecaster_26:
 proto 0 0
 bytec_0 // ""
 txna ApplicationArgs 1
@@ -1037,7 +1111,7 @@ callsub initVote_5
 retsub
 
 // updateVote_caster
-updateVotecaster_25:
+updateVotecaster_27:
 proto 0 0
 bytec_0 // ""
 intc_0 // 0
@@ -1053,7 +1127,7 @@ callsub updateVote_6
 retsub
 
 // readSeat_caster
-readSeatcaster_26:
+readSeatcaster_28:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1069,7 +1143,7 @@ log
 retsub
 
 // readCandidate_caster
-readCandidatecaster_27:
+readCandidatecaster_29:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1091,7 +1165,7 @@ log
 retsub
 
 // readVote1_caster
-readVote1caster_28:
+readVote1caster_30:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1107,7 +1181,7 @@ log
 retsub
 
 // readVote2_caster
-readVote2caster_29:
+readVote2caster_31:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1123,7 +1197,7 @@ log
 retsub
 
 // readVote3_caster
-readVote3caster_30:
+readVote3caster_32:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1139,7 +1213,7 @@ log
 retsub
 
 // readVote4_caster
-readVote4caster_31:
+readVote4caster_33:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1155,7 +1229,7 @@ log
 retsub
 
 // readVote5_caster
-readVote5caster_32:
+readVote5caster_34:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1171,7 +1245,7 @@ log
 retsub
 
 // readVote6_caster
-readVote6caster_33:
+readVote6caster_35:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1187,7 +1261,7 @@ log
 retsub
 
 // readVote7_caster
-readVote7caster_34:
+readVote7caster_36:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1203,7 +1277,7 @@ log
 retsub
 
 // readVote8_caster
-readVote8caster_35:
+readVote8caster_37:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1219,7 +1293,7 @@ log
 retsub
 
 // readWholeBox_caster
-readWholeBoxcaster_36:
+readWholeBoxcaster_38:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1234,8 +1308,41 @@ concat
 log
 retsub
 
+// verify_acc_init_caster
+verifyaccinitcaster_39:
+proto 0 0
+intc_0 // 0
+bytec_0 // ""
+intc_0 // 0
+txna ApplicationArgs 1
+intc_0 // 0
+getbyte
+frame_bury 0
+txna ApplicationArgs 2
+frame_bury 1
+txna ApplicationArgs 3
+btoi
+frame_bury 2
+frame_dig 0
+frame_dig 1
+frame_dig 2
+callsub verifyaccinit_18
+retsub
+
+// get_uuid_caster
+getuuidcaster_40:
+proto 0 0
+bytec_0 // ""
+callsub getuuid_19
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
 // putBoxDebug_caster
-putBoxDebugcaster_37:
+putBoxDebugcaster_41:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1251,24 +1358,24 @@ frame_bury 2
 frame_dig 0
 frame_dig 1
 frame_dig 2
-callsub putBoxDebug_18
+callsub putBoxDebug_20
 retsub
 
 // set_app_global_state_value_caster
-setappglobalstatevaluecaster_38:
+setappglobalstatevaluecaster_42:
 proto 0 0
 bytec_0 // ""
 txna ApplicationArgs 1
 frame_bury 0
 frame_dig 0
-callsub setappglobalstatevalue_19
+callsub setappglobalstatevalue_21
 retsub
 
 // readGlobal_caster
-readGlobalcaster_39:
+readGlobalcaster_43:
 proto 0 0
 bytec_0 // ""
-callsub readGlobal_20
+callsub readGlobal_22
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0

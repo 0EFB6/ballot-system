@@ -1,7 +1,4 @@
 from pyteal import *
-import uuid
-# import hashlib
-
 
 @Subroutine(TealType.bytes)
 def convert_uint_to_bytes(arg):
@@ -61,30 +58,5 @@ def convert_bytes_to_uint(str):
         ])
     )
 
-# @Subroutine(TealType.uint64)
-# def str_length(str):
 
-#     str_length = ScratchVar(TealType.uint64)
-
-#     return Seq([
-#             str_length.store(Len(str)),
-#             str_length.load()
-#         ])
-
-# using uuid prob better cause hashing ppl just need ur ic info to get ur id
-# def hash_ic(ic_num: str):
-#     str_to_bytes = ic_num.encode('UTF-8')
-#     h = hashlib.shake_256(str_to_bytes)
-#     return h.hexdigest(7)
-
-# state should be same for both no matter how?
-def get_uuid(dun_area_no , par_area_no , state_no):
-    unique_id = uuid.uuid4().hex
-    # decide what will be pass in when getting the uuid (name of area and state in bytes or no. of area and state)
-    print(unique_id)
-    unique_id = dun_area_no + state_no + "000" + par_area_no + state_no + unique_id
-    print(unique_id)
-    
-    # return unique_id
-
-get_uuid("@","@","*")
+ 

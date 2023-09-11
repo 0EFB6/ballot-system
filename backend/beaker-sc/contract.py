@@ -2,6 +2,7 @@ from utils import *
 from beaker import *
 from pyteal import *
 from beaker.lib.storage import BoxList, BoxMapping
+import uuid
 
 # Constant Vlaues
 LEN_SEAT_NO 		= Int(4)
@@ -24,11 +25,17 @@ CANDIDATE_VOTES_1 	= Int(135)
 #    (Subang) (103) (Selangor), (2),          (Wilson),        (Pakatan)
 
 class ParliamentSeat:
-	global_state = GlobalStateValue(
-		stack_type=TealType.bytes,
-		default=Bytes("Testing"),
-		descr="Global state for Parliament Seat"
-	)
+    global_state = GlobalStateValue(
+        stack_type=TealType.bytes,
+        default=Bytes("Testing"),
+        descr="Global state for Parliament Seat"
+    )
+	
+    seats_no = LocalStateValue(
+        stack_type=TealType.bytes,
+        default=Bytes(""),
+        descr="The seats voter gonna vote for"
+    )
 
 app = Application("Voting Beaker", state=ParliamentSeat())
 
@@ -167,6 +174,29 @@ def readVote8(seat: abi.String, *, output: abi.String) -> Expr:
 def readWholeBox(seat: abi.String, *, output: abi.String) -> Expr:
 	return output.set(BoxExtract(seat.get(), Int(0), Int(1000)))
 
+# WIP
+# A function to store where the voter is voting after they verify themselves at gov office
+@app.opt_in
+def verify_acc_init(account: abi.Account, seats_no: abi.String, app_id: abi.Uint64) -> Expr:
+    return Seq(
+		app.initialize_local_state(),
+		Assert(Global.creator_address() == Txn.sender()), # supposingly gov official will have the account that creates the app (admin acc)
+        # Don't know how to opt in from here
+        Assert(App.optedIn(account.address(), app_id.get())),
+	    App.localPut(account.address(), Bytes("seats_no"), seats_no.get())	
+    )
+	
+
+@app.opt_in
+def get_uuid(*, output: abi.String) -> Expr:
+    unique_id = Bytes(uuid.uuid4().hex)
+    # unique_id = voting_seat_no[account_address] + unique_id
+    # seat = Bytes(voting_seat_no[account_address.get()])
+    return If(app.state.seats_no[Txn.sender()] != Bytes(""), 
+		   output.set(Concat(app.state.seats_no[Txn.sender()], unique_id)),
+		   output.set(Bytes("Invalid Account"))
+        )
+    
 
 
 

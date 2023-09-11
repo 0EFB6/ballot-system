@@ -222,6 +222,33 @@
             }
         },
         {
+            "name": "verify_acc_init",
+            "args": [
+                {
+                    "type": "account",
+                    "name": "account"
+                },
+                {
+                    "type": "string",
+                    "name": "seats_no"
+                },
+                {
+                    "type": "uint64",
+                    "name": "app_id"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "get_uuid",
+            "args": [],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
             "name": "putBoxDebug",
             "args": [
                 {
