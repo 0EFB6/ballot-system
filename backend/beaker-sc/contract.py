@@ -33,8 +33,45 @@ class ParliamentSeat:
 app = Application("Voting Beaker", state=ParliamentSeat())
 
 @app.external
-def createBox(seat: abi.String) -> Expr:
-	return Pop(BoxCreate(seat.get(), Int(1024)))
+def createBox(seat: abi.String, *, output: abi.String) -> Expr:
+	
+	return Seq(
+		If (
+			Or(
+				Len(seat.get()) == Int(4),
+				Len(seat.get()) == Int(6)
+			),
+			Seq(
+				Pop(BoxCreate(seat.get(), Int(1024))),
+				output.set(Bytes("Box created successfully!"))
+			),
+			output.set(Concat(Bytes("Failed to create box "), seat.get()))
+		)
+	)
+
+@app.external
+def readVote(seat: abi.String, *, output: abi.String) -> Expr:
+	vote1 = itob(btoi(BoxExtract(seat.get(), CANDIDATE_VOTES_1, LEN_VOTECOUNT)))
+	vote2 = itob(btoi(BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM, LEN_VOTECOUNT)))
+	ret = Concat(
+		Bytes("1: "),
+		vote1,
+		Bytes(" 2: "),
+		vote2,
+		Bytes(" 3: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(2), LEN_VOTECOUNT),
+		Bytes(" 4: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(3), LEN_VOTECOUNT),
+		Bytes(" 5: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(4), LEN_VOTECOUNT),
+		Bytes(" 6: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(5), LEN_VOTECOUNT),
+		Bytes(" 7: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(6), LEN_VOTECOUNT),
+		Bytes(" 8: "),
+		BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * Int(7), LEN_VOTECOUNT)
+	)
+	return output.set(ret)
 
 @app.external
 def addSeat(seat: abi.String, area: abi.String, state: abi.String) -> Expr:

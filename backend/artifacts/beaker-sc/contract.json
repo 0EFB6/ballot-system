@@ -10,7 +10,19 @@
                 }
             ],
             "returns": {
-                "type": "void"
+                "type": "string"
+            }
+        },
+        {
+            "name": "readVote",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
             }
         },
         {

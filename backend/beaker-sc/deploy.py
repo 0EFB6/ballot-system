@@ -19,7 +19,7 @@ app_client = client.ApplicationClient(
 )
 
 app_id, addr, txid = app_client.create()
-app_client.fund(100 * algo)
+app_client.fund(100000 * algo)
 print(
 	f"""
 App Deployed!
@@ -44,7 +44,7 @@ AMPANG = "P106"
 #ret = app_client.call(readGlobal)
 #print(f"Global State Value=> {ret.return_value}")
 
-app_client1.call(createBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)])
+print(f"HH: {app_client1.call(createBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 app_client2.call(createBox, seat=PUCHONG, boxes=[(app_client.app_id, PUCHONG)])
 app_client3.call(createBox, seat=SUBANG, boxes=[(app_client.app_id, SUBANG)])
 #app_client1.call(putbox_votecount, seat=AMPANG, value="012345", i=0, boxes=[(app_client.app_id, AMPANG)])
@@ -111,6 +111,8 @@ print(f"{app_client1.call(readVote7, seat=AMPANG, boxes=[(app_client.app_id, AMP
 print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
 print(f"{app_client1.call(readWholeBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+
+#print(f"\n{app_client1.call(readVote, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
 
 
