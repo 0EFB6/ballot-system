@@ -14,18 +14,6 @@
             }
         },
         {
-            "name": "readVote",
-            "args": [
-                {
-                    "type": "string",
-                    "name": "seat"
-                }
-            ],
-            "returns": {
-                "type": "string"
-            }
-        },
-        {
             "name": "addSeat",
             "args": [
                 {
@@ -42,7 +30,7 @@
                 }
             ],
             "returns": {
-                "type": "void"
+                "type": "string"
             }
         },
         {
@@ -66,7 +54,7 @@
                 }
             ],
             "returns": {
-                "type": "void"
+                "type": "string"
             }
         },
         {
@@ -78,7 +66,7 @@
                 }
             ],
             "returns": {
-                "type": "void"
+                "type": "string"
             }
         },
         {
@@ -94,7 +82,7 @@
                 }
             ],
             "returns": {
-                "type": "void"
+                "type": "string"
             }
         },
         {

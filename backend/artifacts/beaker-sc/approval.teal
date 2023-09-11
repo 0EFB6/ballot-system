@@ -1,91 +1,99 @@
 #pragma version 8
-intcblock 0 6 1 65 135
-bytecblock 0x 0x151f7c75 0x30 0x313a20 0x676c6f62616c5f7374617465
+intcblock 0 1 6 65 135
+bytecblock 0x 0x151f7c75 0x5d 0x30 0x676c6f62616c5f7374617465
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l42
+bnz main_l40
 txna ApplicationArgs 0
 pushbytes 0xa2e171ad // "createBox(string)string"
 ==
-bnz main_l41
-txna ApplicationArgs 0
-pushbytes 0x158e73e7 // "readVote(string)string"
-==
-bnz main_l40
-txna ApplicationArgs 0
-pushbytes 0x4beeac05 // "addSeat(string,string,string)void"
-==
 bnz main_l39
 txna ApplicationArgs 0
-pushbytes 0xc8c12289 // "addCandidate(string,string,string,uint8)void"
+pushbytes 0x64f98ea9 // "addSeat(string,string,string)string"
 ==
 bnz main_l38
 txna ApplicationArgs 0
-pushbytes 0xe1aaaa81 // "initVote(string)void"
+pushbytes 0xb4f4b839 // "addCandidate(string,string,string,uint8)string"
 ==
 bnz main_l37
 txna ApplicationArgs 0
-pushbytes 0x754cb8d9 // "updateVote(string,uint8)void"
+pushbytes 0x4a64948a // "initVote(string)string"
 ==
 bnz main_l36
 txna ApplicationArgs 0
-pushbytes 0x5f35582d // "readSeat(string)string"
+pushbytes 0xa16e3561 // "updateVote(string,uint8)string"
 ==
 bnz main_l35
 txna ApplicationArgs 0
-pushbytes 0x42181e67 // "readCandidate(string,uint8)string"
+pushbytes 0x5f35582d // "readSeat(string)string"
 ==
 bnz main_l34
 txna ApplicationArgs 0
-pushbytes 0x1a2d2c5a // "readVote1(string)string"
+pushbytes 0x42181e67 // "readCandidate(string,uint8)string"
 ==
 bnz main_l33
 txna ApplicationArgs 0
-pushbytes 0x91aa0826 // "readVote2(string)string"
+pushbytes 0x1a2d2c5a // "readVote1(string)string"
 ==
 bnz main_l32
 txna ApplicationArgs 0
-pushbytes 0x0974a9cc // "readVote3(string)string"
+pushbytes 0x91aa0826 // "readVote2(string)string"
 ==
 bnz main_l31
 txna ApplicationArgs 0
-pushbytes 0x53c205bd // "readVote4(string)string"
+pushbytes 0x0974a9cc // "readVote3(string)string"
 ==
 bnz main_l30
 txna ApplicationArgs 0
-pushbytes 0xb9b2a03c // "readVote5(string)string"
+pushbytes 0x53c205bd // "readVote4(string)string"
 ==
 bnz main_l29
 txna ApplicationArgs 0
-pushbytes 0x8101b548 // "readVote6(string)string"
+pushbytes 0xb9b2a03c // "readVote5(string)string"
 ==
 bnz main_l28
 txna ApplicationArgs 0
-pushbytes 0x17d7d3c7 // "readVote7(string)string"
+pushbytes 0x8101b548 // "readVote6(string)string"
 ==
 bnz main_l27
 txna ApplicationArgs 0
-pushbytes 0x4b1a45e9 // "readVote8(string)string"
+pushbytes 0x17d7d3c7 // "readVote7(string)string"
 ==
 bnz main_l26
 txna ApplicationArgs 0
-pushbytes 0x1a5a2817 // "readWholeBox(string)string"
+pushbytes 0x4b1a45e9 // "readVote8(string)string"
 ==
 bnz main_l25
 txna ApplicationArgs 0
-pushbytes 0x90932589 // "putBoxDebug(string,string,uint16)void"
+pushbytes 0x1a5a2817 // "readWholeBox(string)string"
 ==
 bnz main_l24
 txna ApplicationArgs 0
-pushbytes 0xf74e3c49 // "set_app_global_state_value(string)void"
+pushbytes 0x90932589 // "putBoxDebug(string,string,uint16)void"
 ==
 bnz main_l23
 txna ApplicationArgs 0
-pushbytes 0x320ca674 // "readGlobal()string"
+pushbytes 0xf74e3c49 // "set_app_global_state_value(string)void"
 ==
 bnz main_l22
+txna ApplicationArgs 0
+pushbytes 0x320ca674 // "readGlobal()string"
+==
+bnz main_l21
 err
+main_l21:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub readGlobalcaster_39
+intc_1 // 1
+return
 main_l22:
 txn OnCompletion
 intc_0 // NoOp
@@ -95,8 +103,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readGlobalcaster_41
-intc_2 // 1
+callsub setappglobalstatevaluecaster_38
+intc_1 // 1
 return
 main_l23:
 txn OnCompletion
@@ -107,8 +115,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub setappglobalstatevaluecaster_40
-intc_2 // 1
+callsub putBoxDebugcaster_37
+intc_1 // 1
 return
 main_l24:
 txn OnCompletion
@@ -119,8 +127,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub putBoxDebugcaster_39
-intc_2 // 1
+callsub readWholeBoxcaster_36
+intc_1 // 1
 return
 main_l25:
 txn OnCompletion
@@ -131,8 +139,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readWholeBoxcaster_38
-intc_2 // 1
+callsub readVote8caster_35
+intc_1 // 1
 return
 main_l26:
 txn OnCompletion
@@ -143,8 +151,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote8caster_37
-intc_2 // 1
+callsub readVote7caster_34
+intc_1 // 1
 return
 main_l27:
 txn OnCompletion
@@ -155,8 +163,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote7caster_36
-intc_2 // 1
+callsub readVote6caster_33
+intc_1 // 1
 return
 main_l28:
 txn OnCompletion
@@ -167,8 +175,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote6caster_35
-intc_2 // 1
+callsub readVote5caster_32
+intc_1 // 1
 return
 main_l29:
 txn OnCompletion
@@ -179,8 +187,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote5caster_34
-intc_2 // 1
+callsub readVote4caster_31
+intc_1 // 1
 return
 main_l30:
 txn OnCompletion
@@ -191,8 +199,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote4caster_33
-intc_2 // 1
+callsub readVote3caster_30
+intc_1 // 1
 return
 main_l31:
 txn OnCompletion
@@ -203,8 +211,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote3caster_32
-intc_2 // 1
+callsub readVote2caster_29
+intc_1 // 1
 return
 main_l32:
 txn OnCompletion
@@ -215,8 +223,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote2caster_31
-intc_2 // 1
+callsub readVote1caster_28
+intc_1 // 1
 return
 main_l33:
 txn OnCompletion
@@ -227,8 +235,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readVote1caster_30
-intc_2 // 1
+callsub readCandidatecaster_27
+intc_1 // 1
 return
 main_l34:
 txn OnCompletion
@@ -239,8 +247,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readCandidatecaster_29
-intc_2 // 1
+callsub readSeatcaster_26
+intc_1 // 1
 return
 main_l35:
 txn OnCompletion
@@ -251,8 +259,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub readSeatcaster_28
-intc_2 // 1
+callsub updateVotecaster_25
+intc_1 // 1
 return
 main_l36:
 txn OnCompletion
@@ -263,8 +271,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub updateVotecaster_27
-intc_2 // 1
+callsub initVotecaster_24
+intc_1 // 1
 return
 main_l37:
 txn OnCompletion
@@ -275,8 +283,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub initVotecaster_26
-intc_2 // 1
+callsub addCandidatecaster_23
+intc_1 // 1
 return
 main_l38:
 txn OnCompletion
@@ -287,8 +295,8 @@ intc_0 // 0
 !=
 &&
 assert
-callsub addCandidatecaster_25
-intc_2 // 1
+callsub addSeatcaster_22
+intc_1 // 1
 return
 main_l39:
 txn OnCompletion
@@ -299,45 +307,21 @@ intc_0 // 0
 !=
 &&
 assert
-callsub addSeatcaster_24
-intc_2 // 1
+callsub createBoxcaster_21
+intc_1 // 1
 return
 main_l40:
 txn OnCompletion
 intc_0 // NoOp
 ==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub readVotecaster_23
-intc_2 // 1
-return
-main_l41:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub createBoxcaster_22
-intc_2 // 1
-return
-main_l42:
-txn OnCompletion
-intc_0 // NoOp
-==
-bnz main_l44
+bnz main_l42
 err
-main_l44:
+main_l42:
 txn ApplicationID
 intc_0 // 0
 ==
 assert
-intc_2 // 1
+intc_1 // 1
 return
 
 // itob
@@ -366,7 +350,7 @@ store 2
 pushbytes 0x30313233343536373839 // "0123456789"
 load 2
 load 2
-intc_2 // 1
+intc_1 // 1
 +
 substring3
 load 0
@@ -378,7 +362,7 @@ pushint 10 // 10
 store 1
 b itob_0_l2
 itob_0_l5:
-bytec_2 // "0"
+bytec_3 // "0"
 itob_0_l6:
 retsub
 
@@ -386,40 +370,40 @@ retsub
 btoi_1:
 proto 1 1
 frame_dig -1
-bytec_2 // "0"
+bytec_3 // "0"
 ==
 bnz btoi_1_l5
 intc_0 // 0
-store 3
+store 4
 frame_dig -1
 len
-store 5
-intc_0 // 0
 store 6
+intc_0 // 0
+store 7
 btoi_1_l2:
+load 7
 load 6
-load 5
 <
 bnz btoi_1_l4
-load 3
+load 4
 b btoi_1_l6
 btoi_1_l4:
 frame_dig -1
-load 6
+load 7
 getbyte
 pushint 48 // 48
 -
-store 4
-load 3
+store 5
+load 4
 pushint 10 // 10
 *
-load 4
+load 5
 +
-store 3
-load 6
-intc_2 // 1
+store 4
+load 7
+intc_1 // 1
 +
-store 6
+store 7
 b btoi_1_l2
 btoi_1_l5:
 intc_0 // 0
@@ -438,13 +422,15 @@ pushint 4 // 4
 frame_dig -1
 extract 2 0
 len
-intc_1 // 6
+intc_2 // 6
 ==
 ||
 bnz createBox_2_l2
-pushbytes 0x4661696c656420746f2063726561746520626f7820 // "Failed to create box "
+pushbytes 0x4661696c656420746f2063726561746520626f78205b // "Failed to create box ["
 frame_dig -1
 extract 2 0
+concat
+bytec_2 // "]"
 concat
 frame_bury 0
 frame_dig 0
@@ -461,7 +447,12 @@ extract 2 0
 pushint 1024 // 1024
 box_create
 pop
-pushbytes 0x426f782063726561746564207375636365737366756c6c7921 // "Box created successfully!"
+pushbytes 0x426f78205b // "Box ["
+frame_dig -1
+extract 2 0
+concat
+pushbytes 0x5d2063726561746564207375636365737366756c6c7921 // "] created successfully!"
+concat
 frame_bury 0
 frame_dig 0
 len
@@ -473,130 +464,51 @@ frame_bury 0
 createBox_2_l3:
 retsub
 
-// readVote
-readVote_3:
-proto 1 1
+// addSeat
+addSeat_3:
+proto 3 1
 bytec_0 // ""
-bytec_3 // "1: "
-frame_dig -1
+frame_dig -3
 extract 2 0
-intc 4 // 135
-intc_1 // 6
-box_extract
-callsub btoi_1
-callsub itob_0
-concat
-pushbytes 0x20323a20 // " 2: "
-concat
-frame_dig -1
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-+
-intc_1 // 6
-box_extract
-callsub btoi_1
-callsub itob_0
-concat
-pushbytes 0x20333a20 // " 3: "
-concat
-frame_dig -1
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-pushint 2 // 2
-*
-+
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20343a20 // " 4: "
-concat
-frame_dig -1
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-pushint 3 // 3
-*
-+
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20353a20 // " 5: "
-concat
-frame_dig -1
-extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
+len
 pushint 4 // 4
-*
-+
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20363a20 // " 6: "
-concat
+==
+frame_dig -3
+extract 2 0
+len
+intc_2 // 6
+==
+||
+frame_dig -2
+extract 2 0
+len
+intc_0 // 0
+>
+&&
+frame_dig -2
+extract 2 0
+len
+pushint 26 // 26
+<=
+&&
 frame_dig -1
 extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-pushint 5 // 5
-*
-+
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20373a20 // " 7: "
-concat
+len
+intc_0 // 0
+>
+&&
 frame_dig -1
 extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-intc_1 // 6
-*
-+
-intc_1 // 6
-box_extract
-concat
-pushbytes 0x20383a20 // " 8: "
-concat
-frame_dig -1
+len
+pushint 15 // 15
+<=
+&&
+bnz addSeat_3_l2
+pushbytes 0x4661696c656420746f20616464207365617420746f20626f78205b // "Failed to add seat to box ["
+frame_dig -3
 extract 2 0
-intc 4 // 135
-intc_3 // 65
-pushint 25 // 25
-+
-intc_1 // 6
-+
-pushint 7 // 7
-*
-+
-intc_1 // 6
-box_extract
+concat
+bytec_2 // "]"
 concat
 frame_bury 0
 frame_dig 0
@@ -606,11 +518,8 @@ extract 6 0
 frame_dig 0
 concat
 frame_bury 0
-retsub
-
-// addSeat
-addSeat_4:
-proto 3 0
+b addSeat_3_l3
+addSeat_3_l2:
 frame_dig -3
 extract 2 0
 intc_0 // 0
@@ -629,21 +538,77 @@ pushint 30 // 30
 frame_dig -1
 extract 2 0
 box_replace
+pushbytes 0x53656174205b // "Seat ["
+frame_dig -3
+extract 2 0
+concat
+pushbytes 0x5d206164646564207375636365737366756c6c7921 // "] added successfully!"
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+addSeat_3_l3:
 retsub
 
 // addCandidate
-addCandidate_5:
-proto 4 0
+addCandidate_4:
+proto 4 1
+bytec_0 // ""
+frame_dig -3
+extract 2 0
+len
+intc_0 // 0
+>
+frame_dig -3
+extract 2 0
+len
+intc_3 // 65
+<=
+&&
+frame_dig -2
+extract 2 0
+len
+intc_0 // 0
+>
+&&
+frame_dig -2
+extract 2 0
+len
+pushint 25 // 25
+<=
+&&
+bnz addCandidate_4_l2
+pushbytes 0x4661696c656420746f206164642063616e64696461746520746f20626f78205b // "Failed to add candidate to box ["
+frame_dig -4
+extract 2 0
+concat
+bytec_2 // "]"
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+b addCandidate_4_l3
+addCandidate_4_l2:
 frame_dig -4
 extract 2 0
 pushint 45 // 45
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 frame_dig -1
-intc_2 // 1
+intc_1 // 1
 -
 *
 +
@@ -656,89 +621,123 @@ pushint 110 // 110
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 frame_dig -1
-intc_2 // 1
+intc_1 // 1
 -
 *
 +
 frame_dig -2
 extract 2 0
 box_replace
+pushbytes 0x43616e646964617465205b // "Candidate ["
+frame_dig -1
+callsub itob_0
+concat
+pushbytes 0x5d206164646564207375636365737366756c6c7920746f2073656174205b // "] added successfully to seat ["
+concat
+frame_dig -4
+extract 2 0
+concat
+bytec_2 // "]"
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
+addCandidate_4_l3:
 retsub
 
 // initVote
-initVote_6:
-proto 1 0
+initVote_5:
+proto 1 1
+bytec_0 // ""
 intc 4 // 135
-store 7
-initVote_6_l1:
-load 7
+store 3
+initVote_5_l1:
+load 3
 intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
-pushint 9 // 9
+pushint 8 // 8
 *
 +
-intc_2 // 1
-+
 <
-bz initVote_6_l3
+bz initVote_5_l3
 frame_dig -1
 extract 2 0
-load 7
+load 3
 pushbytes 0x303030303030 // "000000"
 box_replace
-load 7
+load 3
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 +
-store 7
-b initVote_6_l1
-initVote_6_l3:
+store 3
+b initVote_5_l1
+initVote_5_l3:
+pushbytes 0x496e697469616c697a6520766f746520666f722073656174205b // "Initialize vote for seat ["
+frame_dig -1
+extract 2 0
+concat
+pushbytes 0x5d20746f202730303030303027 // "] to '000000'"
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
 retsub
 
 // updateVote
-updateVote_7:
-proto 2 0
+updateVote_6:
+proto 2 1
+bytec_0 // ""
 frame_dig -2
 extract 2 0
 intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 frame_dig -1
-intc_2 // 1
+intc_1 // 1
 -
 *
 +
-intc_1 // 6
+intc_2 // 6
 frame_dig -2
 extract 2 0
 intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 frame_dig -1
-intc_2 // 1
+intc_1 // 1
 -
 *
 +
-intc_1 // 6
+intc_2 // 6
 box_extract
 callsub btoi_1
-intc_2 // 1
+intc_1 // 1
 +
 callsub itob_0
 len
@@ -750,24 +749,38 @@ intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 frame_dig -1
-intc_2 // 1
+intc_1 // 1
 -
 *
 +
-intc_1 // 6
+intc_2 // 6
 box_extract
 callsub btoi_1
-intc_2 // 1
+intc_1 // 1
 +
 callsub itob_0
 box_replace
+pushbytes 0x5375636365737366756c6c7920766f74656420666f722063616e646964617465205b // "Successfully voted for candidate ["
+frame_dig -1
+callsub itob_0
+concat
+bytec_2 // "]"
+concat
+frame_bury 0
+frame_dig 0
+len
+itob
+extract 6 0
+frame_dig 0
+concat
+frame_bury 0
 retsub
 
 // readSeat
-readSeat_8:
+readSeat_7:
 proto 1 1
 bytec_0 // ""
 pushbytes 0x53656174204e6f3a20 // "Seat No: "
@@ -804,20 +817,30 @@ frame_bury 0
 retsub
 
 // readCandidate
-readCandidate_9:
+readCandidate_8:
 proto 2 1
 bytec_0 // ""
-pushbytes 0x4e616d653a20 // "Name: "
+pushbytes 0x5b // "["
+frame_dig -2
+extract 2 0
+concat
+pushbytes 0x5d205b43616e64696461746520 // "] [Candidate "
+concat
+frame_dig -1
+callsub itob_0
+concat
+pushbytes 0x5d203d3d3e204e616d653a20 // "] ==> Name: "
+concat
 frame_dig -2
 extract 2 0
 pushint 45 // 45
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 frame_dig -1
-intc_2 // 1
+intc_1 // 1
 -
 *
 +
@@ -832,10 +855,10 @@ pushint 110 // 110
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 frame_dig -1
-intc_2 // 1
+intc_1 // 1
 -
 *
 +
@@ -853,14 +876,14 @@ frame_bury 0
 retsub
 
 // readVote1
-readVote1_10:
+readVote1_9:
 proto 1 1
 bytec_0 // ""
-bytec_3 // "1: "
+pushbytes 0x313a20 // "1: "
 frame_dig -1
 extract 2 0
 intc 4 // 135
-intc_1 // 6
+intc_2 // 6
 box_extract
 callsub btoi_1
 callsub itob_0
@@ -876,7 +899,7 @@ frame_bury 0
 retsub
 
 // readVote2
-readVote2_11:
+readVote2_10:
 proto 1 1
 bytec_0 // ""
 pushbytes 0x323a20 // "2: "
@@ -886,10 +909,10 @@ intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 +
-intc_1 // 6
+intc_2 // 6
 box_extract
 callsub btoi_1
 callsub itob_0
@@ -905,7 +928,7 @@ frame_bury 0
 retsub
 
 // readVote3
-readVote3_12:
+readVote3_11:
 proto 1 1
 bytec_0 // ""
 pushbytes 0x333a20 // "3: "
@@ -915,12 +938,12 @@ intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 pushint 2 // 2
 *
 +
-intc_1 // 6
+intc_2 // 6
 box_extract
 callsub btoi_1
 callsub itob_0
@@ -936,7 +959,7 @@ frame_bury 0
 retsub
 
 // readVote4
-readVote4_13:
+readVote4_12:
 proto 1 1
 bytec_0 // ""
 pushbytes 0x343a20 // "4: "
@@ -946,12 +969,12 @@ intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 pushint 3 // 3
 *
 +
-intc_1 // 6
+intc_2 // 6
 box_extract
 callsub btoi_1
 callsub itob_0
@@ -967,7 +990,7 @@ frame_bury 0
 retsub
 
 // readVote5
-readVote5_14:
+readVote5_13:
 proto 1 1
 bytec_0 // ""
 pushbytes 0x353a20 // "5: "
@@ -977,12 +1000,12 @@ intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 pushint 4 // 4
 *
 +
-intc_1 // 6
+intc_2 // 6
 box_extract
 callsub btoi_1
 callsub itob_0
@@ -998,7 +1021,7 @@ frame_bury 0
 retsub
 
 // readVote6
-readVote6_15:
+readVote6_14:
 proto 1 1
 bytec_0 // ""
 pushbytes 0x363a20 // "6: "
@@ -1008,12 +1031,12 @@ intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 pushint 5 // 5
 *
 +
-intc_1 // 6
+intc_2 // 6
 box_extract
 callsub btoi_1
 callsub itob_0
@@ -1029,7 +1052,7 @@ frame_bury 0
 retsub
 
 // readVote7
-readVote7_16:
+readVote7_15:
 proto 1 1
 bytec_0 // ""
 pushbytes 0x373a20 // "7: "
@@ -1039,12 +1062,12 @@ intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
-intc_1 // 6
+intc_2 // 6
 *
 +
-intc_1 // 6
+intc_2 // 6
 box_extract
 callsub btoi_1
 callsub itob_0
@@ -1060,7 +1083,7 @@ frame_bury 0
 retsub
 
 // readVote8
-readVote8_17:
+readVote8_16:
 proto 1 1
 bytec_0 // ""
 pushbytes 0x383a20 // "8: "
@@ -1070,12 +1093,12 @@ intc 4 // 135
 intc_3 // 65
 pushint 25 // 25
 +
-intc_1 // 6
+intc_2 // 6
 +
 pushint 7 // 7
 *
 +
-intc_1 // 6
+intc_2 // 6
 box_extract
 callsub btoi_1
 callsub itob_0
@@ -1091,7 +1114,7 @@ frame_bury 0
 retsub
 
 // readWholeBox
-readWholeBox_18:
+readWholeBox_17:
 proto 1 1
 bytec_0 // ""
 frame_dig -1
@@ -1110,7 +1133,7 @@ frame_bury 0
 retsub
 
 // putBoxDebug
-putBoxDebug_19:
+putBoxDebug_18:
 proto 3 0
 frame_dig -3
 extract 2 0
@@ -1121,7 +1144,7 @@ box_replace
 retsub
 
 // set_app_global_state_value
-setappglobalstatevalue_20:
+setappglobalstatevalue_19:
 proto 1 0
 bytec 4 // "global_state"
 frame_dig -1
@@ -1130,7 +1153,7 @@ app_global_put
 retsub
 
 // readGlobal
-readGlobal_21:
+readGlobal_20:
 proto 0 1
 bytec_0 // ""
 bytec 4 // "global_state"
@@ -1146,7 +1169,7 @@ frame_bury 0
 retsub
 
 // createBox_caster
-createBoxcaster_22:
+createBoxcaster_21:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1161,15 +1184,21 @@ concat
 log
 retsub
 
-// readVote_caster
-readVotecaster_23:
+// addSeat_caster
+addSeatcaster_22:
 proto 0 0
 bytec_0 // ""
-dup
+dupn 3
 txna ApplicationArgs 1
 frame_bury 1
+txna ApplicationArgs 2
+frame_bury 2
+txna ApplicationArgs 3
+frame_bury 3
 frame_dig 1
-callsub readVote_3
+frame_dig 2
+frame_dig 3
+callsub addSeat_3
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1177,81 +1206,81 @@ concat
 log
 retsub
 
-// addSeat_caster
-addSeatcaster_24:
-proto 0 0
-bytec_0 // ""
-dupn 2
-txna ApplicationArgs 1
-frame_bury 0
-txna ApplicationArgs 2
-frame_bury 1
-txna ApplicationArgs 3
-frame_bury 2
-frame_dig 0
-frame_dig 1
-frame_dig 2
-callsub addSeat_4
-retsub
-
 // addCandidate_caster
-addCandidatecaster_25:
+addCandidatecaster_23:
 proto 0 0
 bytec_0 // ""
-dupn 2
+dupn 3
 intc_0 // 0
 txna ApplicationArgs 1
-frame_bury 0
-txna ApplicationArgs 2
 frame_bury 1
-txna ApplicationArgs 3
+txna ApplicationArgs 2
 frame_bury 2
+txna ApplicationArgs 3
+frame_bury 3
 txna ApplicationArgs 4
 intc_0 // 0
 getbyte
-frame_bury 3
-frame_dig 0
+frame_bury 4
 frame_dig 1
 frame_dig 2
 frame_dig 3
-callsub addCandidate_5
+frame_dig 4
+callsub addCandidate_4
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
 retsub
 
 // initVote_caster
-initVotecaster_26:
-proto 0 0
-bytec_0 // ""
-txna ApplicationArgs 1
-frame_bury 0
-frame_dig 0
-callsub initVote_6
-retsub
-
-// updateVote_caster
-updateVotecaster_27:
-proto 0 0
-bytec_0 // ""
-intc_0 // 0
-txna ApplicationArgs 1
-frame_bury 0
-txna ApplicationArgs 2
-intc_0 // 0
-getbyte
-frame_bury 1
-frame_dig 0
-frame_dig 1
-callsub updateVote_7
-retsub
-
-// readSeat_caster
-readSeatcaster_28:
+initVotecaster_24:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readSeat_8
+callsub initVote_5
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// updateVote_caster
+updateVotecaster_25:
+proto 0 0
+bytec_0 // ""
+dup
+intc_0 // 0
+txna ApplicationArgs 1
+frame_bury 1
+txna ApplicationArgs 2
+intc_0 // 0
+getbyte
+frame_bury 2
+frame_dig 1
+frame_dig 2
+callsub updateVote_6
+frame_bury 0
+bytec_1 // 0x151f7c75
+frame_dig 0
+concat
+log
+retsub
+
+// readSeat_caster
+readSeatcaster_26:
+proto 0 0
+bytec_0 // ""
+dup
+txna ApplicationArgs 1
+frame_bury 1
+frame_dig 1
+callsub readSeat_7
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1260,7 +1289,7 @@ log
 retsub
 
 // readCandidate_caster
-readCandidatecaster_29:
+readCandidatecaster_27:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1273,7 +1302,7 @@ getbyte
 frame_bury 2
 frame_dig 1
 frame_dig 2
-callsub readCandidate_9
+callsub readCandidate_8
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1282,14 +1311,14 @@ log
 retsub
 
 // readVote1_caster
-readVote1caster_30:
+readVote1caster_28:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readVote1_10
+callsub readVote1_9
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1298,14 +1327,14 @@ log
 retsub
 
 // readVote2_caster
-readVote2caster_31:
+readVote2caster_29:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readVote2_11
+callsub readVote2_10
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1314,14 +1343,14 @@ log
 retsub
 
 // readVote3_caster
-readVote3caster_32:
+readVote3caster_30:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readVote3_12
+callsub readVote3_11
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1330,14 +1359,14 @@ log
 retsub
 
 // readVote4_caster
-readVote4caster_33:
+readVote4caster_31:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readVote4_13
+callsub readVote4_12
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1346,14 +1375,14 @@ log
 retsub
 
 // readVote5_caster
-readVote5caster_34:
+readVote5caster_32:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readVote5_14
+callsub readVote5_13
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1362,14 +1391,14 @@ log
 retsub
 
 // readVote6_caster
-readVote6caster_35:
+readVote6caster_33:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readVote6_15
+callsub readVote6_14
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1378,14 +1407,14 @@ log
 retsub
 
 // readVote7_caster
-readVote7caster_36:
+readVote7caster_34:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readVote7_16
+callsub readVote7_15
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1394,14 +1423,14 @@ log
 retsub
 
 // readVote8_caster
-readVote8caster_37:
+readVote8caster_35:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readVote8_17
+callsub readVote8_16
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1410,14 +1439,14 @@ log
 retsub
 
 // readWholeBox_caster
-readWholeBoxcaster_38:
+readWholeBoxcaster_36:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub readWholeBox_18
+callsub readWholeBox_17
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0
@@ -1426,7 +1455,7 @@ log
 retsub
 
 // putBoxDebug_caster
-putBoxDebugcaster_39:
+putBoxDebugcaster_37:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1442,24 +1471,24 @@ frame_bury 2
 frame_dig 0
 frame_dig 1
 frame_dig 2
-callsub putBoxDebug_19
+callsub putBoxDebug_18
 retsub
 
 // set_app_global_state_value_caster
-setappglobalstatevaluecaster_40:
+setappglobalstatevaluecaster_38:
 proto 0 0
 bytec_0 // ""
 txna ApplicationArgs 1
 frame_bury 0
 frame_dig 0
-callsub setappglobalstatevalue_20
+callsub setappglobalstatevalue_19
 retsub
 
 // readGlobal_caster
-readGlobalcaster_41:
+readGlobalcaster_39:
 proto 0 0
 bytec_0 // ""
-callsub readGlobal_21
+callsub readGlobal_20
 frame_bury 0
 bytec_1 // 0x151f7c75
 frame_dig 0

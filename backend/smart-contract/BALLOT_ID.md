@@ -85,3 +85,19 @@ Parliament: Klang, Selangor
 - Ballot ID: 0251000010610**************  
 DUN: Kajang, Selangor  
 Parliament: Damansara, Selangor  
+
+## Box Name
+
+### Parliament
+- P108 Shah Alam
+- P106 Damansara
+- P107 Sungai Buloh
+- P110 Klang
+- P106 Damansara
+
+### DUN
+- N31-10 Subang Jaya
+- N30-10 Kinrara
+- N36-10 Bandar Utama
+- N48-10 Sentosa
+- N25-10 Kajang
