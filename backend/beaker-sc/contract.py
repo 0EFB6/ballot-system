@@ -226,7 +226,9 @@ def readWholeBox(seat: abi.String, *, output: abi.String) -> Expr:
 def verify_acc_init(account: abi.Account, seats_no: abi.String, app_id: abi.Uint64) -> Expr:
     return Seq(
 		# Assert(Global.creator_address() == Txn.sender()), # supposingly gov official will have the account that creates the app (admin acc)
-        # Don't know how to opt in from here
+        # Don't know how to auto opt in from here
+
+        # Check if account is opted in dk if necessary since if not opt in will err too cause can't read local
         Assert(App.optedIn(account.address(), app_id.get())),
 	    App.localPut(account.address(), Bytes("seats_no"), seats_no.get())	
     )
@@ -236,8 +238,9 @@ def verify_acc_init(account: abi.Account, seats_no: abi.String, app_id: abi.Uint
 def get_uuid(*, output: abi.String) -> Expr:
     unique_id = Bytes(uuid.uuid4().hex)
 
+    # Verified account will have their seats_no updated and not empty
     return If(app.state.seats_no[Txn.sender()] == Bytes(""), 
-                output.set(Bytes("Invalid Account")),
+                output.set(Bytes("Unverified Account")),
                 Seq(
                     app.state.seats_no[Txn.sender()].set(Concat(app.state.seats_no[Txn.sender()], unique_id)),
                     output.set(app.state.seats_no[Txn.sender()])
