@@ -57,8 +57,7 @@ print(f"{app_client3.call(createBox, seat=SUBANG, boxes=[(app_client.app_id, SUB
 print(f"{app_client1.call(initVote, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
 print(f'{app_client1.call(addSeat, seat=AMPANG, area="Ampang", state="Selangor", boxes=[(app_client.app_id, AMPANG)]).return_value}')
-ret = app_client1.call(readSeat, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value
-print(f"\nSeat P106 => \n{ret}\n")
+print(f'{app_client1.call(readSeat, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}')
 
 print(f'{app_client1.call(addCandidate, seat=AMPANG, name="Brian", party="Testingg", i=1, boxes=[(app_client.app_id, AMPANG)]).return_value}')
 print(f'{app_client1.call(addCandidate, seat=AMPANG, name="Wilson", party="Perpaduan", i=2, boxes=[(app_client.app_id, AMPANG)]).return_value}')
@@ -108,7 +107,7 @@ print(f"{app_client1.call(readVote6, seat=AMPANG, boxes=[(app_client.app_id, AMP
 print(f"{app_client1.call(readVote7, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
-print(f"{app_client1.call(readWholeBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+#print(f"{app_client1.call(readWholeBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
 
 '''app_client.opt_in()

@@ -117,11 +117,11 @@ def updateVote(seat:abi.String, i: abi.Uint8, *, output: abi.String) -> Expr:
 @app.external
 def readSeat(seat: abi.String, *, output: abi.String) -> Expr:
 	ret = Concat(
-		Bytes("Seat No: "),
+		Bytes("[READ SEAT INFO] Seat No: "),
 		BoxExtract(seat.get(), SEAT_NO_I, LEN_SEAT_NO),
-		Bytes("\nArea: "),
+		Bytes("\tArea: "),
 		BoxExtract(seat.get(), SEAT_AREA_I, LEN_SEAT_AREA),
-		Bytes("\nState: "),
+		Bytes("\tState: "),
 		BoxExtract(seat.get(), SEAT_STATE_I, LEN_SEAT_STATE)
 	)
 	return output.set(ret)

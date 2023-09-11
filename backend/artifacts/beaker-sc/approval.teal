@@ -783,14 +783,14 @@ retsub
 readSeat_7:
 proto 1 1
 bytec_0 // ""
-pushbytes 0x53656174204e6f3a20 // "Seat No: "
+pushbytes 0x5b52454144205345415420494e464f5d2053656174204e6f3a20 // "[READ SEAT INFO] Seat No: "
 frame_dig -1
 extract 2 0
 intc_0 // 0
 pushint 4 // 4
 box_extract
 concat
-pushbytes 0x0a417265613a20 // "\nArea: "
+pushbytes 0x09417265613a20 // "\tArea: "
 concat
 frame_dig -1
 extract 2 0
@@ -798,7 +798,7 @@ pushint 4 // 4
 pushint 26 // 26
 box_extract
 concat
-pushbytes 0x0a53746174653a20 // "\nState: "
+pushbytes 0x0953746174653a20 // "\tState: "
 concat
 frame_dig -1
 extract 2 0
