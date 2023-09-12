@@ -86,6 +86,7 @@ print(f"{app_client1.call(readVote6, seat=AMPANG, boxes=[(app_client.app_id, AMP
 print(f"{app_client1.call(readVote7, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
+app_client1.call(setSeatNo, seat=AMPANG)
 print(f"{app_client1.call(vote, can_id=6).return_value}")
 print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=6, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=2, boxes=[(app_client.app_id, AMPANG)]).return_value}")

@@ -68,8 +68,7 @@ def setSeatNo(seat: abi.String) -> Expr:
 
 @app.external(authorize=Authorize.opted_in())
 def vote(can_id: abi.Uint8, *, output: abi.String) -> Expr:
-	seat_no = app.state.custom_uid[sender].get()
-
+	seat_no = app.state.custom_uid[sender]
 	# Fak this is not working!!!
 	current_vote_byte = BoxExtract(seat_no, CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)), LEN_VOTECOUNT)
 	current_vote_uint = btoi(current_vote_byte)
@@ -327,7 +326,10 @@ def get_uuid(*, output: abi.String) -> Expr:
                     Seq(
 						app.state.collected_ballot[sender].set(Int(1)),
                         output.set(Bytes(uid)),
-                        BoxPut(hash_uid, hash_uid)
+
+						# Wilson: Where is the boc created?
+                        # BoxPut(hash_uid, hash_uid)
+
                         # app.state.custom_uid[sender].set(Concat(app.state.custom_uid[sender], hash_uuid)), 
                     )
                 ),
