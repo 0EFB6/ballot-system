@@ -103,8 +103,9 @@ Parliament: Kuala Selangor, Selangor
 - N25-10 Kajang
 
 ## Candidates Details
-### P108 Shah Alam
-- Candidate 1: Wilson, Party: Testingg
+### Parliament
+#### P108 Shah Alam
+- Candidate 1: Wilson, Party: MADA
 - Candidate 2: Bryan, Party: Perpaduan
 - Candidate 3: Hao, Party: Nasional
 - Candidate 4: Yee Ling, Party: Kesatuan
@@ -112,22 +113,53 @@ Parliament: Kuala Selangor, Selangor
 - Candidate 6: Mahatir, Party: Keadilan
 - Candidate 7: Rahman, Party: Perikatan
 - Candidate 8: Muhammad Zul, Party: Barisan
-### P106 Damansara
+#### P106 Damansara
 - Candidate 1: Brendon, Party: Perpaduan
 - Candidate 2: Luis, Party: Barisan
 - Candidate 3: Joshua, Party: Harapan
 - Candidate 4: Joe, Party: Keadilan
 - Candidate 5: Zack, Party: Perikatan
 - Candidate 6: Jay, Party: Nasional
-### P107 Sungai Buloh
+#### P107 Sungai Buloh
 - Candidate 1: Lucas, Party: Harapan
 - Candidate 2: Nigel Tan, Party: Barisan
 - Candidate 3: Lee Sin Loo, Party: Perpaduan
 - Candidate 4: Tay Yee Ling, Party: Kesatuan
-### P110 Klang
+#### P110 Klang
 - Candidate 1: Micheal, Party: Barisan
 - Candidate 2: Thomas, Party: Harapan
 - Candidate 3: Olivia, Party: Perikatan
-### P096 Kuala Selangor
+#### P096 Kuala Selangor
 - Candidate 1: Charles, Party: Harapan
 - Candidate 2: Jack, Party: Barisan
+
+### DUN
+#### N31-10 Subang Jaya
+- Candidate 1: Noah, Party: Barisan
+- Candidate 2: Isabella, Party: Harapan
+- Candidate 3: Benjamin, Party: Perikatan
+- Candidate 4: Sophia, Party: Kesatuan
+- Candidate 5: William, Party: Perpaduan
+- Candidate 6: Emma, Party: Keadilan
+- Candidate 7: Liam, Party: Nasional
+
+#### N30-10 Kinrara
+- Candidate 1: Amir, Party: Perikatan
+- Candidate 2: Rafiq, Party: Perpaduan
+- Candidate 3: Zain, Party: Barisan
+- Candidate 4: Irfan, Party: Keadilan
+- Candidate 5: Siti, Party: Harapan
+
+#### N36-10 Bandar Utama
+- Candidate 1: Norazlina, Party: Barisan
+- Candidate 2: Norliana, Party: Perpaduan
+- Candidate 3: Amina, Party: Keadilan
+
+#### N48-10 Sentosa
+- Candidate 1: Zhi Tao, Party: Nasional
+- Candidate 2: Xiu Mei, Party: Harapan
+
+#### N25-10 Kajang
+- Candidate 1: Xin Yi, Party: Perpaduan
+- Candidate 2: Mei Ling, Party: Kesatuan
+- Candidate 3: Yi Zhao, Party: Nasional
