@@ -285,15 +285,18 @@ def readWholeBox(seat: abi.String, *, output: abi.String) -> Expr:
 
 # WIP
 # A function to store where the voter is voting after they verify themselves at gov office
-@app.external
+
+# Wilson: modified the decorator to only allow opted in account to run this method, ignore non-opted in user with standard error.
+#		  I don't think we need to handle error for non-opted in account, just let it be what it is
+#		  Removed 'Assert(App.optedIn(account.address(), app_id.get()))'
+
+@app.external(authorize=Authorize.opted_in())
 def verify_acc_init(account: abi.Account, seats_no: abi.String, app_id: abi.Uint64) -> Expr:
     return Seq(
 		# Assert(Global.creator_address() == sender), # supposingly only gov official can add using the account that creates the app (admin acc)
         # Don't know how to auto opt in from here
         # Need add state that store verified account? 
 
-        # Check if account is opted in, dk if necessary since if not opt in will err too cause can't read local
-        Assert(App.optedIn(account.address(), app_id.get())),
 	    App.localPut(account.address(), Bytes("seats_no"), seats_no.get())	
     )
 	
