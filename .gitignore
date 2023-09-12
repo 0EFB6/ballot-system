@@ -1,4 +1,4 @@
 **/__pycache__/
 backend/artifacts/
 backend/beaker-sc/__pycache__/
-
+*.pyc
