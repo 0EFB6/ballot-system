@@ -334,10 +334,12 @@ def get_uuid(*, output: abi.String) -> Expr:
             )
 
 # WIP
+# maybe use pyteal Sha256 here then up there use sha256 from hashlib
 @app.external
 def show_hashid(uid: abi.String, *, output: abi.String):
 	# use during testing only
-    id_str_to_bytes = uid.encode('UTF-8')
+    # return output.set(uid[1])
+    id_str_to_bytes = abi.String.encode(uid)
     h = hashlib.shake_256(id_str_to_bytes)
 	# return a 32digits hexadecimal hash
     hash_uid = Bytes(h.hexdigest(16))
@@ -347,8 +349,14 @@ def show_hashid(uid: abi.String, *, output: abi.String):
 # def check_uuid(uid: abi.String, *, output: abi.String) -> Expr:
 #     return If(App.box_create(uid.get(), Int(32)), output.set(Bytes("can't vote")),output.set(Bytes("can vote")))
 
-    
 
+# def bytes_to_str(bytes):
+#     str = bytes.decode("utf-8")
+#     str = []
+#     str.append(bytes)
+#     str.append("b")
+#     str = "".join(str)
+#     print(str)
 
 
 
@@ -414,3 +422,4 @@ def deleteParliamentSeat(area: abi.String) -> Expr:
 if __name__ == '__main__':
     app.build().export("../artifacts/beaker-sc")
     print("Success")
+
