@@ -302,8 +302,8 @@ def verify_acc_init(account: abi.Account, custom_uid: abi.String) -> Expr:
 		# Assert(Global.creator_address() == sender), # supposingly only gov official can add using the account that creates the app (admin acc)
 
         # Need add state that store verified account? 
-	    App.localPut(account.address(), Bytes("collected_ballot"), Int(0)),
-	    App.localPut(account.address(), Bytes("custom_uid"), custom_uid.get())
+		app.state.collected_ballot[account.address()].set(Int(0)),
+		app.state.custom_uid[account.address()].set(custom_uid.get())
     )
 	
 
@@ -345,9 +345,13 @@ def get_uuid(*, output: abi.String) -> Expr:
 #    hash_uid = Bytes(h.hexdigest(16))
 #    return output.set(App.box_extract(hash_uid, Int(0), Int(32)))
 	
-# @app.external
-# def check_uuid(uid: abi.String, *, output: abi.String) -> Expr:
-#     return If(App.box_create(uid.get(), Int(32)), output.set(Bytes("can't vote")),output.set(Bytes("can vote")))
+@app.external
+def check_uuid(uid: abi.String, *, output: abi.String) -> Expr:
+    return If(
+		BoxCreate(uid.get(), Int(32)),
+		output.set(Bytes("Can't Vote")),
+		output.set(Bytes("Can Vote"))
+	)
 
 
 # def bytes_to_str(bytes):
