@@ -325,9 +325,9 @@ def get_uuid(*, output: abi.String) -> Expr:
                 If(app.state.collected_ballot[sender] == Int(1),
                     output.set(Bytes("Collected Ballot")),
                     Seq(
-	                    App.localPut(sender, Bytes("collected_ballot"), Int(1)),
+						app.state.collected_ballot[sender].set(Int(1)),
                         output.set(Bytes(uid)),
-                        App.box_put(hash_uid, hash_uid)
+                        BoxPut(hash_uid, hash_uid)
                         # app.state.custom_uid[sender].set(Concat(app.state.custom_uid[sender], hash_uuid)), 
                     )
                 ),
@@ -335,15 +335,15 @@ def get_uuid(*, output: abi.String) -> Expr:
 
 # WIP
 # maybe use pyteal Sha256 here then up there use sha256 from hashlib
-@app.external
-def show_hashid(uid: abi.String, *, output: abi.String):
-	# use during testing only
-    # return output.set(uid[1])
-    id_str_to_bytes = abi.String.encode(uid)
-    h = hashlib.shake_256(id_str_to_bytes)
-	# return a 32digits hexadecimal hash
-    hash_uid = Bytes(h.hexdigest(16))
-    return output.set(App.box_extract(hash_uid, Int(0), Int(32)))
+#@app.external
+#def show_hashid(uid: abi.String, *, output: abi.String):
+#	# use during testing only
+#    # return output.set(uid[1])
+#    id_str_to_bytes = abi.String.encode(uid)
+#    h = hashlib.shake_256(id_str_to_bytes)
+#	# return a 32digits hexadecimal hash
+#    hash_uid = Bytes(h.hexdigest(16))
+#    return output.set(App.box_extract(hash_uid, Int(0), Int(32)))
 	
 # @app.external
 # def check_uuid(uid: abi.String, *, output: abi.String) -> Expr:
