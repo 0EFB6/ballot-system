@@ -343,7 +343,7 @@ def get_uuid(*, output: abi.String) -> Expr:
 #    h = hashlib.shake_256(id_str_to_bytes)
 #	# return a 32digits hexadecimal hash
 #    hash_uid = Bytes(h.hexdigest(16))
-#    return output.set(App.box_extract(hash_uid, Int(0), Int(32)))
+#    return output.set(BoxExtract(hash_uid, Int(0), Int(32)))
 	
 @app.external
 def check_uuid(uid: abi.String, *, output: abi.String) -> Expr:
