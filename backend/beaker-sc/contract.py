@@ -26,21 +26,49 @@ CANDIDATE_VOTES_1 	= Int(135)
 #    (Subang) (103) (Selangor), (2),          (Wilson),        (Pakatan)
 
 class ParliamentSeat:
-    global_state = GlobalStateValue(
+	global_state = GlobalStateValue(
         stack_type=TealType.bytes,
         default=Bytes("Testing"),
         descr="Global state for Parliament Seat"
     )
-	
-    seats_no = LocalStateValue(
+	seats_no = LocalStateValue(
         stack_type=TealType.bytes,
         default=Bytes(""),
         descr="The seats voter gonna vote for"
     )
+	candidate_id = LocalStateValue(
+		stack_type=TealType.uint64,
+		default=Int(0),
+		static=False,
+		descr="The candidate ID which voters are voting for"
+	)
+	voted = LocalStateValue(
+		stack_type=TealType.uint64,
+		default=Int(0),
+		static=False,
+		descr="Value indicating voters have voted or not, 0 indicate not voted, 1 indicate voted"
+	)
 
 app = (Application("Voting Beaker", state=ParliamentSeat())
 	   .apply(unconditional_create_approval, initialize_global_state=True)
 	   .apply(unconditional_opt_in_approval, initialize_local_state=True))
+
+@app.external(authorize=Authorize.opted_in())
+def vote(can_id: abi.Uint8, *, output: abi.String) -> Expr:
+	return If(
+		And(
+			can_id.get() >= Int(1),
+			can_id.get() <= Int(8),
+			app.state.voted[Txn.sender()].get() == Int(0),
+			app.state.candidate_id[Txn.sender()].get() == Int(0),
+		),
+		Seq(
+			app.state.candidate_id[Txn.sender()].set(can_id.get()),
+			app.state.voted[Txn.sender()].increment(Int(1)),
+			output.set(Bytes("You have successfully voted!"))
+		),
+		output.set(Bytes("Failed to vote! You may have already voten before."))
+	)
 
 @app.external
 def createBox(seat: abi.String, *, output: abi.String) -> Expr:

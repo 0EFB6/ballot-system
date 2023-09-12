@@ -34,6 +34,7 @@ App Address : {addr}
 app_client1 = app_client.prepare(signer=accounts[0].signer)
 app_client2 = app_client.prepare(signer=accounts[1].signer)
 app_client3 = app_client.prepare(signer=accounts[2].signer)
+app_client1.opt_in()
 
 SUBANG = "P102"
 PUCHONG = "P103"
@@ -112,7 +113,8 @@ print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMP
 # app_client1.call(get_uuid)
 # app_client1.call(verify_acc_init, account='KC7ZZZVICU4VFJYT6SR6BYHLOC5CYPO64WRVN34ATESFHZEA36DU2YFV5A', seats_no='1243', app_id=app_id)
 
-
+print(f"{app_client1.call(vote, can_id=6).return_value}")
+print(f"{app_client2.call(vote, can_id=6).return_value}")
 '''app_client.opt_in()
 print("Opted in to app!")'''
 '''
