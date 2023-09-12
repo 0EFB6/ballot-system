@@ -1,4 +1,8 @@
-**/__pycache__/
+*/__pycache__/
 backend/artifacts/
 backend/beaker-sc/__pycache__/
 *.pyc
+backend/beaker-sc/__pycache__/contract.cpython-310.pyc
+backend/beaker-sc/__pycache__/utils.cpython-310.pyc
+backend/smart-contract/__pycache__/candidate.cpython-310.pyc
+
