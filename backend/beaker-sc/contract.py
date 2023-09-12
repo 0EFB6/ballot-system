@@ -31,11 +31,17 @@ class ElectionVotingSystem:
         default=Bytes("Testing"),
         descr="Global state for Parliament Seat"
     )
-	seats_no = LocalStateValue(
+	custom_uid = LocalStateValue(
         stack_type=TealType.bytes,
-        default=Bytes("NIL"),
-        descr="The seats voter gonna vote for, eg. P106, N06-10"
+        default=Bytes(""),
+        descr="The custom part of the uid, eg. 0311000010810"
     )
+	collected_ballot = LocalStateValue(
+		stack_type=TealType.uint64,
+		default=Int(0),
+		static=False,
+		descr="Value indicating voter collected ballot id or not, 0 indicate haven't collected, 1 indicate collected"
+	)
 	candidate_id = LocalStateValue(
 		stack_type=TealType.uint64,
 		default=Int(0),
@@ -58,11 +64,11 @@ sender = Txn.sender()
 # Voting part, a bit messy
 @app.external(authorize=Authorize.opted_in())
 def setSeatNo(seat: abi.String) -> Expr:
-	return app.state.seats_no[sender].set(seat.get())
+	return app.state.custom_uid[sender].set(seat.get())
 
 @app.external(authorize=Authorize.opted_in())
 def vote(can_id: abi.Uint8, *, output: abi.String) -> Expr:
-	seat_no = app.state.seats_no[sender].get()
+	seat_no = app.state.custom_uid[sender].get()
 
 	# Fak this is not working!!!
 	current_vote_byte = BoxExtract(seat_no, CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)), LEN_VOTECOUNT)
@@ -105,7 +111,7 @@ def updateVote(seat:abi.String, can_id: abi.Uint8, *, output: abi.String) -> Exp
 
 @app.external(authorize=Authorize.opted_in())
 def getLocalSeatNo(*, output: abi.String):
-	return output.set(app.state.seats_no[sender].get())
+	return output.set(app.state.custom_uid[sender].get())
 
 @app.external(authorize=Authorize.opted_in())
 def getLocalCandidateId(*, output: abi.Uint8):
@@ -283,87 +289,63 @@ def readVote8(seat: abi.String, *, output: abi.String) -> Expr:
 def readWholeBox(seat: abi.String, *, output: abi.String) -> Expr:
 	return output.set(BoxExtract(seat.get(), Int(0), Int(1000)))
 
-# WIP
-# A function to store where the voter is voting after they verify themselves at gov office
+
 
 # Wilson: modified the decorator to only allow opted in account to run this method, ignore non-opted in user with standard error.
 #		  I don't think we need to handle error for non-opted in account, just let it be what it is
-#		  Removed 'Assert(App.optedIn(account.address(), app_id.get()))'
+#		  Removed 'Assert(App.optedIn(account.address(), app_id.get()))' (Ok nice: ZH)
 
+# A function to store where the voter is voting after they verify themselves at gov office
 @app.external(authorize=Authorize.opted_in())
-def verify_acc_init(account: abi.Account, seats_no: abi.String, app_id: abi.Uint64) -> Expr:
+def verify_acc_init(account: abi.Account, custom_uid: abi.String) -> Expr:
     return Seq(
 		# Assert(Global.creator_address() == sender), # supposingly only gov official can add using the account that creates the app (admin acc)
-        # Don't know how to auto opt in from here
-        # Need add state that store verified account? 
 
-	    App.localPut(account.address(), Bytes("seats_no"), seats_no.get())	
+        # Need add state that store verified account? 
+	    App.localPut(account.address(), Bytes("collected_ballot"), Int(0)),
+	    App.localPut(account.address(), Bytes("custom_uid"), custom_uid.get())
     )
 	
-# @Subroutine(TealType.bytes)
-# def hash_ballot(ballot_id):
-# #     # return Sha256(ballot_id)
-# #     str_to_bytes = ballot_id.encode('UTF-8')
-#     h = hashlib.shake_256(ballot_id)
-#     return Bytes(h.hexdigest(45))
-#97-122 a-z 48-57 0-10
 
-# def btos(bytes) -> str:
-# 	str = Base64Decode(bytes)
-# 	return str
-    # it = ScratchVar(TealType.uint64)
-    # ascii = 0
-    # res = ""
-    # return Seq(
-    #     For(it.store(Int(0)), it.load() < Len(bytes), it.store(it.load() + Int(1))).Do(
-    #         ascii = GetByte(bytes, it.load(), it.load() + 1)
-    #         If(ascii)
-    #     )
-    # )
-
-# @Subroutine(TealType.bytes)
-# def set_reserved_global_state_val(k: abi.Uint8, v: abi.String) -> Expr:
-#     # Accessing the key with square brackets, accepts both Expr and an ABI type
-#     # If the value is an Expr it must evaluate to `TealType.bytes`
-#     # If the value is an ABI type, the `encode` method is used to convert it to bytes
-#     return app.state.hashed_ids[k].set(v.get())
-
-
-# @Subroutine(TealType.bytes)
-# def get_reserved_global_state_val(k: abi.Uint8, *, output: abi.String) -> Expr:
-#     return output.set(app.state.hashed_ids[k])
-
-
+# How to store the uuid though, if onchain everyone can see? 
+# (solution: store the hash uuid, when verifying hash the input uuid to see if it is the same)
 
 @app.external
 def get_uuid(*, output: abi.String) -> Expr:
-    unique_id = Bytes(uuid.uuid4().hex)
-    # How to store the uuid though, if onchain everyone can see? 
-    # (solution: store the hash uuid, when verifying hash the input uuid to see if it is the same)
-    #  verify account too
-    # Verified account will have their seats_no updated and not empty
-    # tmp = ScratchVar(TealType.bytes)
-    # m = hashlib.sha256()
+    uid = uuid.uuid4().hex
+    id_str_to_bytes = uid.encode('UTF-8')
+    h = hashlib.shake_256(id_str_to_bytes)
+	# return a 32digits hexadecimal hash
+    hash_uid = Bytes(h.hexdigest(16))
 
-    return If(app.state.seats_no[sender] == Bytes(""), 
+    # Verified account will have their custom_uid updated and not empty
+    return If(app.state.custom_uid[sender] == Bytes(""), 
                 output.set(Bytes("Unverified Account")),
-                Seq(
-                    app.state.seats_no[sender].set(Concat(app.state.seats_no[sender], unique_id)),
-                     # got ex sha256 create a base32 16 digits value Bytes("base32", "2323232323232323")
-                    # output.set(abi.String.decode(Sha256(app.state.seats_no[sender]))),
-                    # If output the id without hashing is already working
-                    
-                    # m.update(app.state.seats_no[Txn.sender()]),
-                    # Pop(App.box_create(Bytes(m.hexdigest()), Int(32))),
-                    Pop(App.box_create(Bytes("base32", Sha256(app.state.seats_no[Txn.sender()]).__hash__), Int(32))),
-                    # set_reserved_global_state_val(Int(0), Sha256(app.state.seats_no[Txn.sender()])),
-                    # output.set(Sha256(app.state.seats_no[sender])) # dk how to decode the hash so it could be stored or do we not need to decode?
-                )
+                # shows actual id but store hash id
+                If(app.state.collected_ballot[sender] == Int(1),
+                    output.set(Bytes("Collected Ballot")),
+                    Seq(
+	                    App.localPut(sender, Bytes("collected_ballot"), Int(1)),
+                        output.set(Bytes(uid)),
+                        App.box_put(hash_uid, hash_uid)
+                        # app.state.custom_uid[sender].set(Concat(app.state.custom_uid[sender], hash_uuid)), 
+                    )
+                ),
             )
 
+# WIP
+@app.external
+def show_hashid(uid: abi.String, *, output: abi.String):
+	# use during testing only
+    id_str_to_bytes = uid.encode('UTF-8')
+    h = hashlib.shake_256(id_str_to_bytes)
+	# return a 32digits hexadecimal hash
+    hash_uid = Bytes(h.hexdigest(16))
+    return output.set(App.box_extract(hash_uid, Int(0), Int(32)))
+	
 # @app.external
-# def check_uuid(uuid: abi.String, *, output: abi.String) -> Expr:
-#     return If(App.box_create(Sha256(uuid.get()), Int(32)), output.set(Bytes("can't vote")),output.set(Bytes("can vote")))
+# def check_uuid(uid: abi.String, *, output: abi.String) -> Expr:
+#     return If(App.box_create(uid.get(), Int(32)), output.set(Bytes("can't vote")),output.set(Bytes("can vote")))
 
     
 

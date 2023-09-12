@@ -1,4 +1,7 @@
-# Ballot ID (45 digits)
+# Ballot ID (45 digits)  
+
+> Might make ballot id 32 digit uuid only. The front part will be stored locally  
+
 *** ** 000 *** ** (32 *)  
 Before 000 divider:  
 DUN:
