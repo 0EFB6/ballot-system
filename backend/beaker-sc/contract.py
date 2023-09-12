@@ -25,28 +25,96 @@ CANDIDATE_VOTES_1 	= Int(135)
 #value: Area, No, State,        Candidate No, Candidate Name, Candidate Party, Votes
 #    (Subang) (103) (Selangor), (2),          (Wilson),        (Pakatan)
 
-class ParliamentSeat:
-    global_state = GlobalStateValue(
+class ElectionVotingSystem:
+	global_state = GlobalStateValue(
         stack_type=TealType.bytes,
         default=Bytes("Testing"),
         descr="Global state for Parliament Seat"
     )
-	
-    seats_no = LocalStateValue(
+	seats_no = LocalStateValue(
         stack_type=TealType.bytes,
-        default=Bytes(""),
-        descr="The seats voter gonna vote for"
+        default=Bytes("NIL"),
+        descr="The seats voter gonna vote for, eg. P106, N06-10"
     )
-	
-    # hashed_ids = ReservedGlobalStateValue(
-	# 	stack_type=TealType.bytes,
-	# 	max_keys=64,
-	# 	descr="Storing hashed ballot id to be used to see if someone can vote",
-    # )
+	candidate_id = LocalStateValue(
+		stack_type=TealType.uint64,
+		default=Int(0),
+		static=False,
+		descr="The candidate ID which voters are voting for"
+	)
+	voted = LocalStateValue(
+		stack_type=TealType.uint64,
+		default=Int(0),
+		static=False,
+		descr="Value indicating voters have voted or not, 0 indicate not voted, 1 indicate voted"
+	)
 
-app = (Application("Voting Beaker", state=ParliamentSeat())
+app = (Application("Voting Beaker", state=ElectionVotingSystem())
 	   .apply(unconditional_create_approval, initialize_global_state=True)
 	   .apply(unconditional_opt_in_approval, initialize_local_state=True))
+
+sender = Txn.sender()
+
+# Voting part, a bit messy
+@app.external(authorize=Authorize.opted_in())
+def setSeatNo(seat: abi.String) -> Expr:
+	return app.state.seats_no[sender].set(seat.get())
+
+@app.external(authorize=Authorize.opted_in())
+def vote(can_id: abi.Uint8, *, output: abi.String) -> Expr:
+	seat_no = app.state.seats_no[sender].get()
+
+	# Fak this is not working!!!
+	current_vote_byte = BoxExtract(seat_no, CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)), LEN_VOTECOUNT)
+	current_vote_uint = btoi(current_vote_byte)
+	new_vote_uint = current_vote_uint + Int(1)
+	new_vote_byte = itob(new_vote_uint)
+	idx = Int(6) - Len(new_vote_byte)
+	#############################
+
+	return If(
+		And(
+			can_id.get() >= Int(1),
+			can_id.get() <= Int(8),
+			app.state.voted[sender].get() == Int(0),
+			app.state.candidate_id[sender].get() == Int(0),
+		),
+		Seq(
+			app.state.candidate_id[sender].set(can_id.get()),
+			app.state.voted[sender].increment(Int(1)),
+			#BoxReplace(seat_no, CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)) + idx, new_vote_byte),
+			output.set(Concat(
+					Bytes("You have successfully voted!"),seat_no
+				)
+			)
+		),
+		output.set(Bytes("Failed to vote! You may have already voten before."))
+	)
+
+@app.external(authorize=Authorize.opted_in())
+def updateVote(seat:abi.String, can_id: abi.Uint8, *, output: abi.String) -> Expr:
+	current_vote_byte = BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)), LEN_VOTECOUNT)
+	current_vote_uint = btoi(current_vote_byte)
+	new_vote_uint = current_vote_uint + Int(1)
+	new_vote_byte = itob(new_vote_uint)
+	idx = Int(6) - Len(new_vote_byte)
+	return Seq(
+			BoxReplace(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)) + idx, new_vote_byte),
+			output.set(Concat(Bytes("Successfully voted for candidate ["), itob(can_id.get()), Bytes("]")))
+	)
+
+@app.external(authorize=Authorize.opted_in())
+def getLocalSeatNo(*, output: abi.String):
+	return output.set(app.state.seats_no[sender].get())
+
+@app.external(authorize=Authorize.opted_in())
+def getLocalCandidateId(*, output: abi.Uint8):
+	return output.set(app.state.candidate_id[sender].get())
+
+@app.external(authorize=Authorize.opted_in())
+def getVoted(*, output: abi.Uint8):
+	return output.set(app.state.voted[sender].get())
+############################
 
 @app.external
 def createBox(seat: abi.String, *, output: abi.String) -> Expr:
@@ -116,18 +184,6 @@ def initVote(seat: abi.String, *, output: abi.String):
 				BoxReplace(seat.get(), tmp.load(), Bytes("000000"))
 			),
 		output.set(Concat(Bytes("Initialize vote for seat ["), seat.get(), Bytes("] to '000000'")))
-	)
-
-@app.external
-def updateVote(seat:abi.String, i: abi.Uint8, *, output: abi.String) -> Expr:
-	current_vote_byte = BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (i.get() - Int(1)), LEN_VOTECOUNT)
-	current_vote_uint = btoi(current_vote_byte)
-	new_vote_uint = current_vote_uint + Int(1)
-	new_vote_byte = itob(new_vote_uint)
-	idx = Int(6) - Len(new_vote_byte)
-	return Seq(
-			BoxReplace(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (i.get() - Int(1)) + idx, new_vote_byte),
-			output.set(Concat(Bytes("Successfully voted for candidate ["), itob(i.get()), Bytes("]")))
 	)
 
 @app.external
@@ -229,15 +285,18 @@ def readWholeBox(seat: abi.String, *, output: abi.String) -> Expr:
 
 # WIP
 # A function to store where the voter is voting after they verify themselves at gov office
-@app.external
+
+# Wilson: modified the decorator to only allow opted in account to run this method, ignore non-opted in user with standard error.
+#		  I don't think we need to handle error for non-opted in account, just let it be what it is
+#		  Removed 'Assert(App.optedIn(account.address(), app_id.get()))'
+
+@app.external(authorize=Authorize.opted_in())
 def verify_acc_init(account: abi.Account, seats_no: abi.String, app_id: abi.Uint64) -> Expr:
     return Seq(
-		# Assert(Global.creator_address() == Txn.sender()), # supposingly only gov official can add using the account that creates the app (admin acc)
+		# Assert(Global.creator_address() == sender), # supposingly only gov official can add using the account that creates the app (admin acc)
         # Don't know how to auto opt in from here
         # Need add state that store verified account? 
 
-        # Check if account is opted in, dk if necessary since if not opt in will err too cause can't read local
-        Assert(App.optedIn(account.address(), app_id.get())),
 	    App.localPut(account.address(), Bytes("seats_no"), seats_no.get())	
     )
 	
@@ -286,19 +345,19 @@ def get_uuid(*, output: abi.String) -> Expr:
     # tmp = ScratchVar(TealType.bytes)
     # m = hashlib.sha256()
 
-    return If(app.state.seats_no[Txn.sender()] == Bytes(""), 
+    return If(app.state.seats_no[sender] == Bytes(""), 
                 output.set(Bytes("Unverified Account")),
                 Seq(
-                    app.state.seats_no[Txn.sender()].set(Concat(app.state.seats_no[Txn.sender()], unique_id)),
+                    app.state.seats_no[sender].set(Concat(app.state.seats_no[sender], unique_id)),
                      # got ex sha256 create a base32 16 digits value Bytes("base32", "2323232323232323")
-                    # output.set(abi.String.decode(Sha256(app.state.seats_no[Txn.sender()]))),
+                    # output.set(abi.String.decode(Sha256(app.state.seats_no[sender]))),
                     # If output the id without hashing is already working
                     
                     # m.update(app.state.seats_no[Txn.sender()]),
                     # Pop(App.box_create(Bytes(m.hexdigest()), Int(32))),
                     Pop(App.box_create(Bytes("base32", Sha256(app.state.seats_no[Txn.sender()]).__hash__), Int(32))),
                     # set_reserved_global_state_val(Int(0), Sha256(app.state.seats_no[Txn.sender()])),
-                    # output.set(Sha256(app.state.seats_no[Txn.sender()])) # dk how to decode the hash so it could be stored or do we not need to decode?
+                    # output.set(Sha256(app.state.seats_no[sender])) # dk how to decode the hash so it could be stored or do we not need to decode?
                 )
             )
 

@@ -34,6 +34,7 @@ App Address : {addr}
 app_client1 = app_client.prepare(signer=accounts[0].signer)
 app_client2 = app_client.prepare(signer=accounts[1].signer)
 app_client3 = app_client.prepare(signer=accounts[2].signer)
+app_client1.opt_in()
 
 SUBANG = "P102"
 PUCHONG = "P103"
@@ -85,17 +86,19 @@ print(f"{app_client1.call(readVote6, seat=AMPANG, boxes=[(app_client.app_id, AMP
 print(f"{app_client1.call(readVote7, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)]).return_value}")
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=3, boxes=[(app_client.app_id, AMPANG)]).return_value}")
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=1, boxes=[(app_client.app_id, AMPANG)]).return_value}")
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=4, boxes=[(app_client.app_id, AMPANG)]).return_value}")
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)]).return_value}")
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=3, boxes=[(app_client.app_id, AMPANG)]).return_value}")
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)]).return_value}")
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=2, boxes=[(app_client.app_id, AMPANG)]).return_value}")
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=5, boxes=[(app_client.app_id, AMPANG)]).return_value}")
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=6, boxes=[(app_client.app_id, AMPANG)]).return_value}")
-print(f"{app_client1.call(updateVote, seat=AMPANG, i=7, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(vote, can_id=6).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=6, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=2, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=3, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=1, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=4, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=2, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=3, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=2, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=2, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=5, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=6, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=7, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
 print(f"\nVote (AFTER) ==>")
 print(f"{app_client1.call(readVote1, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
@@ -113,7 +116,19 @@ app_client1.call(get_uuid)
 # print(f"{app_client1.call(get_uuid).return_value}")
 # app_client1.call(verify_acc_init, account='KC7ZZZVICU4VFJYT6SR6BYHLOC5CYPO64WRVN34ATESFHZEA36DU2YFV5A', seats_no='1243', app_id=app_id)
 
+app_client1.call(setSeatNo, seat=AMPANG)
+print(f"{app_client1.call(getLocalSeatNo).return_value}")
+print(f"{app_client1.call(getLocalCandidateId).return_value}")
+print(f"{app_client1.call(getVoted).return_value}")
 
+app_client2.opt_in()
+print(f"{app_client2.call(getLocalSeatNo).return_value}")
+print(f"{app_client2.call(getLocalCandidateId).return_value}")
+print(f"{app_client2.call(getVoted).return_value}")
+#print(f"{app_client1.call(vote, can_id=6).return_value}")
+#print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=6, boxes=[(app_client.app_id, AMPANG)]).return_value}")
+
+#print(f"{app_client2.call(vote, can_id=6).return_value}")
 '''app_client.opt_in()
 print("Opted in to app!")'''
 '''

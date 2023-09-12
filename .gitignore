@@ -1,2 +1,4 @@
-__pycache__
+**/__pycache__/
 backend/artifacts/
+backend/beaker-sc/__pycache__/
+
