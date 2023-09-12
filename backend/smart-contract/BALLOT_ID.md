@@ -82,9 +82,9 @@ Parliament: Sungai Buloh, Selangor
 DUN: Sentosa, Selangor  
 Parliament: Klang, Selangor  
 
-- Ballot ID: 0251000010610**************  
+- Ballot ID: 0251000009610**************  
 DUN: Kajang, Selangor  
-Parliament: Damansara, Selangor  
+Parliament: Kuala Selangor, Selangor  
 
 ## Box Name
 
@@ -93,7 +93,7 @@ Parliament: Damansara, Selangor
 - P106 Damansara
 - P107 Sungai Buloh
 - P110 Klang
-- P106 Damansara
+- P096 Kuala Selangor
 
 ### DUN
 - N31-10 Subang Jaya
@@ -128,6 +128,6 @@ Parliament: Damansara, Selangor
 - Candidate 1: Micheal, Party: Barisan
 - Candidate 2: Thomas, Party: Harapan
 - Candidate 3: Olivia, Party: Perikatan
-### P106 Damansara
+### P096 Kuala Selangor
 - Candidate 1: Charles, Party: Harapan
 - Candidate 2: Jack, Party: Barisan
