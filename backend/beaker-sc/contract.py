@@ -124,19 +124,18 @@ def getVoted(*, output: abi.Uint8):
 
 @app.external
 def createBox(seat: abi.String, *, output: abi.String) -> Expr:
-	return Seq(
-		If (
-			Or(
-				Len(seat.get()) == Int(4),
-				Len(seat.get()) == Int(6)
-			),
-			Seq(
-				Pop(BoxCreate(seat.get(), Int(1024))),
-				output.set(Concat(Bytes("Box ["), seat.get(), Bytes("] created successfully!")))
-			),
-			output.set(Concat(Bytes("Failed to create box ["), seat.get(), Bytes("]")))
-		)
+	return If (
+		Or(
+			Len(seat.get()) == Int(4),
+			Len(seat.get()) == Int(6)
+		),
+		Seq(
+			Pop(BoxCreate(seat.get(), Int(1024))),
+			output.set(Concat(Bytes("Box ["), seat.get(), Bytes("] created successfully!")))
+		),
+		output.set(Concat(Bytes("Failed to create box ["), seat.get(), Bytes("]")))
 	)
+
 
 @app.external
 def addSeat(seat: abi.String, area: abi.String, state: abi.String, *, output: abi.String) -> Expr:
@@ -309,7 +308,16 @@ def verify_acc_init(account: abi.Account, custom_uid: abi.String) -> Expr:
 # @app.external
 # def set_hashid_box(hash_uid: abi.String):
 #     return App.box_put(hash_uid.get(), hash_uid.get())
-
+@app.external
+def createBoxUuid(name: abi.String, *, output: abi.String) -> Expr:
+	return If(
+		Len(name.get()) == Int(32),
+		Seq(
+			Pop(BoxCreate(name.get(), Int(32))),
+			output.set(Concat(Bytes("Box ["), name.get(), Bytes("] created successfully!")))
+		),
+		output.set(Concat(Bytes("Failed to create box ["), name.get(), Bytes("]")))
+	)
 # How to store the uuid though, if onchain everyone can see? 
 # (solution: store the hash uuid, when verifying hash the input uuid to see if it is the same)
 
