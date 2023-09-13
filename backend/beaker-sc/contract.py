@@ -4,6 +4,7 @@ from pyteal import *
 from beaker.lib.storage import BoxList, BoxMapping
 import uuid
 import hashlib
+from algosdk import logic
 
 # Constant Vlaues
 LEN_SEAT_NO 		= Int(4)
@@ -305,14 +306,19 @@ def verify_acc_init(account: abi.Account, custom_uid: abi.String) -> Expr:
 		app.state.custom_uid[account.address()].set(custom_uid.get())
     )
 	
+# @app.external
+# def set_hashid_box(hash_uid: abi.String):
+#     return App.box_put(hash_uid.get(), hash_uid.get())
 
 # How to store the uuid though, if onchain everyone can see? 
 # (solution: store the hash uuid, when verifying hash the input uuid to see if it is the same)
 
+# to call the function i need to know the name of the box but the name is the hash_uid that's given in the function so it's no possible
+# so i have to name the box something? (ic num)
 @app.external
-def get_uuid(*, output: abi.String) -> Expr:
+def get_uuid(ic_num: abi.String, *, output: abi.String) -> Expr:
     uid = uuid.uuid4().hex
-    id_str_to_bytes = uid.encode('UTF-8')
+    id_str_to_bytes = uid.encode('utf-8')
     h = hashlib.shake_256(id_str_to_bytes)
 	# return a 32digits hexadecimal hash
     hash_uid = Bytes(h.hexdigest(16))
@@ -324,10 +330,11 @@ def get_uuid(*, output: abi.String) -> Expr:
                 If(app.state.collected_ballot[sender] == Int(1),
                     output.set(Bytes("Collected Ballot")),
                     Seq(
+                        App.box_put(ic_num.get(), hash_uid),		
 						app.state.collected_ballot[sender].set(Int(1)),
                         output.set(Bytes(uid)),
-
 						# Wilson: Where is the boc created?
+                        # wdym where?
                         # BoxPut(hash_uid, hash_uid)
 
                         # app.state.custom_uid[sender].set(Concat(app.state.custom_uid[sender], hash_uuid)), 
@@ -347,14 +354,30 @@ def get_uuid(*, output: abi.String) -> Expr:
 #    hash_uid = Bytes(h.hexdigest(16))
 #    return output.set(BoxExtract(hash_uid, Int(0), Int(32)))
 	
-@app.external
-def check_uuid(uid: abi.String, *, output: abi.String) -> Expr:
-    return If(
-		BoxCreate(uid.get(), Int(32)),
-		output.set(Bytes("Can't Vote")),
-		output.set(Bytes("Can Vote"))
-	)
+# @app.external
+# def check_uuid(uid: abi.String, *, output: abi.String) -> Expr:
+#     return If(
+# 		BoxCreate(uid.get(), Int(32)),
+# 		output.set(Bytes("Can't Vote")),
+# 		output.set(Bytes("Can Vote"))
+# 	)
 
+# use signature to verify id?
+@app.external
+def test_sha(ic_num: abi.String, uid: abi.String, *, output: abi.String) -> Expr:
+    # bytetostr = uid.decode('utf-8')
+
+    id_str_to_bytes = str.encode("utf-8")
+
+
+    h = hashlib.shake_256(id_str_to_bytes)
+	# return a 32digits hexadecimal hash
+    hash_uid = Bytes(h.hexdigest(16))
+    return Seq(
+		contents := BoxGet(ic_num.get()),
+        If(contents.value() == hash_uid, output.set(Bytes("exist")), output.set(Bytes("doesn't exist")))
+    )
+	
 
 # def bytes_to_str(bytes):
 #     str = bytes.decode("utf-8")

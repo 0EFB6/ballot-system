@@ -111,21 +111,25 @@ print(f"{app_client1.call(readVote6, seat=AMPANG, boxes=[(app_client.app_id, AMP
 print(f"{app_client1.call(readVote7, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
+IC_NUM = "041"
 #print(f"{app_client1.call(readWholeBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 # app_client1.call(get_uuid)
+app_client1.opt_in()
+app_client1.call(verify_acc_init, account="KC7ZZZVICU4VFJYT6SR6BYHLOC5CYPO64WRVN34ATESFHZEA36DU2YFV5A", custom_uid="----")
+print(f"{app_client1.call(get_uuid, ic_num=IC_NUM, boxes=[(app_client.app_id, IC_NUM)]).return_value}")
 
-print(f"{app_client1.call(get_uuid).return_value}")
+# print(f"{app_client1.call(get_uuid).return_value}")
 # app_client1.call(verify_acc_init, account='KC7ZZZVICU4VFJYT6SR6BYHLOC5CYPO64WRVN34ATESFHZEA36DU2YFV5A', seats_no='1243', app_id=app_id)
 
-app_client1.call(setSeatNo, seat=AMPANG)
-print(f"{app_client1.call(getLocalSeatNo).return_value}")
-print(f"{app_client1.call(getLocalCandidateId).return_value}")
-print(f"{app_client1.call(getVoted).return_value}")
+# app_client1.call(setSeatNo, seat=AMPANG)
+# print(f"{app_client1.call(getLocalSeatNo).return_value}")
+# print(f"{app_client1.call(getLocalCandidateId).return_value}")
+# print(f"{app_client1.call(getVoted).return_value}")
 
-app_client2.opt_in()
-print(f"{app_client2.call(getLocalSeatNo).return_value}")
-print(f"{app_client2.call(getLocalCandidateId).return_value}")
-print(f"{app_client2.call(getVoted).return_value}")
+# app_client2.opt_in()
+# print(f"{app_client2.call(getLocalSeatNo).return_value}")
+# print(f"{app_client2.call(getLocalCandidateId).return_value}")
+# print(f"{app_client2.call(getVoted).return_value}")
 #print(f"{app_client1.call(vote, can_id=6).return_value}")
 #print(f"{app_client1.call(updateVote, seat=AMPANG, can_id=6, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 
