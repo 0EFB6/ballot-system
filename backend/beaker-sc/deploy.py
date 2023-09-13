@@ -114,8 +114,8 @@ print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMP
 IC_NUM = "041"
 #print(f"{app_client1.call(readWholeBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 # app_client1.call(get_uuid)
-app_client1.opt_in()
-app_client1.call(verify_acc_init, account="KC7ZZZVICU4VFJYT6SR6BYHLOC5CYPO64WRVN34ATESFHZEA36DU2YFV5A", custom_uid="----")
+
+app_client1.call(verify_acc_init, account="BK5BXUQ5VKJKFXEWURB3G6ISBR47VDRHJXIYPVLP7WO3442CXGCG6OR5PQ", custom_uid="----")
 print(f"{app_client1.call(get_uuid, ic_num=IC_NUM, boxes=[(app_client.app_id, IC_NUM)]).return_value}")
 
 # print(f"{app_client1.call(get_uuid).return_value}")

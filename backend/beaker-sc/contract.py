@@ -27,11 +27,6 @@ CANDIDATE_VOTES_1 	= Int(135)
 #    (Subang) (103) (Selangor), (2),          (Wilson),        (Pakatan)
 
 class ElectionVotingSystem:
-	global_state = GlobalStateValue(
-        stack_type=TealType.bytes,
-        default=Bytes("Testing"),
-        descr="Global state for Parliament Seat"
-    )
 	custom_uid = LocalStateValue(
         stack_type=TealType.bytes,
         default=Bytes(""),
@@ -57,7 +52,6 @@ class ElectionVotingSystem:
 	)
 
 app = (Application("Voting Beaker", state=ElectionVotingSystem())
-	   .apply(unconditional_create_approval, initialize_global_state=True)
 	   .apply(unconditional_opt_in_approval, initialize_local_state=True))
 
 sender = Txn.sender()
@@ -407,14 +401,6 @@ def test_sha(ic_num: abi.String, uid: abi.String, *, output: abi.String) -> Expr
 @app.external
 def putBoxDebug(seat: abi.String, value: abi.String, i: abi.Uint16) -> Expr:
 	return BoxReplace(seat.get(), i.get(), value.get())
-
-@app.external
-def set_app_global_state_value(str: abi.String) -> Expr:
-	return app.state.global_state.set(str.get())
-
-@app.external
-def readGlobal(*, output: abi.String) -> Expr:
-	return output.set(app.state.global_state)
 
 # Borken Function
 '''@app.external
