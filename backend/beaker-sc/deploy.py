@@ -118,7 +118,7 @@ IC_NUM = "041"
 app_client1.call(verify_acc_init, account="BK5BXUQ5VKJKFXEWURB3G6ISBR47VDRHJXIYPVLP7WO3442CXGCG6OR5PQ", custom_uid="----")
 ret = app_client1.call(get_uuid, ic_num=IC_NUM, boxes=[(app_client.app_id, IC_NUM)]).return_value
 print(f"{ret}")
-print(f"{app_client1.call(test_sha, ic_num=IC_NUM, uid=ret, boxes=[(app_client.app_id, IC_NUM)]).return_value}")
+#print(f"{app_client1.call(test_sha, ic_num=IC_NUM, uid=ret, boxes=[(app_client.app_id, IC_NUM)]).return_value}")
 
 # print(f"{app_client1.call(get_uuid).return_value}")
 # app_client1.call(verify_acc_init, account='KC7ZZZVICU4VFJYT6SR6BYHLOC5CYPO64WRVN34ATESFHZEA36DU2YFV5A', seats_no='1243', app_id=app_id)
