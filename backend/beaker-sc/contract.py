@@ -27,11 +27,6 @@ CANDIDATE_VOTES_1 	= Int(135)
 #    (Subang) (103) (Selangor), (2),          (Wilson),        (Pakatan)
 
 class ElectionVotingSystem:
-	global_state = GlobalStateValue(
-        stack_type=TealType.bytes,
-        default=Bytes("Testing"),
-        descr="Global state for Parliament Seat"
-    )
 	custom_uid = LocalStateValue(
         stack_type=TealType.bytes,
         default=Bytes(""),
@@ -57,7 +52,6 @@ class ElectionVotingSystem:
 	)
 
 app = (Application("Voting Beaker", state=ElectionVotingSystem())
-	   .apply(unconditional_create_approval, initialize_global_state=True)
 	   .apply(unconditional_opt_in_approval, initialize_local_state=True))
 
 sender = Txn.sender()
@@ -70,13 +64,6 @@ def setSeatNo(seat: abi.String) -> Expr:
 @app.external(authorize=Authorize.opted_in())
 def vote(can_id: abi.Uint8, *, output: abi.String) -> Expr:
 	seat_no = app.state.custom_uid[sender]
-	# Fak this is not working!!!
-	current_vote_byte = BoxExtract(seat_no, CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)), LEN_VOTECOUNT)
-	current_vote_uint = btoi(current_vote_byte)
-	new_vote_uint = current_vote_uint + Int(1)
-	new_vote_byte = itob(new_vote_uint)
-	idx = Int(6) - Len(new_vote_byte)
-	#############################
 
 	return If(
 		And(
@@ -88,7 +75,7 @@ def vote(can_id: abi.Uint8, *, output: abi.String) -> Expr:
 		Seq(
 			app.state.candidate_id[sender].set(can_id.get()),
 			app.state.voted[sender].increment(Int(1)),
-			#BoxReplace(seat_no, CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)) + idx, new_vote_byte),
+			#updateVote(app.state.custom_uid[sender], can_id.get()),
 			output.set(Concat(
 					Bytes("You have successfully voted!"),seat_no
 				)
@@ -97,17 +84,27 @@ def vote(can_id: abi.Uint8, *, output: abi.String) -> Expr:
 		output.set(Bytes("Failed to vote! You may have already voten before."))
 	)
 
-@app.external(authorize=Authorize.opted_in())
-def updateVote(seat:abi.String, can_id: abi.Uint8, *, output: abi.String) -> Expr:
+@Subroutine(TealType.bytes)
+def updateVote(seat:abi.String, can_id: abi.Uint8) -> Expr:
 	current_vote_byte = BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)), LEN_VOTECOUNT)
 	current_vote_uint = btoi(current_vote_byte)
 	new_vote_uint = current_vote_uint + Int(1)
 	new_vote_byte = itob(new_vote_uint)
 	idx = Int(6) - Len(new_vote_byte)
-	return Seq(
-			BoxReplace(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)) + idx, new_vote_byte),
-			output.set(Concat(Bytes("Successfully voted for candidate ["), itob(can_id.get()), Bytes("]")))
-	)
+	return BoxReplace(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)) + idx, new_vote_byte)
+
+
+#@app.external(authorize=Authorize.opted_in())
+#def updateVote(seat:abi.String, can_id: abi.Uint8, *, output: abi.String) -> Expr:
+#	current_vote_byte = BoxExtract(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)), LEN_VOTECOUNT)
+#	current_vote_uint = btoi(current_vote_byte)
+#	new_vote_uint = current_vote_uint + Int(1)
+#	new_vote_byte = itob(new_vote_uint)
+#	idx = Int(6) - Len(new_vote_byte)
+#	return Seq(
+#			BoxReplace(seat.get(), CANDIDATE_VOTES_1 + LEN_SUM * (can_id.get() - Int(1)) + idx, new_vote_byte),
+#			output.set(Concat(Bytes("Successfully voted for candidate ["), itob(can_id.get()), Bytes("]")))
+#	)
 
 @app.external(authorize=Authorize.opted_in())
 def getLocalSeatNo(*, output: abi.String):
@@ -410,14 +407,6 @@ def test_sha(ic_num: abi.String, uid: abi.String, *, output: abi.String) -> Expr
 @app.external
 def putBoxDebug(seat: abi.String, value: abi.String, i: abi.Uint16) -> Expr:
 	return BoxReplace(seat.get(), i.get(), value.get())
-
-@app.external
-def set_app_global_state_value(str: abi.String) -> Expr:
-	return app.state.global_state.set(str.get())
-
-@app.external
-def readGlobal(*, output: abi.String) -> Expr:
-	return output.set(app.state.global_state)
 
 # Borken Function
 '''@app.external
