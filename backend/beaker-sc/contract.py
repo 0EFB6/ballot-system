@@ -373,8 +373,6 @@ def test_sha(ic_num: abi.String, uid: abi.String, *, output: abi.String) -> Expr
     # bytetostr = uid.decode('utf-8')
 
     id_str_to_bytes = str.encode("utf-8")
-
-
     h = hashlib.shake_256(id_str_to_bytes)
 	# return a 32digits hexadecimal hash
     hash_uid = Bytes(h.hexdigest(16))
