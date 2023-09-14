@@ -6,7 +6,7 @@ import uuid
 import hashlib
 from algosdk import logic
 
-# Constant Vlaues
+# Constant Values
 LEN_SEAT_NO 		= Int(4)
 LEN_SEAT_AREA 		= Int(26)
 LEN_SEAT_STATE 		= Int(15)
@@ -374,17 +374,20 @@ def get_uuid(ic_num: abi.String, *, output: abi.String) -> Expr:
 @app.external
 def test_sha(ic_num: abi.String, uid: abi.String, *, output: abi.String) -> Expr:
     # bytetostr = uid.decode('utf-8')
+    test = str(uid)
+    stob = test.encode('utf-8')
+	
+    # id_str_to_bytes = str.encode("utf-8")
 
-    id_str_to_bytes = str.encode("utf-8")
-
-
-    h = hashlib.shake_256(id_str_to_bytes)
-	# return a 32digits hexadecimal hash
+    # Base64Decode()
+    h = hashlib.shake_256(stob)
+	# # return a 32digits hexadecimal hash
     hash_uid = Bytes(h.hexdigest(16))
-    return Seq(
-		contents := BoxGet(ic_num.get()),
-        If(contents.value() == hash_uid, output.set(Bytes("exist")), output.set(Bytes("doesn't exist")))
-    )
+    return output.set(hash_uid)
+    # return Seq(
+	# 	contents := BoxGet(ic_num.get()),
+    #     If(contents.value() == hash_uid, output.set(Bytes("exist")), output.set(Bytes("doesn't exist")))
+    # )
 	
 
 # def bytes_to_str(bytes):
