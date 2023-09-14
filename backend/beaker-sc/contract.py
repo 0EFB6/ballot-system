@@ -385,6 +385,10 @@ def test_sha(ic_num: abi.String, uid: abi.String, *, output: abi.String) -> Expr
 	# 	contents := BoxGet(ic_num.get()),
     #     If(contents.value() == hash_uid, output.set(Bytes("exist")), output.set(Bytes("doesn't exist")))
     # )
+
+@app.external
+def readBoxIcNo(ic_num: abi.String, *, output: abi.String):
+	return output.set(BoxExtract(ic_num.get(), Int(0), Int(32)))
 	
 
 # def bytes_to_str(bytes):
