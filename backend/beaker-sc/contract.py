@@ -337,7 +337,7 @@ def get_uuid(ic_num: abi.String, *, output: abi.String) -> Expr:
                     Seq(
                         App.box_put(ic_num.get(), hash_uid),		
 						app.state.collected_ballot[sender].set(Int(1)),
-                        output.set(Bytes(uid)),
+                        output.set(Concat(Bytes(uid), Bytes(" || "), hash_uid)),
 						# Wilson: Where is the boc created?
                         # wdym where?
                         # BoxPut(hash_uid, hash_uid)
@@ -371,16 +371,16 @@ def get_uuid(ic_num: abi.String, *, output: abi.String) -> Expr:
 @app.external
 def test_sha(ic_num: abi.String, uid: abi.String, *, output: abi.String) -> Expr:
     # bytetostr = uid.decode('utf-8')
-    test = str(uid)
-    stob = test.encode('utf-8')
+    test = str(uid.get()).encode('utf-8')
+    #stob = test.encode('utf-8')
 	
     # id_str_to_bytes = str.encode("utf-8")
 
     # Base64Decode()
-    h = hashlib.shake_256(stob)
+    h = hashlib.shake_256(test)
 	# # return a 32digits hexadecimal hash
     hash_uid = Bytes(h.hexdigest(16))
-    return output.set(hash_uid)
+    return output.set(Concat(Bytes("Hashhed UID:"), hash_uid, Bytes("  test:"), Bytes(test)))
     # return Seq(
 	# 	contents := BoxGet(ic_num.get()),
     #     If(contents.value() == hash_uid, output.set(Bytes("exist")), output.set(Bytes("doesn't exist")))
