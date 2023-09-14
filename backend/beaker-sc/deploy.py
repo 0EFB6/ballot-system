@@ -115,7 +115,7 @@ IC_NUM = "041"
 #print(f"{app_client1.call(readWholeBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 # app_client1.call(get_uuid)
 
-app_client1.call(verify_acc_init, account="BK5BXUQ5VKJKFXEWURB3G6ISBR47VDRHJXIYPVLP7WO3442CXGCG6OR5PQ", custom_uid="----")
+app_client1.call(verify_acc_init, account="JKMYDOGCC5UCXUCZM6EEBXPWC5PMAU5MNMP4UCBZ7AZPWJRDXCCLAJD77Y", custom_uid="----")
 ret = app_client1.call(get_uuid, ic_num=IC_NUM, boxes=[(app_client.app_id, IC_NUM)]).return_value
 print(f"{ret}")
 #print(f"{app_client1.call(test_sha, ic_num=IC_NUM, uid=ret, boxes=[(app_client.app_id, IC_NUM)]).return_value}")
