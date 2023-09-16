@@ -50,7 +50,7 @@ class ElectionVotingSystem:
 		descr="Value indicating voters have voted or not, 0 indicate not voted, 1 indicate voted"
 	)
 
-app = (Application("Voting Beaker", state=ElectionVotingSystem())
+app = (Application("VotingApp", state=ElectionVotingSystem())
 	   .apply(unconditional_opt_in_approval, initialize_local_state=True))
 
 sender = Txn.sender()

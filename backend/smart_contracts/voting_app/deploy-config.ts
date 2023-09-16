@@ -1,5 +1,5 @@
 import * as algokit from '@algorandfoundation/algokit-utils'
-import { VotingAppClient } from '../artifacts/voting_app/client'
+import { VotingAppClient } from '../artifacts/VotingApp/client'
 
 // Below is a showcase of various deployment options you can use in TypeScript Client
 export async function deploy() {

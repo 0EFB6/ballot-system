@@ -1,5 +1,5 @@
 {
-    "name": "Voting Beaker",
+    "name": "VotingApp",
     "methods": [
         {
             "name": "setSeatNo",
