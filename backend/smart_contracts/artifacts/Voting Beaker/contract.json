@@ -1,0 +1,327 @@
+{
+    "name": "Voting Beaker",
+    "methods": [
+        {
+            "name": "setSeatNo",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "vote",
+            "args": [
+                {
+                    "type": "uint8",
+                    "name": "can_id"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "getLocalSeatNo",
+            "args": [],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "getLocalCandidateId",
+            "args": [],
+            "returns": {
+                "type": "uint8"
+            }
+        },
+        {
+            "name": "getVoted",
+            "args": [],
+            "returns": {
+                "type": "uint8"
+            }
+        },
+        {
+            "name": "createBox",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "addSeat",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                },
+                {
+                    "type": "string",
+                    "name": "area"
+                },
+                {
+                    "type": "string",
+                    "name": "state"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "addCandidate",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                },
+                {
+                    "type": "string",
+                    "name": "name"
+                },
+                {
+                    "type": "string",
+                    "name": "party"
+                },
+                {
+                    "type": "uint8",
+                    "name": "i"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "initVote",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readSeat",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readCandidate",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                },
+                {
+                    "type": "uint8",
+                    "name": "i"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readVote1",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readVote2",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readVote3",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readVote4",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readVote5",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readVote6",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readVote7",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readVote8",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readWholeBox",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "verify_acc_init",
+            "args": [
+                {
+                    "type": "account",
+                    "name": "account"
+                },
+                {
+                    "type": "string",
+                    "name": "custom_uid"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "createBoxUuid",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "name"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "get_uuid",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "ic_num"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "readBoxIcNo",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "ic_num"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        },
+        {
+            "name": "putBoxDebug",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "seat"
+                },
+                {
+                    "type": "string",
+                    "name": "value"
+                },
+                {
+                    "type": "uint16",
+                    "name": "i"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        }
+    ],
+    "networks": {}
+}
