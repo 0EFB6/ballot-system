@@ -4,3 +4,4 @@ backend/smart_contracts/artifacts/
 .gitignore
 backend/smart_contracts/artifacts/VotingApp/contract.json
 backend/smart_contracts/artifacts/VotingApp/application.json
+backend/smart_contracts/artifacts/VotingApp/client.ts
