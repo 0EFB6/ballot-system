@@ -5,3 +5,4 @@ backend/smart_contracts/artifacts/
 backend/smart_contracts/artifacts/VotingApp/contract.json
 backend/smart_contracts/artifacts/VotingApp/application.json
 backend/smart_contracts/artifacts/VotingApp/client.ts
+backend/smart_contracts/artifacts/voting_app/*
