@@ -73,11 +73,11 @@ const Test = ({ openModal, setModalState }: AppCallsInterface) => {
   return (
     <dialog id="appcalls_modal" className={`modal ${openModal ? 'modal-open' : ''} bg-slate-200`}>
       <form method="dialog" className="modal-box">
-        <h3 className="font-bold text-lg">Testing Algorand smart contract</h3>
+        <h3 className="font-bold text-lg">Test Algorand Smart Contract</h3>
         <br />
         <input
           type="text"
-          placeholder="Provide input to test function"
+          placeholder="Enter something"
           className="input input-bordered w-full"
           value={contractInput}
           onChange={(e) => {

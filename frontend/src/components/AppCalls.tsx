@@ -87,11 +87,11 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
   return (
     <dialog id="appcalls_modal" className={`modal ${openModal ? 'modal-open' : ''} bg-slate-200`}>
       <form method="dialog" className="modal-box">
-        <h3 className="font-bold text-lg">Say hello to your Algorand smart contract</h3>
+        <h3 className="font-bold text-lg">Create Box with Seat Name</h3>
         <br />
         <input
           type="text"
-          placeholder="Provide input to hello function"
+          placeholder="Provide input to createBox function"
           className="input input-bordered w-full"
           value={contractInput}
           onChange={(e) => {
