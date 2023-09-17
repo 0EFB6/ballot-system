@@ -12,7 +12,7 @@ interface AppCallsInterface {
   setModalState: (value: boolean) => void
 }
 
-const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
+const Test = ({ openModal, setModalState }: AppCallsInterface) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [contractInput, setContractInput] = useState<string>('')
   const [contractInput2, setContractInput2] = useState<string>('')
@@ -46,7 +46,6 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
 
     const appClient = new VotingAppClient(appDetails, algodClient)
 
-	//const boxKey = new Uint8Array(Buffer.from(contractInput2)); // Convert seat to Uint8Array
     // Please note, in typical production scenarios,
     // you wouldn't want to use deploy directly from your frontend.
     // Instead, you would deploy your contract on your backend and reference it by id.
@@ -62,16 +61,7 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
       return
     })
 
-    const response = await appClient.createBox({
-		seat: contractInput,
-		//seat: contractInput2,
-		boxes: [
-			{
-				appIndex: 1008,
-				name: new Uint8Array(Buffer.from(contractInput)),
-			}
-		]
-	}).catch((e: Error) => {
+    const response = await appClient.testing({ name: contractInput, seat: contractInput }).catch((e: Error) => {
       enqueueSnackbar(`Error calling the contract: ${e.message}`, { variant: 'error' })
       setLoading(false)
       return
@@ -84,19 +74,26 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
   return (
     <dialog id="appcalls_modal" className={`modal ${openModal ? 'modal-open' : ''} bg-slate-200`}>
       <form method="dialog" className="modal-box">
-        <h3 className="font-bold text-lg">Say hello to your Algorand smart contract</h3>
+        <h3 className="font-bold text-lg">Testing Algorand smart contract</h3>
         <br />
         <input
           type="text"
-          placeholder="Provide input to hello function"
+          placeholder="Provide input to test function"
           className="input input-bordered w-full"
           value={contractInput}
           onChange={(e) => {
             setContractInput(e.target.value)
           }}
         />
-		<br />
-		
+		<input
+          type="text"
+          placeholder="Enter seat no"
+          className="input input-bordered w-full"
+          value={contractInput2}
+          onChange={(e) => {
+            setContractInput2(e.target.value)
+          }}
+        />
         <div className="modal-action ">
           <button className="btn" onClick={() => setModalState(!openModal)}>
             Close
@@ -110,4 +107,4 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
   )
 }
 
-export default AppCalls
+export default Test

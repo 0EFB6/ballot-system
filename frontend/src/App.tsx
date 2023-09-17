@@ -28,6 +28,7 @@ export default function App() {
   const [openWalletModal, setOpenWalletModal] = useState<boolean>(false)
   const [openDemoModal, setOpenDemoModal] = useState<boolean>(false)
   const [appCallsDemoModal, setAppCallsDemoModal] = useState<boolean>(false)
+  //const [testDemoModal, setTestDemoModal] = useState<boolean>(false)
   const { activeAddress } = useWallet()
 
   const toggleWalletModal = () => {
@@ -41,6 +42,10 @@ export default function App() {
   const toggleAppCallsModal = () => {
     setAppCallsDemoModal(!appCallsDemoModal)
   }
+
+  //const toggleTestModal = () => {
+  //  setTestDemoModal(!testDemoModal)
+  //}
 
   const algodConfig = getAlgodConfigFromViteEnvironment()
 

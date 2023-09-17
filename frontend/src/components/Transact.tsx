@@ -38,7 +38,7 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
     const transaction = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       from: activeAddress,
       to: receiverAddress,
-      amount: 1e6,
+      amount: 100e6,
       suggestedParams,
     })
 
