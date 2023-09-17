@@ -6,6 +6,7 @@ import algosdk from 'algosdk'
 import { SnackbarProvider } from 'notistack'
 import { useState } from 'react'
 import AppCalls from './components/AppCalls'
+import Test from './components/Test'
 import ConnectWallet from './components/ConnectWallet'
 import Transact from './components/Transact'
 import { getAlgodConfigFromViteEnvironment } from './utils/network/getAlgoClientConfigs'
@@ -28,7 +29,7 @@ export default function App() {
   const [openWalletModal, setOpenWalletModal] = useState<boolean>(false)
   const [openDemoModal, setOpenDemoModal] = useState<boolean>(false)
   const [appCallsDemoModal, setAppCallsDemoModal] = useState<boolean>(false)
-  //const [testDemoModal, setTestDemoModal] = useState<boolean>(false)
+  const [testDemoModal, setTestDemoModal] = useState<boolean>(false)
   const { activeAddress } = useWallet()
 
   const toggleWalletModal = () => {
@@ -43,9 +44,9 @@ export default function App() {
     setAppCallsDemoModal(!appCallsDemoModal)
   }
 
-  //const toggleTestModal = () => {
-  //  setTestDemoModal(!testDemoModal)
-  //}
+  const toggleTestModal = () => {
+    setTestDemoModal(!testDemoModal)
+  }
 
   const algodConfig = getAlgodConfigFromViteEnvironment()
 
@@ -67,30 +68,20 @@ export default function App() {
           <div className="hero-content text-center rounded-lg p-6 max-w-md bg-white mx-auto">
             <div className="max-w-md">
               <h1 className="text-4xl">
-                Welcome to <div className="font-bold">AlgoKit 🙂</div>
+                <div className="font-bold">SPR Ballot System 🙂</div>
               </h1>
               <p className="py-6">
-                This starter has been generated using official AlgoKit React template. Refer to the resource below for next steps.
+                Testing VotingApp for demo purposes.
               </p>
 
               <div className="grid">
-                <a
-                  data-test-id="getting-started"
-                  className="btn btn-primary m-2"
-                  target="_blank"
-                  href="https://github.com/algorandfoundation/algokit-cli"
-                >
-                  Getting started
-                </a>
-
-                <div className="divider" />
                 <button data-test-id="connect-wallet" className="btn m-2" onClick={toggleWalletModal}>
-                  Wallet Connection
+                  Connect Wallet
                 </button>
 
                 {activeAddress && (
                   <button data-test-id="transactions-demo" className="btn m-2" onClick={toggleDemoModal}>
-                    Transactions Demo
+                    Send
                   </button>
                 )}
 
@@ -99,11 +90,17 @@ export default function App() {
                     Contract Interactions Demo
                   </button>
                 )}
+				{activeAddress && (
+                  <button data-test-id="appcalls-demo" className="btn m-2" onClick={toggleTestModal}>
+                    Hello World!
+                  </button>
+                )}
               </div>
 
               <ConnectWallet openModal={openWalletModal} closeModal={toggleWalletModal} />
               <Transact openModal={openDemoModal} setModalState={setOpenDemoModal} />
               <AppCalls openModal={appCallsDemoModal} setModalState={setAppCallsDemoModal} />
+			  <Test openModal={testDemoModal} setModalState={setTestDemoModal} />
             </div>
           </div>
         </div>

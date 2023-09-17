@@ -52,23 +52,26 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
     // Instead, you would deploy your contract on your backend and reference it by id.
     // Given the simplicity of the starter contract, we are deploying it on the frontend
     // for demonstration purposes.
-    const deployParams = {
-      onSchemaBreak: 'append',
-      onUpdate: 'append',
-    }
-    await appClient.deploy(deployParams).catch((e: Error) => {
-      enqueueSnackbar(`Error deploying the contract: ${e.message}`, { variant: 'error' })
-      setLoading(false)
-      return
-    })
+    //const deployParams = {
+    //  onSchemaBreak: 'append',
+    //  onUpdate: 'append',
+    //}
+    //await appClient.deploy(deployParams).catch((e: Error) => {
+    //  enqueueSnackbar(`Error deploying the contract: ${e.message}`, { variant: 'error' })
+    //  setLoading(false)
+    //  return
+    //})
+	
+	const boxKey = new Uint8Array(Buffer.from(contractInput)); // Convert seat to Uint8Array for Box Reference
 
     const response = await appClient.createBox({
 		seat: contractInput,
 		//seat: contractInput2,
 		boxes: [
 			{
-				appIndex: 1008,
-				name: new Uint8Array(Buffer.from(contractInput)),
+				appIndex: 1013,
+				name: boxKey
+				//name: new Uint8Array(Buffer.from(contractInput)),
 			}
 		]
 	}).catch((e: Error) => {

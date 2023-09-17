@@ -15,7 +15,6 @@ interface AppCallsInterface {
 const Test = ({ openModal, setModalState }: AppCallsInterface) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [contractInput, setContractInput] = useState<string>('')
-  const [contractInput2, setContractInput2] = useState<string>('')
 
   const algodConfig = getAlgodConfigFromViteEnvironment()
   const algodClient = algokit.getAlgoClient({
@@ -61,7 +60,7 @@ const Test = ({ openModal, setModalState }: AppCallsInterface) => {
       return
     })
 
-    const response = await appClient.testing({ name: contractInput, seat: contractInput }).catch((e: Error) => {
+    const response = await appClient.hello({ name: contractInput }).catch((e: Error) => {
       enqueueSnackbar(`Error calling the contract: ${e.message}`, { variant: 'error' })
       setLoading(false)
       return
@@ -83,15 +82,6 @@ const Test = ({ openModal, setModalState }: AppCallsInterface) => {
           value={contractInput}
           onChange={(e) => {
             setContractInput(e.target.value)
-          }}
-        />
-		<input
-          type="text"
-          placeholder="Enter seat no"
-          className="input input-bordered w-full"
-          value={contractInput2}
-          onChange={(e) => {
-            setContractInput2(e.target.value)
           }}
         />
         <div className="modal-action ">
