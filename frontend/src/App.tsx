@@ -9,6 +9,7 @@ import AppCalls from './components/AppCalls'
 import ConnectWallet from './components/ConnectWallet'
 import Transact from './components/Transact'
 import { getAlgodConfigFromViteEnvironment } from './utils/network/getAlgoClientConfigs'
+import GetBallotID from './components/GetBallotID'
 
 let providersArray: ProvidersArray
 if (import.meta.env.VITE_ALGOD_NETWORK === '') {
@@ -27,7 +28,10 @@ if (import.meta.env.VITE_ALGOD_NETWORK === '') {
 export default function App() {
   const [openWalletModal, setOpenWalletModal] = useState<boolean>(false)
   const [openDemoModal, setOpenDemoModal] = useState<boolean>(false)
-  const [appCallsDemoModal, setAppCallsDemoModal] = useState<boolean>(false)
+  // const [appCallsDemoModal, setAppCallsDemoModal] = useState<boolean>(false)
+  // my code
+  const [verifyAccModal, setVerifyAccModal] = useState<boolean>(false)
+  const [getBallotIDModal, setGetBallotIDModal] = useState<boolean>(false)
   const { activeAddress } = useWallet()
 
   const toggleWalletModal = () => {
@@ -38,8 +42,16 @@ export default function App() {
     setOpenDemoModal(!openDemoModal)
   }
 
-  const toggleAppCallsModal = () => {
-    setAppCallsDemoModal(!appCallsDemoModal)
+  // const toggleAppCallsModal = () => {
+  //   setAppCallsDemoModal(!appCallsDemoModal)
+  // }
+  // my code
+  const toggleVerifyAccModal = () => {
+    setVerifyAccModal(!verifyAccModal)
+  }
+
+  const toggleGetBallotIDModal = () => {
+    setGetBallotIDModal(!getBallotIDModal)
   }
 
   const algodConfig = getAlgodConfigFromViteEnvironment()
@@ -89,16 +101,31 @@ export default function App() {
                   </button>
                 )}
 
-                {activeAddress && (
+                {/* {activeAddress && (
                   <button data-test-id="appcalls-demo" className="btn m-2" onClick={toggleAppCallsModal}>
                     Contract Interactions Demo
+                  </button>
+                )} */}
+                {/* my code */}
+                {activeAddress && (
+                  <button data-test-id="verify_acc" className="btn m-2" onClick={toggleVerifyAccModal}>
+                    Verify Account
+                  </button>
+                )}
+
+                {activeAddress && (
+                  <button data-test-id="get_ballot_id" className="btn m-2" onClick={toggleGetBallotIDModal}>
+                    Get Ballot ID
                   </button>
                 )}
               </div>
 
               <ConnectWallet openModal={openWalletModal} closeModal={toggleWalletModal} />
               <Transact openModal={openDemoModal} setModalState={setOpenDemoModal} />
-              <AppCalls openModal={appCallsDemoModal} setModalState={setAppCallsDemoModal} />
+              {/* <AppCalls openModal={appCallsDemoModal} setModalState={setAppCallsDemoModal} /> */}
+              {/* my code */}
+              <AppCalls openModal={verifyAccModal} setModalState={setVerifyAccModal} />
+              <GetBallotID openModal={getBallotIDModal} setModalState={setGetBallotIDModal} />
             </div>
           </div>
         </div>
