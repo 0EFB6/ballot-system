@@ -1,0 +1,9 @@
+*/__pycache__/
+backend/smart_contracts/artifacts/
+*.pyc
+.gitignore
+backend/smart_contracts/artifacts/VotingApp/contract.json
+backend/smart_contracts/artifacts/VotingApp/application.json
+backend/smart_contracts/artifacts/VotingApp/client.ts
+backend/smart_contracts/artifacts/voting_app/*
+backend/smart_contracts/artifacts/VotingApp/*

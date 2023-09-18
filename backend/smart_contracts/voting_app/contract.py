@@ -55,6 +55,14 @@ app = (Application("VotingApp", state=ElectionVotingSystem())
 
 sender = Txn.sender()
 
+@app.external
+def hello(name: abi.String, *, output: abi.String) -> Expr:
+    return output.set(Concat(Bytes("Hello, "), name.get()))
+
+@app.external
+def testing(name: abi.String, seat: abi.String, *, output: abi.String) -> Expr:
+    return output.set(Concat(Bytes("Test, "), name.get(), Bytes(" "), seat.get()))
+
 @Subroutine(TealType.bytes)
 def itob(arg):
 

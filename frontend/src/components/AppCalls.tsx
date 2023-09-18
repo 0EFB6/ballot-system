@@ -14,7 +14,8 @@ interface AppCallsInterface {
 
 const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
   const [loading, setLoading] = useState<boolean>(false)
-  // const [contractInput, setContractInput] = useState<string>('')
+  const [contractInput, setContractInput] = useState<string>('')
+  const [contractInput2, setContractInput2] = useState<string>('')
   // my code
   const [accInput, setAccInput] = useState<string>('')
   const [customUIDInput, setCustomUIDInput] = useState<string>('')
@@ -73,6 +74,8 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
   //   enqueueSnackbar(`Response from the contract: ${response?.return}`, { variant: 'success' })
   //   setLoading(false)
   // }
+
+
   // my code
   const verifyAcc = async () => {
     setLoading(true)
@@ -86,6 +89,7 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
 
     const appClient = new VotingAppClient(appDetails, algodClient)
 
+    //const boxKey = new Uint8Array(Buffer.from(contractInput2)); // Convert seat to Uint8Array
     // Please note, in typical production scenarios,
     // you wouldn't want to use deploy directly from your frontend.
     // Instead, you would deploy your contract on your backend and reference it by id.
@@ -135,6 +139,8 @@ const AppCalls = ({ openModal, setModalState }: AppCallsInterface) => {
             setCustomUIDInput(e.target.value)
           }}
         />
+		<br />
+
         <div className="modal-action ">
           <button className="btn" onClick={() => setModalState(!openModal)}>
             Close

@@ -46,4 +46,17 @@ export async function deploy() {
   const method = 'hello'
   const response = await appClient.hello({ name: 'world' })
   console.log(`Called ${method} on ${app.name} (${app.appId}) with name = world, received: ${response.return}`)
+  
+  // Fk box create
+  const response2 = await appClient.createBox({
+	seat: 'P069',
+	boxes: [
+		{
+			appIndex: app.appId,
+			//name: 'P069'
+			name: new Uint8Array(Buffer.from('P069')),
+		}
+	]
+  })
+  console.log(`Called createBox on ${app.name} (${app.appId}) with name = world, received: ${response2.return}`)
 }

@@ -38,7 +38,7 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
     const transaction = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       from: activeAddress,
       to: receiverAddress,
-      amount: 1e6,
+      amount: 100e6,
       suggestedParams,
     })
 
@@ -84,7 +84,7 @@ const Transact = ({ openModal, setModalState }: TransactInterface) => {
             className={`btn ${receiverAddress.length === 58 ? '' : 'btn-disabled'} lo`}
             onClick={handleSubmitAlgo}
           >
-            {loading ? <span className="loading loading-spinner" /> : 'Send 1 Algo'}
+            {loading ? <span className="loading loading-spinner" /> : 'Send 100 Algo'}
           </button>
         </div>
       </form>
