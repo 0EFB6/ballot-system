@@ -1,4 +1,3 @@
-from utils import *
 from beaker import *
 from pyteal import *
 from beaker.lib.storage import BoxList, BoxMapping
@@ -51,10 +50,76 @@ class ElectionVotingSystem:
 		descr="Value indicating voters have voted or not, 0 indicate not voted, 1 indicate voted"
 	)
 
-app = (Application("Voting Beaker", state=ElectionVotingSystem())
+app = (Application("VotingApp", state=ElectionVotingSystem())
 	   .apply(unconditional_opt_in_approval, initialize_local_state=True))
 
 sender = Txn.sender()
+
+@app.external
+def hello(name: abi.String, *, output: abi.String) -> Expr:
+    return output.set(Concat(Bytes("Hello, "), name.get()))
+
+@app.external
+def testing(name: abi.String, seat: abi.String, *, output: abi.String) -> Expr:
+    return output.set(Concat(Bytes("Test, "), name.get(), Bytes(" "), seat.get()))
+
+@Subroutine(TealType.bytes)
+def itob(arg):
+
+    string = ScratchVar(TealType.bytes)
+    num = ScratchVar(TealType.uint64)
+    digit = ScratchVar(TealType.uint64)
+
+    return If(
+        arg == Int(0),
+        Bytes("0"),
+        Seq([
+            string.store(Bytes("")),
+            For(num.store(arg), num.load() > Int(0), num.store(num.load() / Int(10))).Do(
+                Seq([
+                    digit.store(num.load() % Int(10)),
+                    string.store(
+                        Concat(
+                            Substring(
+                                Bytes('0123456789'),
+                                digit.load(),
+                                digit.load() + Int(1)
+                            ),
+                            string.load()
+                        )
+                    )
+                ])
+
+            ),
+            string.load()
+        ])
+    )
+
+@Subroutine(TealType.uint64)
+def btoi(str):
+
+    num = ScratchVar(TealType.uint64)
+    digit = ScratchVar(TealType.uint64)
+    ascii = ScratchVar(TealType.uint64)
+    str_length = ScratchVar(TealType.uint64)
+    iterator = ScratchVar(TealType.uint64)
+    # 48-57 (0...789)
+    return If(
+        str == Bytes("0"),
+        Int(0),
+        Seq([
+            num.store(Int(0)),
+            str_length.store(Len(str)),
+            For(iterator.store(Int(0)), iterator.load() < str_length.load(), iterator.store(iterator.load() + Int(1))).Do(
+                Seq([
+                    ascii.store(GetByte(str, iterator.load())),
+                    digit.store(ascii.load() - Int(48)),
+                    num.store(num.load() * Int(10) + digit.load())
+                ])
+            ),
+            num.load()
+        ])
+    )
 
 # Voting part, a bit messy
 @app.external(authorize=Authorize.opted_in())
@@ -337,7 +402,7 @@ def get_uuid(ic_num: abi.String, *, output: abi.String) -> Expr:
                     Seq(
                         App.box_put(ic_num.get(), hash_uid),		
 						app.state.collected_ballot[sender].set(Int(1)),
-                        output.set(Concat(Bytes(uid), Bytes(" || "), hash_uid)),
+                        output.set(Bytes(uid)),
 						# Wilson: Where is the boc created?
                         # wdym where?
                         # BoxPut(hash_uid, hash_uid)
@@ -368,23 +433,25 @@ def get_uuid(ic_num: abi.String, *, output: abi.String) -> Expr:
 # 	)
 
 # use signature to verify id?
-@app.external
-def test_sha(ic_num: abi.String, uid: abi.String, *, output: abi.String) -> Expr:
-    # bytetostr = uid.decode('utf-8')
-    test = str(uid.get()).encode('utf-8')
-    #stob = test.encode('utf-8')
+# @app.external
+# def test_sha(ic_num: abi.String, uid: abi.String, *, output: abi.String) -> Expr:
+#     # bytetostr = uid.decode('utf-8')
+#     # test = str(uid.get)
+#     # test = unescapeStr(uid.get())
+#     # test = str(uid)
+#     stob = test.encode('utf-8')
 	
-    # id_str_to_bytes = str.encode("utf-8")
+#     # id_str_to_bytes = str.encode("utf-8")
 
-    # Base64Decode()
-    h = hashlib.shake_256(test)
-	# # return a 32digits hexadecimal hash
-    hash_uid = Bytes(h.hexdigest(16))
-    return output.set(Concat(Bytes("Hashhed UID:"), hash_uid, Bytes("  test:"), Bytes(test)))
-    # return Seq(
-	# 	contents := BoxGet(ic_num.get()),
-    #     If(contents.value() == hash_uid, output.set(Bytes("exist")), output.set(Bytes("doesn't exist")))
-    # )
+#     # Base64Decode()
+#     h = hashlib.shake_256(stob)
+# 	# # return a 32digits hexadecimal hash
+#     hash_uid = Bytes(h.hexdigest(16))
+#     return output.set(test)
+#     # return Seq(
+# 	# 	contents := BoxGet(ic_num.get()),
+#     #     If(contents.value() == hash_uid, output.set(Bytes("exist")), output.set(Bytes("doesn't exist")))
+#     # )
 
 @app.external
 def readBoxIcNo(ic_num: abi.String, *, output: abi.String):
@@ -452,7 +519,4 @@ def readParliamentSeat(area: abi.String, *, output: ParliamentItem) -> Expr:
 def deleteParliamentSeat(area: abi.String) -> Expr:
 	return Pop(app.state.par_seat[area.get()].delete())'''
 
-if __name__ == '__main__':
-    app.build().export("../artifacts/beaker-sc")
-    print("Success")
 
