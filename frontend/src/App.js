@@ -65,7 +65,18 @@ function App() {
         () => callCounterApplication('Voting')
       }>
       Votelocal
-    </Button></Col>
+    </Button>
+    <input id="receiver"></input>
+
+    <Button className="btn-dec-local" 
+     onClick={
+      // add the local deduct method
+      () => sendPaymentTxn()
+      }>
+      Send payment
+    </Button>
+
+    </Col>
     <Col>
     <h3>Local Count</h3>
     <span className='local-counter-text'>{localCount}</span>
@@ -183,6 +194,27 @@ function App() {
       
       } catch (e) {
         console.error(`There was an error calling the counter app: ${e}`);
+      }
+    }
+
+    async function sendPaymentTxn() {
+      try {
+        //const suggestedParams = await algod.getTransactionParams().do();
+        const receiver = document.getElementById("receiver").value
+      
+        const txn = {
+          type: 'pay',
+          accountAddress: accountAddress,
+          to: receiver,
+          amount: 100,
+        }
+      
+        const signedTxn = await peraWallet.signTransaction(txn);
+        console.log(signedTxn);
+        const { txId } = await algod.sendPaymentTxn(signedTxn).do();
+        const result = await waitForConfirmation(algod, txId, 2);
+      } catch (e) {
+        console.error(`There was an error sending the payment: ${e}`);
       }
     }
 }
