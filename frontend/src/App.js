@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 const peraWallet = new PeraWalletConnect();
 
 // The app ID on testnet
-const appIndex = 366029400;
+const appIndex = 368627424;
 
 // connect to the algorand node
 const algod = new algosdk.Algodv2('','https://testnet-api.algonode.cloud', 443);
@@ -62,7 +62,7 @@ function App() {
           <Col><Button className="btn-add-local"
      onClick={
       // add the method for the local add
-        () => callCounterApplication('Voting')
+        () => callCounterApplication('Voting', '69')
       }>
       Votelocal
     </Button>
@@ -93,7 +93,7 @@ function App() {
           <Col><Button className="btn-add-global"
      onClick={
       // add the global add function
-        () => callCounterApplication('VotingGlobal')
+        () => callCounterApplication('VotingGlobal', '2')
       }>
       Vote global
     </Button></Col>
@@ -170,11 +170,11 @@ function App() {
       }
     }
 
-    async function callCounterApplication(action) {
+    async function callCounterApplication(action, arg) {
       try {
         // get suggested params
         const suggestedParams = await algod.getTransactionParams().do();
-        const appArgs = [new Uint8Array(Buffer.from(action))];
+        const appArgs = [new Uint8Array(Buffer.from(action)), new Uint8Array(Buffer.from(arg))];
         
         const actionTx = algosdk.makeApplicationNoOpTxn(
           accountAddress,
