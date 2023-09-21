@@ -59,14 +59,15 @@ function App() {
         
       <Container>
         <Row>
+        <input id="receiver"></input>
           <Col><Button className="btn-add-local"
      onClick={
       // add the method for the local add
-        () => callCounterApplication('Voting', '69')
+        () => callCounterApplication('Voting', document.getElementById("receiver").value)
       }>
       Votelocal
     </Button>
-    <input id="receiver"></input>
+
 
     <Button className="btn-dec-local" 
      onClick={
