@@ -1,6 +1,7 @@
 from pyteal import *
 
-def itob(arg):
+@Subroutine(TealType.bytes)
+def convert_uint_to_bytes(arg):
 
     string = ScratchVar(TealType.bytes)
     num = ScratchVar(TealType.uint64)
@@ -31,7 +32,8 @@ def itob(arg):
         ])
     )
 
-def btoi(str):
+@Subroutine(TealType.uint64)
+def convert_bytes_to_uint(str):
 
     num = ScratchVar(TealType.uint64)
     digit = ScratchVar(TealType.uint64)
@@ -55,3 +57,6 @@ def btoi(str):
             num.load()
         ])
     )
+
+
+ 

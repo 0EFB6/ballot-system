@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 const peraWallet = new PeraWalletConnect();
 
 // The app ID on testnet
-const appIndex = 368627424;
+const appIndex = 370200171;
 
 // connect to the algorand node
 const algod = new algosdk.Algodv2('','https://testnet-api.algonode.cloud', 443);
@@ -85,9 +85,9 @@ function App() {
           <Col><Button className="btn-dec-local" 
      onClick={
       // add the local deduct method
-      () => callCounterApplication('Deduct_Local')
+      () => callCounterApplication('duduct_local', '')
       }>
-      Decrease
+      Decrease lcoal
     </Button></Col>
         </Row>
         <Row>
@@ -105,9 +105,9 @@ function App() {
           <Col><Button className="btn-dec-global" 
      onClick={
       // add the deduct global function
-      () => callCounterApplication('Deduct_Global')
+      () => callCounterApplication('add_local', '')
       }>
-      Decrease
+      Add local
     </Button></Col>
         </Row>
       </Container>

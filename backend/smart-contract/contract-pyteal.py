@@ -1,60 +1,80 @@
 from pyteal import *
+from utils import *
 
-def itob(arg):
+# Constant Values
+LEN_SEAT_NO 		= Int(4)
+LEN_SEAT_AREA 		= Int(26)
+LEN_SEAT_STATE 		= Int(15)
+LEN_CANDIDATE_NAME 	= Int(65)
+LEN_PARTY 			= Int(25)
+LEN_VOTECOUNT 		= Int(6)
+LEN_SUM 			= LEN_CANDIDATE_NAME + LEN_PARTY + LEN_VOTECOUNT
+SEAT_NO_I 			= Int(0)
+SEAT_AREA_I 		= Int(4)
+SEAT_STATE_I 		= Int(30)
+CANDIDATE_NAME_1 	= Int(45)
+CANDIDATE_PARTY_1 	= Int(110)
+CANDIDATE_VOTES_1 	= Int(135)
 
-    string = ScratchVar(TealType.bytes)
-    num = ScratchVar(TealType.uint64)
-    digit = ScratchVar(TealType.uint64)
+sender = Txn.sender()
 
-    return If(
-        arg == Int(0),
-        Bytes("0"),
-        Seq([
-            string.store(Bytes("")),
-            For(num.store(arg), num.load() > Int(0), num.store(num.load() / Int(10))).Do(
-                Seq([
-                    digit.store(num.load() % Int(10)),
-                    string.store(
-                        Concat(
-                            Substring(
-                                Bytes('0123456789'),
-                                digit.load(),
-                                digit.load() + Int(1)
-                            ),
-                            string.load()
-                        )
-                    )
-                ])
+def vote_local():
+    localVote = ScratchVar(TealType.uint64)
 
-            ),
-            string.load()
-        ])
-    )
+    return Seq([
+        localVote.store(btoi(Txn.application_args[1])),
+        #localVote.store(App.localGet(sender, Bytes("Vote"))),
+        App.localPut(sender, Bytes("Vote"), localVote.load() + Int(2)),
+        Return(Int(1))
+    ])
 
-def btoi(str):
 
-    num = ScratchVar(TealType.uint64)
-    digit = ScratchVar(TealType.uint64)
-    ascii = ScratchVar(TealType.uint64)
-    str_length = ScratchVar(TealType.uint64)
-    iterator = ScratchVar(TealType.uint64)
-    # 48-57 (0...789)
-    return If(
-        str == Bytes("0"),
-        Int(0),
-        Seq([
-            num.store(Int(0)),
-            str_length.store(Len(str)),
-            For(iterator.store(Int(0)), iterator.load() < str_length.load(), iterator.store(iterator.load() + Int(1))).Do(
-                Seq([
-                    ascii.store(GetByte(str, iterator.load())),
-                    digit.store(ascii.load() - Int(48)),
-                    num.store(num.load() * Int(10) + digit.load())
-                ])
-            ),
-            num.load()
-        ])
-    )
+seat = Txn.application_args[2] # P106
+area = Txn.application_args[3] # Subang
+state = Txn.application_args[4] # Selangor
+name = Txn.application_args[5] # Brandon
+party = Txn.application_args[6] # Harapan
+i = Txn.application_args[7] # Candidate ID
+
+def createBox():
+	return Seq([
+        If (
+		    Or(
+			    Len(seat) == Int(4),
+			    Len(seat) == Int(6)
+		    ),
+			Pop(App.box_create(seat, Int(1024))),
+			#output.set(Concat(Bytes("Box ["), seat.get(), Bytes("] created successfully!")))
+		#output.set(Concat(Bytes("Failed to create box ["), seat.get(), Bytes("]")))
+	    ),
+        Return(Int(1))
+    ])
+
+def addCandidate():
+	return Seq([
+		If(
+		    And(
+		    	Len(name) > Int(0),
+		    	Len(name) <= LEN_CANDIDATE_NAME,
+		    	Len(party) > Int(0),
+		    	Len(party) <= LEN_PARTY,
+                Or(
+                    Len(seat) == Int(4),
+                    Len(seat) == Int(6)
+                )
+		    ),
+		    Seq(
+		    	App.box_replace(seat,
+                       CANDIDATE_NAME_1 + LEN_SUM * (btoi(i) - Int(1)),
+                       name),
+		    	App.box_replace(seat,
+                       CANDIDATE_PARTY_1 + LEN_SUM * (btoi(i) - Int(1)),
+                       party),
+		    	#output.set(Concat(Bytes("Candidate ["), itob(i.get()), Bytes("] added successfully to seat ["), seat.get(), Bytes("]")))
+		    )
+		    #output.set(Concat(Bytes("Failed to add candidate to box ["), seat.get(), Bytes("]")))
+	    )
+    ])
 
 def approval_program():
     handle_creation = Seq([
@@ -68,7 +88,7 @@ def approval_program():
     handle_update = Return(Int(0))
     handle_deleteion = Return(Int(0))
 
-    sender = Txn.sender()
+    
     scratchVote = ScratchVar(TealType.uint64)
     localVote = ScratchVar(TealType.uint64)
 
@@ -80,13 +100,8 @@ def approval_program():
     #        Return(Int(1))
     #    ])
 
-    voteLocal = Seq([
-        localVote.store(btoi(Txn.application_args[1])),
-        #localVote.store(App.localGet(sender, Bytes("Vote"))),
-        App.localPut(sender, Bytes("Vote"), localVote.load() + Int(2)),
-        Return(Int(1))
-    ])
-    #oteLocal = voteLocal()
+    
+    voteLocal = vote_local()
     # voteGlobal = voteLocal()
     voteGlobal = Seq([
         
@@ -99,7 +114,9 @@ def approval_program():
         Assert(Global.group_size() == Int(1)), 
         Cond(
             [Txn.application_args[0] == Bytes("Voting"), voteLocal],
-            [Txn.application_args[0] == Bytes("VotingGlobal"), voteGlobal]
+            [Txn.application_args[0] == Bytes("VotingGlobal"), voteGlobal],
+            [Txn.application_args[0] == Bytes("CreateBox"), createBox()],
+            [Txn.application_args[0] == Bytes("AddCandidate"), addCandidate()]
         )
     )
 
