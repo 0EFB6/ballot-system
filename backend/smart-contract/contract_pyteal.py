@@ -1,5 +1,6 @@
 from pyteal import *
 from utils import *
+from contract_pyteal_methods import *
 
 # 9 Global Bytes
 # 3 Global Ints
@@ -7,21 +8,7 @@ from utils import *
 # 1 Local Ints
 
 # Constant Values
-LEN_SEAT_NO 		= Int(4)
-LEN_SEAT_AREA 		= Int(26)
-LEN_SEAT_STATE 		= Int(15)
-LEN_CANDIDATE_NAME 	= Int(65)
-LEN_PARTY 			= Int(25)
-LEN_VOTECOUNT 		= Int(6)
-LEN_SUM 			= LEN_CANDIDATE_NAME + LEN_PARTY + LEN_VOTECOUNT
-SEAT_NO_I 			= Int(0)
-SEAT_AREA_I 		= Int(4)
-SEAT_STATE_I 		= Int(30)
-CANDIDATE_NAME_1 	= Int(45)
-CANDIDATE_PARTY_1 	= Int(110)
-CANDIDATE_VOTES_1 	= Int(135)
-
-K_VOTE = Bytes("Votes")
+K_VOTE = Bytes("Voted")
 K_SEAT_NO = Bytes("SeatNo")
 K_SEAT_AREA = Bytes("SeatArea")
 K_SEAT_STATE = Bytes("SeatState")
@@ -34,12 +21,6 @@ K_C2_VOTES = Bytes("C2Votes")
 K_C3_NAME = Bytes("C3Name")
 K_C3_PARTY = Bytes("C3Party")
 K_C3_VOTES = Bytes("C3Votes")
-CAN1_NAME = Bytes("Brendon")
-CAN1_PARTY = Bytes("Perpaduan")
-CAN2_NAME = Bytes("Luis")
-CAN2_PARTY = Bytes("Madani")
-CAN3_NAME = Bytes("Zack")
-CAN3_PARTY = Bytes("Nasional")
 
 sender = Txn.sender()
 
@@ -50,80 +31,6 @@ sender = Txn.sender()
 #name = Txn.application_args[4] # Brandon
 #party = Txn.application_args[5] # Harapan
 #i = Txn.application_args[6] # Candidate ID
-
-def init_parliament_seat():
-    return Seq([
-        App.globalPut(K_SEAT_NO, Bytes("P110")),
-        App.globalPut(K_SEAT_AREA, Bytes("Klang")),
-        App.globalPut(K_SEAT_STATE, Bytes("Selangor")),
-        App.globalPut(K_C1_NAME, CAN1_NAME),
-        App.globalPut(K_C1_PARTY, CAN1_PARTY),
-        App.globalPut(K_C1_VOTES, Int(0)),
-        App.globalPut(K_C2_NAME, CAN2_NAME),
-        App.globalPut(K_C2_PARTY, CAN2_PARTY),
-        App.globalPut(K_C2_VOTES, Int(0)),
-        App.globalPut(K_C3_NAME, CAN3_NAME),
-        App.globalPut(K_C3_PARTY, CAN3_PARTY),
-        App.globalPut(K_C3_VOTES, Int(0)),
-        Return(Int(1))
-    ])
-
-def init_state_seat():
-    return Seq([
-        App.globalPut(K_SEAT_NO, Bytes("N31")),
-        App.globalPut(K_SEAT_AREA, Bytes("Subang Jaya")),
-        App.globalPut(K_SEAT_STATE, Bytes("Selangor")),
-        App.globalPut(K_C1_NAME, CAN1_NAME),
-        App.globalPut(K_C1_PARTY, CAN1_PARTY),
-        App.globalPut(K_C1_VOTES, Int(0)),
-        App.globalPut(K_C2_NAME, CAN2_NAME),
-        App.globalPut(K_C2_PARTY, CAN2_PARTY),
-        App.globalPut(K_C2_VOTES, Int(0)),
-        App.globalPut(K_C3_NAME, CAN3_NAME),
-        App.globalPut(K_C3_PARTY, CAN3_PARTY),
-        App.globalPut(K_C3_VOTES, Int(0)),
-        Return(Int(1))
-    ])
-
-def voteCandidate1():
-    return Seq([
-        If(
-            App.localGet(sender, K_VOTE)  == Int(0),
-            Seq(
-                App.globalPut(K_C1_VOTES, App.globalGet(K_C1_VOTES) + Int(1)),
-                App.localPut(sender, K_VOTE, Int(1))
-            )
-        ),
-        Return(Int(1))
-    ])
-
-def voteCandidate2():
-    currentVoteCount = App.globalGet(K_C2_VOTES)
-    isVoted = App.localGet(sender, K_VOTE)
-    return Seq([
-        If(
-            isVoted == Int(0),
-            Seq(
-                App.globalPut(K_C2_VOTES, currentVoteCount + Int(1)),
-                App.localPut(sender, K_VOTE, isVoted + Int(1))
-            )
-        ),
-        Return(Int(1))
-    ])
-
-def voteCandidate3():
-    currentVoteCount = App.globalGet(K_C3_VOTES)
-    isVoted = App.localGet(sender, K_VOTE)
-    return Seq([
-        If(
-            isVoted == Int(0),
-            Seq(
-                App.globalPut(K_C3_VOTES, currentVoteCount + Int(1)),
-                App.localPut(sender, K_VOTE, isVoted + Int(1))
-            )
-        ),
-        Return(Int(1))
-    ])
 
 def debugLocal():
     localVote = ScratchVar(TealType.uint64)
@@ -168,11 +75,16 @@ def approval_program():
         Cond(
             [Txn.application_args[0] == Bytes("DebugLocal"), debugLocal()],
             [Txn.application_args[0] == Bytes("DebugGlobal"), debugGlobal()],
-            [Txn.application_args[0] == Bytes("InitParliamentSeat"), init_parliament_seat()],
-            [Txn.application_args[0] == Bytes("InitStateSeat"), init_state_seat()],
+            [Txn.application_args[0] == Bytes("InitParliamentSeatDemp1"), init_parliament_seat_demo1()],
+            [Txn.application_args[0] == Bytes("InitParliamentSeatDemo2"), init_parliament_seat_demo2()],
+            [Txn.application_args[0] == Bytes("InitStateSeatDemo1"), init_state_seat_demo1()],
+            [Txn.application_args[0] == Bytes("InitStateSeatDemo2"), init_state_seat_demo2()],
             [Txn.application_args[0] == Bytes("VoteCandidate1"), voteCandidate1()],
             [Txn.application_args[0] == Bytes("VoteCandidate2"), voteCandidate2()],
             [Txn.application_args[0] == Bytes("VoteCandidate3"), voteCandidate3()],
+            [Txn.application_args[0] == Bytes("GetSeatNo"), getSeatNo()],
+            [Txn.application_args[0] == Bytes("GetSeatArea"), getSeatArea()],
+            [Txn.application_args[0] == Bytes("GetSeatState"), getSeatState()],
         )
     )
 

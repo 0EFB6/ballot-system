@@ -65,29 +65,47 @@ function App() {
         <input id='seat' type='text' placeholder='Seat'></input>
         <input id='area' type='text' placeholder='Area'></input>
         <input id='state' type='text' placeholder='State'></input>
-          <Col><Button className="btn-add-local"
+      <Col>
+      <Button className="btn-add-local"
      onClick={
-      // add the method for the local add
-        () => callCounterApplication('InitParliamentSeat')
+        () => callCounterApplication('InitParliamentSeatDemo1')
         //document.getElementById("seat").value,
         //document.getElementById("area").value,
         //document.getElementById("state").value
       }>
-      Init Parliament Seat
+      Init Parliament Seat Demo 1
     </Button>
 
+    <Button className="btn-add-local"
+     onClick={
+        () => callCounterApplication('InitParliamentSeatDemo2')
+      }>
+      Init Parliament Seat Demo 2
+    </Button>
     </Col>
+
     <Col>
     <h3>Local Count</h3>
     <span className='local-counter-text'>{localCount}</span>
     </Col>
-          <Col><Button className="btn-dec-local" 
+    
+    <Col>
+          <Button className="btn-dec-local" 
      onClick={
       // add the local deduct method
-      () => callCounterApplication('InitStateSeat')
+      () => callCounterApplication('InitStateSeatDemo1')
       }>
-      Init State Seat
-    </Button></Col>
+      Init State Seat Demo 1
+    </Button>
+    <Button className="btn-dec-local" 
+     onClick={
+      // add the local deduct method
+      () => callCounterApplication('InitStateSeatDemo2')
+      }>
+      Init State Seat Demo 2
+    </Button>
+    </Col>
+
     <Button className="btn-dec-local" 
      onClick={
       // add the local deduct method
