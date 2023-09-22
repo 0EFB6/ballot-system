@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 const peraWallet = new PeraWalletConnect();
 
 // The app ID on testnet
-const appIndex = 370200171;
+const appIndex = 373126960;
 
 // connect to the algorand node
 const algod = new algosdk.Algodv2('','https://testnet-api.algonode.cloud', 443);
@@ -20,6 +20,9 @@ function App() {
   const [accountAddress, setAccountAddress] = useState(null);
   const [currentCount, setCurrentCount] = useState(null);
   const [localCount, setLocalCount] = useState(null);
+  const [can1VoteCount, setCan1VoteCount] = useState(null);
+  const [can2VoteCount, setCan2VoteCount] = useState(null);
+  const [can3VoteCount, setCan3VoteCount] = useState(null);
   const isConnectedToPeraWallet = !!accountAddress;
 
   useEffect(() => {
@@ -59,22 +62,18 @@ function App() {
         
       <Container>
         <Row>
-        <input id="receiver"></input>
+        <input id='seat' type='text' placeholder='Seat'></input>
+        <input id='area' type='text' placeholder='Area'></input>
+        <input id='state' type='text' placeholder='State'></input>
           <Col><Button className="btn-add-local"
      onClick={
       // add the method for the local add
-        () => callCounterApplication('Voting', document.getElementById("receiver").value)
+        () => callCounterApplication('InitParliamentSeat')
+        //document.getElementById("seat").value,
+        //document.getElementById("area").value,
+        //document.getElementById("state").value
       }>
-      Votelocal
-    </Button>
-
-
-    <Button className="btn-dec-local" 
-     onClick={
-      // add the local deduct method
-      () => sendPaymentTxn()
-      }>
-      Send payment
+      Init Parliament Seat
     </Button>
 
     </Col>
@@ -85,18 +84,42 @@ function App() {
           <Col><Button className="btn-dec-local" 
      onClick={
       // add the local deduct method
-      () => callCounterApplication('duduct_local', '')
+      () => callCounterApplication('InitStateSeat')
       }>
-      Decrease lcoal
+      Init State Seat
     </Button></Col>
+    <Button className="btn-dec-local" 
+     onClick={
+      // add the local deduct method
+      () => callCounterApplication('VoteCandidate1')
+      }>
+      Vote Candidate 1
+    </Button>
+    <span className='local-counter-text'>{can1VoteCount}</span>
+    <Button className="btn-dec-local" 
+     onClick={
+      // add the local deduct method
+      () => callCounterApplication('VoteCandidate2')
+      }>
+      Vote Candidate 2
+    </Button>
+    <span className='local-counter-text'>{can2VoteCount}</span>
+    <Button className="btn-dec-local" 
+     onClick={
+      // add the local deduct method
+      () => callCounterApplication('VoteCandidate3')
+      }>
+      Vote Candidate 3
+    </Button>
+    <span className='local-counter-text'>{can3VoteCount}</span>
         </Row>
         <Row>
           <Col><Button className="btn-add-global"
      onClick={
       // add the global add function
-        () => callCounterApplication('VotingGlobal', '2')
+        () => callCounterApplication('DebugGlobal')
       }>
-      Vote global
+      DEBUG global
     </Button></Col>
     <Col>
     <h3>Global Count</h3>
@@ -105,9 +128,9 @@ function App() {
           <Col><Button className="btn-dec-global" 
      onClick={
       // add the deduct global function
-      () => callCounterApplication('add_local', '')
+      () => callCounterApplication('DebugLocal')
       }>
-      Add local
+      DEBUG local
     </Button></Col>
         </Row>
       </Container>
@@ -144,9 +167,48 @@ function App() {
         const result = await waitForConfirmation(algod, txId, 2);
     }
 
+    async function printSeatidState() {
+      try {
+        const counter = await algod.getApplicationByID(appIndex).do();
+        console.log(counter)
+        if (!counter.params['global-state'][0].value.uint) {
+          const decodedString = Buffer.from(counter.params['global-state'][0].value.bytes, 'base64').toString();
+          setCurrentCount(decodedString);
+        } else {
+          setCurrentCount(0);
+        }
+      } catch (e) {
+        console.error('There was an error connecting to the algorand node: ', e)
+      }
+    }
+    async function checkVoteCountState() {
+      try {
+        const counter = await algod.getApplicationByID(appIndex).do();
+        console.log(counter)
+        if (!!counter.params['global-state'][5].value.uint) {
+          setCan1VoteCount(counter.params['global-state'][5].value.uint);
+        } else {
+          setCan1VoteCount(69);
+        }
+        if (!!counter.params['global-state'][8].value.uint) {
+          setCan2VoteCount(counter.params['global-state'][8].value.uint);
+        } else {
+          setCan2VoteCount(6969);
+        }
+        if (!!counter.params['global-state'][11].value.uint) {
+          setCan3VoteCount(counter.params['global-state'][11].value.uint);
+        } else {
+          setCan3VoteCount(6996);
+        }
+      } catch (e) {
+        console.error('There was an error connecting to the algorand node: ', e)
+      }
+    }
+
     async function checkCounterState() {
       try {
         const counter = await algod.getApplicationByID(appIndex).do();
+        console.log(counter)
         if (!!counter.params['global-state'][0].value.uint) {
           setCurrentCount(counter.params['global-state'][0].value.uint);
         } else {
@@ -165,17 +227,20 @@ function App() {
         } else {
           setLocalCount(0);
         }
-        console.log(accountInfo['app-local-state']['key-value'][0].value.uint);
+        console.log(accountInfo);
       } catch (e) {
         console.error('There was an error connecting to the algorand node: ', e)
       }
     }
 
-    async function callCounterApplication(action, arg) {
+    async function callCounterApplication(action) {
       try {
         // get suggested params
         const suggestedParams = await algod.getTransactionParams().do();
-        const appArgs = [new Uint8Array(Buffer.from(action)), new Uint8Array(Buffer.from(arg))];
+        const appArgs = [new Uint8Array(Buffer.from(action)),];
+                        //new Uint8Array(Buffer.from(arg1)),
+                        //new Uint8Array(Buffer.from(arg2)),
+                        //new Uint8Array(Buffer.from(arg3))];
         
         const actionTx = algosdk.makeApplicationNoOpTxn(
           accountAddress,
@@ -190,7 +255,9 @@ function App() {
         console.log(signedTx);
         const { txId } = await algod.sendRawTransaction(signedTx).do();
         const result = await waitForConfirmation(algod, txId, 2);
-        checkCounterState();
+        checkVoteCountState();
+        printSeatidState();
+        //checkCounterState();
         checkLocalCounterState();
       
       } catch (e) {

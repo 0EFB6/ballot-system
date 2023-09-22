@@ -78,13 +78,15 @@ def clear_state_program():
 
 # 7 - update the file to 
 # print out the results
-print(approval_program())
-print(clear_state_program())
+#print(approval_program())
+#print(clear_state_program())
 
-appFile = open('approval.teal', 'w')
+appFile = open('../artifacts/approval.teal', 'w')
 appFile.write(approval_program())
 appFile.close()
 
-clearFile = open('clear.teal', 'w')
+clearFile = open('../artifacts/clear.teal', 'w')
 clearFile.write(clear_state_program())
 clearFile.close()
+
+print("Done")

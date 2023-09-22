@@ -1,6 +1,11 @@
 from pyteal import *
 from utils import *
 
+# 9 Global Bytes
+# 3 Global Ints
+# 0 Local Bytes
+# 1 Local Ints
+
 # Constant Values
 LEN_SEAT_NO 		= Int(4)
 LEN_SEAT_AREA 		= Int(26)
@@ -16,107 +21,158 @@ CANDIDATE_NAME_1 	= Int(45)
 CANDIDATE_PARTY_1 	= Int(110)
 CANDIDATE_VOTES_1 	= Int(135)
 
+K_VOTE = Bytes("Votes")
+K_SEAT_NO = Bytes("SeatNo")
+K_SEAT_AREA = Bytes("SeatArea")
+K_SEAT_STATE = Bytes("SeatState")
+K_C1_NAME = Bytes("C1Name")
+K_C1_PARTY = Bytes("C1Party")
+K_C1_VOTES = Bytes("C1Votes")
+K_C2_NAME = Bytes("C2Name")
+K_C2_PARTY = Bytes("C2Party")
+K_C2_VOTES = Bytes("C2Votes")
+K_C3_NAME = Bytes("C3Name")
+K_C3_PARTY = Bytes("C3Party")
+K_C3_VOTES = Bytes("C3Votes")
+CAN1_NAME = Bytes("Brendon")
+CAN1_PARTY = Bytes("Perpaduan")
+CAN2_NAME = Bytes("Luis")
+CAN2_PARTY = Bytes("Madani")
+CAN3_NAME = Bytes("Zack")
+CAN3_PARTY = Bytes("Nasional")
+
 sender = Txn.sender()
 
-def vote_local():
-    localVote = ScratchVar(TealType.uint64)
+#key = Txn.application_args[1] # Address
+#seat = Txn.application_args[1] # P106
+#area = Txn.application_args[2] # Subang
+#state = Txn.application_args[3] # Selangor
+#name = Txn.application_args[4] # Brandon
+#party = Txn.application_args[5] # Harapan
+#i = Txn.application_args[6] # Candidate ID
 
+def init_parliament_seat():
+    return Seq([
+        App.globalPut(K_SEAT_NO, Bytes("P110")),
+        App.globalPut(K_SEAT_AREA, Bytes("Klang")),
+        App.globalPut(K_SEAT_STATE, Bytes("Selangor")),
+        App.globalPut(K_C1_NAME, CAN1_NAME),
+        App.globalPut(K_C1_PARTY, CAN1_PARTY),
+        App.globalPut(K_C1_VOTES, Int(0)),
+        App.globalPut(K_C2_NAME, CAN2_NAME),
+        App.globalPut(K_C2_PARTY, CAN2_PARTY),
+        App.globalPut(K_C2_VOTES, Int(0)),
+        App.globalPut(K_C3_NAME, CAN3_NAME),
+        App.globalPut(K_C3_PARTY, CAN3_PARTY),
+        App.globalPut(K_C3_VOTES, Int(0)),
+        Return(Int(1))
+    ])
+
+def init_state_seat():
+    return Seq([
+        App.globalPut(K_SEAT_NO, Bytes("N31")),
+        App.globalPut(K_SEAT_AREA, Bytes("Subang Jaya")),
+        App.globalPut(K_SEAT_STATE, Bytes("Selangor")),
+        App.globalPut(K_C1_NAME, CAN1_NAME),
+        App.globalPut(K_C1_PARTY, CAN1_PARTY),
+        App.globalPut(K_C1_VOTES, Int(0)),
+        App.globalPut(K_C2_NAME, CAN2_NAME),
+        App.globalPut(K_C2_PARTY, CAN2_PARTY),
+        App.globalPut(K_C2_VOTES, Int(0)),
+        App.globalPut(K_C3_NAME, CAN3_NAME),
+        App.globalPut(K_C3_PARTY, CAN3_PARTY),
+        App.globalPut(K_C3_VOTES, Int(0)),
+        Return(Int(1))
+    ])
+
+def voteCandidate1():
+    return Seq([
+        If(
+            App.localGet(sender, K_VOTE)  == Int(0),
+            Seq(
+                App.globalPut(K_C1_VOTES, App.globalGet(K_C1_VOTES) + Int(1)),
+                App.localPut(sender, K_VOTE, Int(1))
+            )
+        ),
+        Return(Int(1))
+    ])
+
+def voteCandidate2():
+    currentVoteCount = App.globalGet(K_C2_VOTES)
+    isVoted = App.localGet(sender, K_VOTE)
+    return Seq([
+        If(
+            isVoted == Int(0),
+            Seq(
+                App.globalPut(K_C2_VOTES, currentVoteCount + Int(1)),
+                App.localPut(sender, K_VOTE, isVoted + Int(1))
+            )
+        ),
+        Return(Int(1))
+    ])
+
+def voteCandidate3():
+    currentVoteCount = App.globalGet(K_C3_VOTES)
+    isVoted = App.localGet(sender, K_VOTE)
+    return Seq([
+        If(
+            isVoted == Int(0),
+            Seq(
+                App.globalPut(K_C3_VOTES, currentVoteCount + Int(1)),
+                App.localPut(sender, K_VOTE, isVoted + Int(1))
+            )
+        ),
+        Return(Int(1))
+    ])
+
+def debugLocal():
+    localVote = ScratchVar(TealType.uint64)
     return Seq([
         localVote.store(btoi(Txn.application_args[1])),
         #localVote.store(App.localGet(sender, Bytes("Vote"))),
-        App.localPut(sender, Bytes("Vote"), localVote.load() + Int(2)),
+        App.localPut(sender, K_VOTE, localVote.load() + Int(2)),
         Return(Int(1))
     ])
 
-
-seat = Txn.application_args[2] # P106
-area = Txn.application_args[3] # Subang
-state = Txn.application_args[4] # Selangor
-name = Txn.application_args[5] # Brandon
-party = Txn.application_args[6] # Harapan
-i = Txn.application_args[7] # Candidate ID
-
-def createBox():
-	return Seq([
-        If (
-		    Or(
-			    Len(seat) == Int(4),
-			    Len(seat) == Int(6)
-		    ),
-			Pop(App.box_create(seat, Int(1024))),
-			#output.set(Concat(Bytes("Box ["), seat.get(), Bytes("] created successfully!")))
-		#output.set(Concat(Bytes("Failed to create box ["), seat.get(), Bytes("]")))
-	    ),
+def debugGlobal():
+    return Seq([
+        App.globalPut(Bytes("Vote"), App.globalGet(Bytes("Vote")) + Int(3)),
         Return(Int(1))
-    ])
-
-def addCandidate():
-	return Seq([
-		If(
-		    And(
-		    	Len(name) > Int(0),
-		    	Len(name) <= LEN_CANDIDATE_NAME,
-		    	Len(party) > Int(0),
-		    	Len(party) <= LEN_PARTY,
-                Or(
-                    Len(seat) == Int(4),
-                    Len(seat) == Int(6)
-                )
-		    ),
-		    Seq(
-		    	App.box_replace(seat,
-                       CANDIDATE_NAME_1 + LEN_SUM * (btoi(i) - Int(1)),
-                       name),
-		    	App.box_replace(seat,
-                       CANDIDATE_PARTY_1 + LEN_SUM * (btoi(i) - Int(1)),
-                       party),
-		    	#output.set(Concat(Bytes("Candidate ["), itob(i.get()), Bytes("] added successfully to seat ["), seat.get(), Bytes("]")))
-		    )
-		    #output.set(Concat(Bytes("Failed to add candidate to box ["), seat.get(), Bytes("]")))
-	    )
     ])
 
 def approval_program():
     handle_creation = Seq([
-        App.globalPut(Bytes("Vote"), Int(0)),
-        App.globalPut(Bytes("Voteid"), Int(0)),
+        App.globalPut(K_SEAT_NO, Bytes("NULL")),
+        App.globalPut(K_SEAT_AREA, Bytes("NULL")),
+        App.globalPut(K_SEAT_STATE, Bytes("NULL")),
+        App.globalPut(K_C1_NAME, Bytes("NULL")),
+        App.globalPut(K_C1_PARTY, Bytes("NULL")),
+        App.globalPut(K_C1_VOTES, Int(0)),
+        App.globalPut(K_C2_NAME, Bytes("NULL")),
+        App.globalPut(K_C2_PARTY, Bytes("NULL")),
+        App.globalPut(K_C2_VOTES, Int(0)),
+        App.globalPut(K_C3_NAME, Bytes("NULL")),
+        App.globalPut(K_C3_PARTY, Bytes("NULL")),
+        App.globalPut(K_C3_VOTES, Int(0)),
         Return(Int(1))
     ])
-
-    handle_optin = Return(Int(1))
+    handle_optin = Seq([
+        App.localPut(sender, K_VOTE, Int(0)),
+        Return(Int(1))
+    ])
     handle_closeout = Return(Int(0))
     handle_update = Return(Int(0))
     handle_deleteion = Return(Int(0))
-
-    
-    scratchVote = ScratchVar(TealType.uint64)
-    localVote = ScratchVar(TealType.uint64)
-
-    #def voteLocal():
-    #    Seq([
-    #        #scratchVote.store(Btoi(Txn.application_args[1])),
-    #        localVote.store(App.localGet(sender, Bytes("Vote"))),
-    #        App.localPut(sender, Bytes("Vote"), localVote.load() + Int(1)),
-    #        Return(Int(1))
-    #    ])
-
-    
-    voteLocal = vote_local()
-    # voteGlobal = voteLocal()
-    voteGlobal = Seq([
-        
-        scratchVote.store(App.globalGet(Bytes("Vote"))),
-        App.globalPut(Bytes("Vote"), scratchVote.load() + Int(3)),
-        Return(Int(1))
-    ])
-
     handle_noop = Seq(
         Assert(Global.group_size() == Int(1)), 
         Cond(
-            [Txn.application_args[0] == Bytes("Voting"), voteLocal],
-            [Txn.application_args[0] == Bytes("VotingGlobal"), voteGlobal],
-            [Txn.application_args[0] == Bytes("CreateBox"), createBox()],
-            [Txn.application_args[0] == Bytes("AddCandidate"), addCandidate()]
+            [Txn.application_args[0] == Bytes("DebugLocal"), debugLocal()],
+            [Txn.application_args[0] == Bytes("DebugGlobal"), debugGlobal()],
+            [Txn.application_args[0] == Bytes("InitParliamentSeat"), init_parliament_seat()],
+            [Txn.application_args[0] == Bytes("InitStateSeat"), init_state_seat()],
+            [Txn.application_args[0] == Bytes("VoteCandidate1"), voteCandidate1()],
+            [Txn.application_args[0] == Bytes("VoteCandidate2"), voteCandidate2()],
+            [Txn.application_args[0] == Bytes("VoteCandidate3"), voteCandidate3()],
         )
     )
 
