@@ -17,6 +17,7 @@ router = Router(
 	"Create Parliament Seat",
 	BareCallActions(
 		no_op=OnCompleteAction.create_only(handle_creation),
+		
 	),
 )
 

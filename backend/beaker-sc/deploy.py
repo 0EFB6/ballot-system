@@ -147,7 +147,7 @@ print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMP
 IC_NUM = "041"
 #print(f"{app_client1.call(readWholeBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 # app_client1.call(get_uuid)
-TEST = "test"
+
 app_client1.call(verify_acc_init, account=accounts[0].address, custom_uid="----")
 ret = app_client1.call(get_uuid, ic_num=IC_NUM, boxes=[(app_client.app_id, IC_NUM)]).return_value
 print(f"{ret}")
