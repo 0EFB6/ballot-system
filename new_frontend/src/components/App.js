@@ -7,6 +7,7 @@ import LandingPage from './LandingPage';
 import State from './State';
 import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
+import General from './General';
 
 // Create the PeraWalletConnect instance outside the component
 const peraWallet = new PeraWalletConnect();
@@ -22,7 +23,7 @@ function App() {
   const [currentCount, setCurrentCount] = useState(null);
   const [localCount, setLocalCount] = useState(null);
   const isConnectedToPeraWallet = !!accountAddress;
-  const [optInState, setOptInState] = useState(null);
+  const [isOptIn, setIsOptIn] = useState(null);
 
   useEffect(() => {
     checkCounterState();
@@ -45,13 +46,19 @@ function App() {
       <Header isConnectedToPeraWallet={isConnectedToPeraWallet} handleConnectWalletClick={handleConnectWalletClick} handleDisconnectWalletClick={handleDisconnectWalletClick}/>
       
       {isConnectedToPeraWallet 
-        ? <Dashboard callCounterApplication={callCounterApplication} currentCount={currentCount} localCount={localCount} optInToApp={optInToApp}/> 
-        : <Routes>
+        ? <Routes>
+            <Route path='/' element={<Dashboard optInToApp={optInToApp} isOptIn={isOptIn}/>}/>
+            <Route path='/state' element={<State callCounterApplication={callCounterApplication} isOptIn={isOptIn} isConnectedToPeraWallet={isConnectedToPeraWallet}/>}/>
+            <Route path='/general' element={<General callCounterApplication={callCounterApplication} isOptIn={isOptIn} isConnectedToPeraWallet={isConnectedToPeraWallet}/>}/>
+          </Routes>
+        : 
+        <Routes>
             <Route path='/' element={<LandingPage handleConnectWalletClick={handleConnectWalletClick} handleDisconnectWalletClick={handleDisconnectWalletClick}/>}/>
-            <Route path='/state' element={<State callCounterApplication={callCounterApplication} localCount={localCount} currentCount={currentCount}/>}/>
+            <Route path='/state' element={<State callCounterApplication={callCounterApplication} isOptIn={isOptIn} isConnectedToPeraWallet={isConnectedToPeraWallet}/>}/>
+            <Route path='/general' element={<General callCounterApplication={callCounterApplication} isOptIn={isOptIn} isConnectedToPeraWallet={isConnectedToPeraWallet}/>}/>
           </Routes>}
-          
-      <State callCounterApplication={callCounterApplication} localCount={localCount} currentCount={currentCount}/>
+
+      {/* Footer */} 
       <section className='bg-black p-4 text-white'>
           <h1 className='font-bold text-xl'>Ballot.</h1>
           <p>Made with love, Ballot&copy; {new Date().getFullYear()}. All rights reserved. By Malaysians, for Malaysians.</p>
@@ -86,7 +93,7 @@ function App() {
     console.log(signedTx);
     const { txId } = await algod.sendRawTransaction(signedTx).do();
     const result = await waitForConfirmation(algod, txId, 2);
-
+    setIsOptIn(true);
   }
 
   async function checkCounterState() {

@@ -3,7 +3,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from 'react-bootstrap/Button';
 
-export default function State({callCounterApplication, isConnectedToPeraWallet, isOptIn}){
+export default function General({callCounterApplication, isConnectedToPeraWallet, isOptIn}){
     const Area = "Bukit Mertajam"
     const Number = "P045"
     const State = "Pulau Pinang"

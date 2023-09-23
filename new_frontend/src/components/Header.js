@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', current: true },
+  { name: 'Dashboard', href: '/', current: false },
   { name: 'State Election', href: '/state', current: false },
   { name: 'General Election', href: 'general', current: false },
 ]
