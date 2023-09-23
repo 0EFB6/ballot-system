@@ -7,7 +7,7 @@ from utils import *
 # 1 Local Ints
 
 # Constant Values
-K_VOTE = Bytes("Votes")
+K_VOTE = Bytes("Voted")
 K_SEAT_NO = Bytes("SeatNo")
 K_SEAT_AREA = Bytes("SeatArea")
 K_SEAT_STATE = Bytes("SeatState")

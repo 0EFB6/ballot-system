@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 const peraWallet = new PeraWalletConnect();
 
 // The app ID on testnet
-const appIndex = 373126960;
+const appIndex = 376061977;
 
 // connect to the algorand node
 const algod = new algosdk.Algodv2('','https://testnet-api.algonode.cloud', 443);
@@ -43,13 +43,13 @@ function App() {
   return (
     <Container className='App-header'>
       <meta name="name" content="Modified Counter App" />
-      <h1> AlgoHUB - Lab 3</h1>
+      <h1> Ballot System</h1>
       <Row>
         <Col><Button className="btn-wallet"
       onClick={
         isConnectedToPeraWallet ? handleDisconnectWalletClick : handleConnectWalletClick
       }>
-      {isConnectedToPeraWallet ? "Disconnect" : "Connect to Pera Wallet"}
+      {isConnectedToPeraWallet ? "Disconnect Wallet" : "Connect Wallet"}
     </Button></Col>
     <Col><Button className="btn-wallet"
       onClick={
@@ -70,8 +70,6 @@ function App() {
      onClick={
         () => callCounterApplication('InitParliamentSeatDemo1')
         //document.getElementById("seat").value,
-        //document.getElementById("area").value,
-        //document.getElementById("state").value
       }>
       Init Parliament Seat Demo 1
     </Button>
@@ -106,6 +104,7 @@ function App() {
     </Button>
     </Col>
 
+    
     <Button className="btn-dec-local" 
      onClick={
       // add the local deduct method
@@ -128,6 +127,30 @@ function App() {
       () => callCounterApplication('VoteCandidate3')
       }>
       Vote Candidate 3
+    </Button>
+
+    <Button className="btn-dec-local" 
+     onClick={
+      // add the local deduct method
+      () => callCounterApplication('GetSeatNo')
+      }>
+      Get Seat No
+    </Button>
+
+    <Button className="btn-dec-local" 
+     onClick={
+      // add the local deduct method
+      () => callCounterApplication('GetSeatArea')
+      }>
+      Get Seat Area
+    </Button>
+
+    <Button className="btn-dec-local" 
+     onClick={
+      // add the local deduct method
+      () => callCounterApplication('GetSeatState')
+      }>
+      Get Seat State
     </Button>
     <span className='local-counter-text'>{can3VoteCount}</span>
         </Row>
