@@ -12,7 +12,7 @@ export default function State({callCounterApplication, isConnectedToPeraWallet, 
         {name:'AH PANG', party:'BARISAN NASIONAL OF MALAYSIA (BN)', partyFlag:'https://mysprsemak.spr.gov.my/storage/logo_parti/BN.png', img:'https://img.astroawani.com/2022-11/61668486362_TBtanyangpeng.jpg'},
         {name:'STEVEN KOH', party:'PERIKATAN NASIONAL (PN)', partyFlag:'https://mysprsemak.spr.gov.my/storage/logo_parti/PN.png', img:'https://scontent.fkul8-1.fna.fbcdn.net/v/t39.30808-6/364165315_258115340445733_2823740976136437526_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=a2f6c7&_nc_ohc=yflh_Dw242AAX-NuVGK&_nc_ht=scontent.fkul8-1.fna&oh=00_AfD_7XKhbtp-EJQupQxOvOlAmzuv0EHVopfQT-tNiXEHhg&oe=65138973'}
     ]
-    return ((!isConnectedToPeraWallet && !isOptIn) ? <div className="text-5xl font-bold min-h-screen text-white">You have yet to connect to Pera Wallet or opt in to Ballot.</div> 
+    return ((!isConnectedToPeraWallet) ? <div className="text-5xl font-bold min-h-screen text-white">You have yet to connect to Pera Wallet or opt in to Ballot.</div> 
     :<Container className="text-white min-h-screen">
       <div className="m-8 text-3xl font-bold">
         <h1 className="text-5l">General Election GE15</h1>
