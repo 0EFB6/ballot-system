@@ -1,6 +1,8 @@
+from algokit_utils import ApplicationClient
 from contract import *
 from beaker import sandbox, client, localnet
 from beaker.consts import *
+from beaker.client.api_providers import AlgoNode, Network
 
 app.build().export("../artifacts/beaker-sc")
 print("\nApp successfully exported to artifacts directory!")
@@ -30,10 +32,41 @@ App Id      : {app_id}
 App Address : {addr}
 """
 )
+'''
+# Testing to run with testnet account
+# Here we use `localnet` but beaker.client.api_providers can also be used
+# with something like ``AlgoNode(Network.TestNet).algod()``
+# algod_client = localnet.get_algod_client()
+algod_client = AlgoNode(Network.TestNet).algod()
+# print(algod_client)
+# Sandbox account use in creating application because idk how to get testnet's acc private key
+local_acct = localnet.get_accounts().pop()
+# print(local_acct)
+# kinda useless?
+acct = AlgoNode(Network.TestNet).algod().account_info(accounts[0].address)
+# print(acct)
+
+# Create an Application client containing both an algod client and app
+app_client = ApplicationClient(
+    client=algod_client, app=app, signer=local_acct.signer
+)
+
+# Create the application on chain, implicitly sets the app id for the app client
+app_id, app_addr, txid = app_client.create()
+print(f"Created App with id: {app_id} and address addr: {app_addr} in tx: {txid}")
+
+# result = app_client.call(add, a=2, b=2)
+# print(f"add result: {result.return_value}")
+
+# def opt_in_voter():
+#     app_client.prepare(signer=)
+'''
 
 app_client1 = app_client.prepare(signer=accounts[0].signer)
 app_client2 = app_client.prepare(signer=accounts[1].signer)
 app_client3 = app_client.prepare(signer=accounts[2].signer)
+app_id
+# opt in
 app_client1.opt_in()
 
 SUBANG = "P102"
@@ -114,12 +147,12 @@ print(f"{app_client1.call(readVote8, seat=AMPANG, boxes=[(app_client.app_id, AMP
 IC_NUM = "041"
 #print(f"{app_client1.call(readWholeBox, seat=AMPANG, boxes=[(app_client.app_id, AMPANG)]).return_value}")
 # app_client1.call(get_uuid)
-
-app_client1.call(verify_acc_init, account="JKMYDOGCC5UCXUCZM6EEBXPWC5PMAU5MNMP4UCBZ7AZPWJRDXCCLAJD77Y", custom_uid="----")
+TEST = "test"
+app_client1.call(verify_acc_init, account=accounts[0].address, custom_uid="----")
 ret = app_client1.call(get_uuid, ic_num=IC_NUM, boxes=[(app_client.app_id, IC_NUM)]).return_value
 print(f"{ret}")
 print(f"{app_client1.call(readBoxIcNo, ic_num=IC_NUM, boxes=[(app_client.app_id, IC_NUM)]).return_value}")
-print(f"{app_client1.call(test_sha, ic_num=IC_NUM, uid=ret, boxes=[(app_client.app_id, IC_NUM)]).return_value}")
+print(f"{app_client1.call(test_sha, ic_num=IC_NUM, uid=TEST).return_value}")
 print(f"{app_client1.call(readBoxIcNo, ic_num=IC_NUM, boxes=[(app_client.app_id, IC_NUM)]).return_value}")
 #print(f"{app_client1.call(test_sha, ic_num=IC_NUM, uid=ret, boxes=[(app_client.app_id, IC_NUM)]).return_value}")
 

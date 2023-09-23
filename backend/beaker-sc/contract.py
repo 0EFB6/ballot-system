@@ -1,10 +1,10 @@
 from utils import *
 from beaker import *
-from pyteal import *
 from beaker.lib.storage import BoxList, BoxMapping
 import uuid
 import hashlib
-from algosdk import logic
+# from createApp import handle_opt_in
+
 
 # Constant Values
 LEN_SEAT_NO 		= Int(4)
@@ -371,16 +371,27 @@ def get_uuid(ic_num: abi.String, *, output: abi.String) -> Expr:
 @app.external
 def test_sha(ic_num: abi.String, uid: abi.String, *, output: abi.String) -> Expr:
     # bytetostr = uid.decode('utf-8')
-    test = str(uid)
-    stob = test.encode('utf-8')
-	
-    # id_str_to_bytes = str.encode("utf-8")
+    # test = str(uid.get)
 
+    # test = str(uid)
+    # stob = test.encode('utf-8')
+    
+    # id_str_to_bytes = str.encode("utf-8")
+    # test = abi.BaseType.decode()
     # Base64Decode()
-    h = hashlib.shake_256(stob)
+    # h = hashlib.shake_256()
 	# # return a 32digits hexadecimal hash
-    hash_uid = Bytes(h.hexdigest(16))
-    return output.set(hash_uid)
+    # hash_uid = Bytes(h.hexdigest(16))
+    m = hashlib.sha256()
+    m.update(b"Nobody inspects")
+    res = m.hexdigest()
+	sha256 = hashlib.sha256()
+    sha256.update(namespace+policyName)
+    chksum = sha256.digest() # Get hash as byte string
+    print chksum.encode('hex') # Convert byte string to hexadecimal for printing
+    print base64.b32encode(chksum)
+    print base64.b32encode(bytearray("abc"))
+    return output.set(res)
     # return Seq(
 	# 	contents := BoxGet(ic_num.get()),
     #     If(contents.value() == hash_uid, output.set(Bytes("exist")), output.set(Bytes("doesn't exist")))
@@ -400,8 +411,21 @@ def readBoxIcNo(ic_num: abi.String, *, output: abi.String):
 #     print(str)
 
 
+# @app.external
+# def display(*, output: abi.String) -> Expr:
+#     return output.set(handle_opt_in())
+# algod_client = get_algod_client("http://localhost:4001", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+# sp = algod_client.suggested_params()
 
-
+# @app.external
+# def opt_in_app(address: abi.String, app_id: abi.String, private_key: abi.String, *, output: abi.String) -> Expr:
+#     opt_in_txn = transaction.ApplicationOptInTxn(address, sp, app_id)
+#     signed_opt_in = opt_in_txn.sign(private_key)
+#     txid = algod_client.send_transaction(signed_opt_in)
+#     optin_result = transaction.wait_for_confirmation(algod_client, txid, 4)
+#     return Seq(
+#         If(optin_result["confirmed-round"] > 0, output.set("Opt in success"), output.set("Opt in failed")),
+#     )
 
 
 

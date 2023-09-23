@@ -5,4 +5,5 @@ backend/beaker-sc/__pycache__/
 backend/beaker-sc/__pycache__/contract.cpython-310.pyc
 backend/beaker-sc/__pycache__/utils.cpython-310.pyc
 backend/smart-contract/__pycache__/candidate.cpython-310.pyc
+optin.py
 
