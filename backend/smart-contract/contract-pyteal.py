@@ -1,6 +1,4 @@
 from pyteal import *
-from utils import *
-from contract_pyteal_methods import *
 
 # 9 Global Bytes
 # 3 Global Ints
@@ -21,16 +19,15 @@ K_C2_VOTES = Bytes("C2Votes")
 K_C3_NAME = Bytes("C3Name")
 K_C3_PARTY = Bytes("C3Party")
 K_C3_VOTES = Bytes("C3Votes")
+CAN1_NAME = Bytes("Rajiv Rishyakaran")
+CAN1_PARTY = Bytes("Pakatan Harapan")
+CAN2_NAME = Bytes("Nallan Dhanabalan")
+CAN2_PARTY = Bytes("Perikatan Nasional")
+CAN3_NAME = Bytes("Vkk Raja")
+CAN3_PARTY = Bytes("MUDA")
 
 sender = Txn.sender()
 
-#key = Txn.application_args[1] # Address
-#seat = Txn.application_args[1] # P106
-#area = Txn.application_args[2] # Subang
-#state = Txn.application_args[3] # Selangor
-#name = Txn.application_args[4] # Brandon
-#party = Txn.application_args[5] # Harapan
-#i = Txn.application_args[6] # Candidate ID
 
 def debugLocal():
     localVote = ScratchVar(TealType.uint64)

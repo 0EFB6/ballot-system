@@ -30,11 +30,11 @@ export default function Dashboard({optInToApp, isOptIn}) {
           </Button>
         </div>
 
-        {/* Latest Results */}
+        {/* Latest Results 1*/}
         <div>
           <h1 className='text-3xl font-bold'>Latest Results</h1>
-          <h2 className='ml-8 mt-4'>PRK PARLIMEN P.161 PULAI</h2>
-          <h2 className='ml-8'>9 SEPTEMBER 2023</h2>
+          <h2 className='ml-8 mt-4'>PARLIMEN P.045 BUKIT MERTAJAM</h2>
+          <h2 className='ml-8'>28 SEPTEMBER 2023</h2>
           <table class="table-auto w-full border-collapse border-2 border-slate-500 border-spacing-2 m-4 rounded-lg">
             <thead>
               <tr>
@@ -45,19 +45,51 @@ export default function Dashboard({optInToApp, isOptIn}) {
             </thead>
             <tbody>
               <tr>
-                <td className='border-2 border-slate-500 p-2'>SAMSUDIN PKPKL</td>
-                <td className='border-2 border-slate-500 p-2'>BEBAS (KUNCI)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/KUNCI.png' alt='Kunci'/></td>
-                <td className='border-2 border-slate-500 p-2'>528</td>
+                <td className='border-2 border-slate-500 p-2'>STEVEN SIM CHEE KEONG</td>
+                <td className='border-2 border-slate-500 p-2'>PAKATAN HARAPAN (PH)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/PH_aCpmiWX717.png' alt='Pakatan Harapan'/></td>
+                <td className='border-2 border-slate-500 p-2'>69</td>
               </tr>
               <tr>
-                <td className='border-2 border-slate-500 p-2'>ZULKIFLI JAAFAR</td>
-                <td className='border-2 border-slate-500 p-2'>PERIKATAN NASIONAL (PN)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/PN.png' alt='Perikatan'/></td>
-                <td className='border-2 border-slate-500 p-2'>29,642</td>
+                <td className='border-2 border-slate-500 p-2'>AH PANG</td>
+                <td className='border-2 border-slate-500 p-2'>BARISAN NASIONAL (BN)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/BN.png' alt='Barisan Nasional'/></td>
+                <td className='border-2 border-slate-500 p-2'>29642</td>
               </tr>
               <tr>
-                <td className='border-2 border-slate-500 p-2'>SUHAIZAN KAYAT</td>
-                <td className='border-2 border-slate-500 p-2'>PAKATAN HARAPAN (PH)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/PH_aCpmiWX717.png' alt='Harapan'/></td>
-                <td className='border-2 border-slate-500 p-2'>48,283</td>
+                <td className='border-2 border-slate-500 p-2'>STEVEN KOH</td>
+                <td className='border-2 border-slate-500 p-2'>PERIKATAN NASIONAL (PN)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/PN.png' alt='Perikatan Nasional'/></td>
+                <td className='border-2 border-slate-500 p-2'>48283</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Latest Results 2*/}
+        <div>
+          <h2 className='ml-8 mt-4'>DEWAN NEGERI SELANGOR N.34 BUKIT GASING</h2>
+          <h2 className='ml-8'>28 SEPTEMBER 2023</h2>
+          <table class="table-auto w-full border-collapse border-2 border-slate-500 border-spacing-2 m-4 rounded-lg">
+            <thead>
+              <tr>
+                <th className='border-2 border-slate-500 p-2'>Candidate</th>
+                <th className='border-2 border-slate-500 p-2'>Party</th>
+                <th className='border-2 border-slate-500 p-2'>Number of Votes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className='border-2 border-slate-500 p-2'>RAJIV RISHYAKARAN</td>
+                <td className='border-2 border-slate-500 p-2'>PAKATAN HARAPAN (PH)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/PH_aCpmiWX717.png' alt='Pakatan Harapan'/></td>
+                <td className='border-2 border-slate-500 p-2'>28227</td>
+              </tr>
+              <tr>
+                <td className='border-2 border-slate-500 p-2'>NALLAN DHANABALAN</td>
+                <td className='border-2 border-slate-500 p-2'>PERIKATAN NASIONAL (PN)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/PN.png' alt='Perikatan Nasional'/></td>
+                <td className='border-2 border-slate-500 p-2'>3255</td>
+              </tr>
+              <tr>
+                <td className='border-2 border-slate-500 p-2'>VKK RAJA</td>
+                <td className='border-2 border-slate-500 p-2'>MUDA<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/MUDA.png' alt='MUDA'/></td>
+                <td className='border-2 border-slate-500 p-2'>1390</td>
               </tr>
             </tbody>
           </table>
