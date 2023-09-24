@@ -30,7 +30,6 @@ export default function General({callCounterApplication, isConnectedToPeraWallet
             </div>
             <Button className="m-4 text-xl font-semibold rounded-full px-4 absolute left-[50%] translate-x-[-75%]" onClick={() => callCounterApplication('VoteCandidate1')}>Vote</Button>
             </Col>
-            
         ))}
       </Row>
     </Container>
