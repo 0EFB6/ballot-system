@@ -28,8 +28,9 @@ export default function General({callCounterApplication, isConnectedToPeraWallet
                 <h1>{item.party}</h1>
                 <img className='aspect-video m-2 mx-auto' src={item.partyFlag} alt={item.party}/>
             </div>
-            <Button className="m-4 text-xl font-semibold rounded-full px-4 absolute left-[50%] translate-x-[-75%]" onClick={() => callCounterApplication()}>Vote</Button>
+            <Button className="m-4 text-xl font-semibold rounded-full px-4 absolute left-[50%] translate-x-[-75%]" onClick={() => callCounterApplication('VoteCandidate1')}>Vote</Button>
             </Col>
+            
         ))}
       </Row>
     </Container>
