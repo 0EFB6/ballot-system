@@ -114,10 +114,10 @@ def clear_program():
     program = Return(Int(1))
     return compileTeal(program, Mode.Application, version=5)
 
-app = open('../artifacts/approval.teal', 'w')
+app = open('../artifacts/approval-state.teal', 'w')
 app.write(approval_program())
 app.close()
-clear = open('../artifacts/clear.teal', 'w')
+clear = open('../artifacts/clear-state.teal', 'w')
 clear.write(clear_program())
 clear.close()
 print("Compiled successfully")
