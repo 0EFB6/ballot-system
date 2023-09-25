@@ -20,15 +20,15 @@ export default function State({callCounterApplication, isConnectedToPeraWallet, 
         <h1>{State}</h1>
       </div>
       <Row className="m-8">
-        {Candidates.map((item) => (
-            <Col className="relative">
+        {Candidates.map((item, index) => (
+            <Col className="relative" key={index}>
                 <img className="aspect-square w-full justify-content-center object-cover rounded-t-lg" alt={item.name} src={item.img}/>
                 <div className='border-2 border-slate-500 p-2 rounded-b-lg text-xl'>
                 <h1>{item.name}</h1>
                 <h1>{item.party}</h1>
                 <img className='aspect-video m-2 mx-auto' src={item.partyFlag} alt={item.party}/>
             </div>
-            <Button className="m-4 text-xl font-semibold rounded-full px-4 absolute left-[50%] translate-x-[-75%]" onClick={() => callCounterApplication()}>Vote</Button>
+            <Button className="m-4 text-xl font-semibold rounded-full px-4 absolute left-[50%] translate-x-[-75%]" onClick={() => callCounterApplication(`VoteCandidate${index + 1}`)}>Vote</Button>
             </Col>
         ))}
       </Row>
