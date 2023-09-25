@@ -13,7 +13,7 @@ import General from './General';
 const peraWallet = new PeraWalletConnect();
 
 // The app ID on testnet
-const appIndex = 381646532;
+const appIndex = 382462844;
 
 // connect to the algorand node
 const algod = new algosdk.Algodv2('','https://testnet-api.algonode.cloud', 443);
@@ -26,8 +26,6 @@ function App() {
   const [isOptIn, setIsOptIn] = useState(null);
 
   useEffect(() => {
-    checkCounterState();
-    checkLocalCounterState();
     // reconnect to session when the component is mounted
     peraWallet.reconnectSession().then((accounts) => {
       // Setup disconnect event listener
@@ -61,6 +59,7 @@ function App() {
       {/* Footer */} 
       <section className='bg-black p-4 text-white'>
           <h1 className='font-bold text-xl'>Ballot.</h1>
+          <h2>{App.can3VoteCount}</h2>
           <p>Made with love, Ballot&copy; {new Date().getFullYear()}. All rights reserved. By Malaysians, for Malaysians.</p>
       </section>
     </Container>
@@ -96,33 +95,6 @@ function App() {
     setIsOptIn(true);
   }
 
-  async function checkCounterState() {
-    try {
-      const counter = await algod.getApplicationByID(appIndex).do();
-      if (!!counter.params['global-state'][0].value.uint) {
-        setCurrentCount(counter.params['global-state'][0].value.uint);
-      } else {
-        setCurrentCount(0);
-      }
-    } catch (e) {
-      console.error('There was an error connecting to the algorand node: ', e)
-    }
-  }
-
-  async function checkLocalCounterState() {
-    try {
-      const accountInfo = await algod.accountApplicationInformation(accountAddress,appIndex).do();
-      if (!!accountInfo['app-local-state']['key-value'][0].value.uint) {
-        setLocalCount(accountInfo['app-local-state']['key-value'][0].value.uint);
-      } else {
-        setLocalCount(0);
-      }
-      console.log(accountInfo['app-local-state']['key-value'][0].value.uint);
-    } catch (e) {
-      console.error('There was an error connecting to the algorand node: ', e)
-    }
-  }
-
   async function callCounterApplication(action) {
     try {
       // get suggested params
@@ -142,8 +114,6 @@ function App() {
       console.log(signedTx);
       const { txId } = await algod.sendRawTransaction(signedTx).do();
       const result = await waitForConfirmation(algod, txId, 2);
-      checkCounterState();
-      checkLocalCounterState();
     
     } catch (e) {
       console.error(`There was an error calling the counter app: ${e}`);

@@ -222,11 +222,50 @@ function App() {
         console.error('There was an error connecting to the algorand node: ', e)
       }
     }
+
+    async function checkVoteCountState() {
+      try {
+        const counter = await algod.getApplicationByID(appIndex).do();
+        console.log(counter);
+        let can1Index = -1;
+        let can2Index = -1;
+        let can3Index = -1;
+    
+        for (let i = 0; i < counter.params['global-state'].length; i++) {
+          if (counter.params['global-state'][i].key == "QzJWb3Rlcw==") {
+            if (can1Index === -1) can1Index = i;
+            else if (can2Index === -1) can2Index = i;
+            else if (can3Index === -1) can3Index = i;
+          }
+        }
+    
+        if (can1Index !== -1) {
+          setCan1VoteCount(counter.params['global-state'][can1Index].value.uint);
+        } else {
+          setCan1VoteCount(69);
+        }
+    
+        if (can2Index !== -1) {
+          setCan2VoteCount(counter.params['global-state'][can2Index].value.uint);
+        } else {
+          setCan2VoteCount(6969);
+        }
+    
+        if (can3Index !== -1) {
+          setCan3VoteCount(counter.params['global-state'][can3Index].value.uint);
+        } else {
+          setCan3VoteCount(6996);
+        }
+      } catch (e) {
+        console.error('There was an error connecting to the algorand node: ', e);
+      }
+    }
+    
     async function checkVoteCountState() {
       try {
         const counter = await algod.getApplicationByID(appIndex).do();
         console.log(counter)
-        if (!!counter.params['global-state'][5].value.uint) {
+        if (!!counter.params['global-state'][5] == "QzJWb3Rlcw==") {
           setCan1VoteCount(counter.params['global-state'][5].value.uint);
         } else {
           setCan1VoteCount(69);

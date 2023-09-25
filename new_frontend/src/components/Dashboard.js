@@ -1,7 +1,63 @@
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
+import { useEffect, useState } from 'react';
+import App from './App';
+import algosdk, { waitForConfirmation } from 'algosdk';
 
-export default function Dashboard({optInToApp, isOptIn}) {
+const appIndex = 382462844;
+const algod = new algosdk.Algodv2('','https://testnet-api.algonode.cloud', 443);
+
+
+export default function Dashboard({optInToApp, isOptIn}) { 
+  const [can1VoteCount, setCan1VoteCount] = useState(null);
+  const [can2VoteCount, setCan2VoteCount] = useState(null);
+  const [can3VoteCount, setCan3VoteCount] = useState(null);
+
+  async function checkVoteCountState() {
+    try {
+      const counter = await algod.getApplicationByID(appIndex).do();
+      //console.log(counter);
+
+      let can1Index = -1;
+      let can2Index = -1;
+      let can3Index = -1;
+  
+      for (let i = 0; i < counter.params['global-state'].length; i++) {
+        if (counter.params['global-state'][i].key == "QzFWb3Rlcw==") {
+          can1Index = i;
+        }
+        else if (counter.params['global-state'][i].key == "QzJWb3Rlcw==")
+        {
+          can2Index = i;
+        }
+        else if (counter.params['global-state'][i].key == "QzNWb3Rlcw==")
+        {
+          can3Index = i;
+        }
+      }
+
+      if (can1Index !== -1) {
+        setCan1VoteCount(counter.params['global-state'][can1Index].value.uint);
+      } else {
+        setCan1VoteCount(69);
+      }
+      if (can2Index !== -1) {
+        setCan2VoteCount(counter.params['global-state'][can2Index].value.uint);
+      } else {
+        setCan2VoteCount(6969);
+      }
+      if (can3Index !== -1) {
+        setCan3VoteCount(counter.params['global-state'][can3Index].value.uint);
+      } else {
+        setCan3VoteCount(6996);
+      }
+    } catch (e) {
+      console.error('There was an error connecting to the algorand node: ', e);
+    }
+  }
+
+  checkVoteCountState();
+
     return (
     <Container className='text-white min-h-screen'>
         <h1 className='text-4xl text-white m-4 font-semibold'>Welcome back,</h1>
@@ -47,17 +103,17 @@ export default function Dashboard({optInToApp, isOptIn}) {
               <tr>
                 <td className='border-2 border-slate-500 p-2'>STEVEN SIM CHEE KEONG</td>
                 <td className='border-2 border-slate-500 p-2'>PAKATAN HARAPAN (PH)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/PH_aCpmiWX717.png' alt='Pakatan Harapan'/></td>
-                <td className='border-2 border-slate-500 p-2'>69</td>
+                <td className='border-2 border-slate-500 p-2'>{can1VoteCount}</td>
               </tr>
               <tr>
                 <td className='border-2 border-slate-500 p-2'>AH PANG</td>
                 <td className='border-2 border-slate-500 p-2'>BARISAN NASIONAL (BN)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/BN.png' alt='Barisan Nasional'/></td>
-                <td className='border-2 border-slate-500 p-2'>29642</td>
+                <td className='border-2 border-slate-500 p-2'>{can2VoteCount}</td>
               </tr>
               <tr>
                 <td className='border-2 border-slate-500 p-2'>STEVEN KOH</td>
                 <td className='border-2 border-slate-500 p-2'>PERIKATAN NASIONAL (PN)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/PN.png' alt='Perikatan Nasional'/></td>
-                <td className='border-2 border-slate-500 p-2'>48283</td>
+                <td className='border-2 border-slate-500 p-2'>{can3VoteCount}</td>
               </tr>
             </tbody>
           </table>
@@ -79,17 +135,17 @@ export default function Dashboard({optInToApp, isOptIn}) {
               <tr>
                 <td className='border-2 border-slate-500 p-2'>RAJIV RISHYAKARAN</td>
                 <td className='border-2 border-slate-500 p-2'>PAKATAN HARAPAN (PH)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/PH_aCpmiWX717.png' alt='Pakatan Harapan'/></td>
-                <td className='border-2 border-slate-500 p-2'>28227</td>
+                <td className='border-2 border-slate-500 p-2'>{can1VoteCount}</td>
               </tr>
               <tr>
                 <td className='border-2 border-slate-500 p-2'>NALLAN DHANABALAN</td>
                 <td className='border-2 border-slate-500 p-2'>PERIKATAN NASIONAL (PN)<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/PN.png' alt='Perikatan Nasional'/></td>
-                <td className='border-2 border-slate-500 p-2'>3255</td>
+                <td className='border-2 border-slate-500 p-2'>{can2VoteCount}</td>
               </tr>
               <tr>
                 <td className='border-2 border-slate-500 p-2'>VKK RAJA</td>
                 <td className='border-2 border-slate-500 p-2'>MUDA<img className='aspect-video' src='https://mysprsemak.spr.gov.my/storage/logo_parti/MUDA.png' alt='MUDA'/></td>
-                <td className='border-2 border-slate-500 p-2'>1390</td>
+                <td className='border-2 border-slate-500 p-2'>{can3VoteCount}</td>
               </tr>
             </tbody>
           </table>
