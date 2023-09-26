@@ -1,6 +1,4 @@
-# from pyteal import *
-# from utils import *
-from contract_pyteal_methods import *
+from pyteal import *
 
 # 9 Global Bytes
 # 3 Global Ints
@@ -21,45 +19,68 @@ K_C2_VOTES = Bytes("C2Votes")
 K_C3_NAME = Bytes("C3Name")
 K_C3_PARTY = Bytes("C3Party")
 K_C3_VOTES = Bytes("C3Votes")
+CAN1_NAME = Bytes("Steven Sim Chee Keong")
+CAN1_PARTY = Bytes("Pakatan Harapan")
+CAN2_NAME = Bytes("Ah Pang")
+CAN2_PARTY = Bytes("Barisan Nasiional")
+CAN3_NAME = Bytes("Steven Koh")
+CAN3_PARTY = Bytes("Perikatan Nasional")
 
 sender = Txn.sender()
 
-#key = Txn.application_args[1] # Address
-#seat = Txn.application_args[1] # P106
-#area = Txn.application_args[2] # Subang
-#state = Txn.application_args[3] # Selangor
-#name = Txn.application_args[4] # Brandon
-#party = Txn.application_args[5] # Harapan
-#i = Txn.application_args[6] # Candidate ID
-
-def debugLocal():
-    localVote = ScratchVar(TealType.uint64)
+def voteCandidate1():
     return Seq([
-        localVote.store(btoi(Txn.application_args[1])),
-        #localVote.store(App.localGet(sender, Bytes("Vote"))),
-        App.localPut(sender, K_VOTE, localVote.load() + Int(2)),
+        If(
+            App.localGet(sender, K_VOTE)  == Int(0),
+            Seq(
+                App.globalPut(K_C1_VOTES, App.globalGet(K_C1_VOTES) + Int(1)),
+                App.localPut(sender, K_VOTE, Int(1))
+            )
+        ),
         Return(Int(1))
     ])
 
-def debugGlobal():
+def voteCandidate2():
+    currentVoteCount = App.globalGet(K_C2_VOTES)
+    isVoted = App.localGet(sender, K_VOTE)
     return Seq([
-        App.globalPut(Bytes("Vote"), App.globalGet(Bytes("Vote")) + Int(3)),
+        If(
+            isVoted == Int(0),
+            Seq(
+                App.globalPut(K_C2_VOTES, currentVoteCount + Int(1)),
+                App.localPut(sender, K_VOTE, isVoted + Int(1))
+            )
+        ),
+        Return(Int(1))
+    ])
+
+def voteCandidate3():
+    currentVoteCount = App.globalGet(K_C3_VOTES)
+    isVoted = App.localGet(sender, K_VOTE)
+    return Seq([
+        If(
+            isVoted == Int(0),
+            Seq(
+                App.globalPut(K_C3_VOTES, currentVoteCount + Int(1)),
+                App.localPut(sender, K_VOTE, isVoted + Int(1))
+            )
+        ),
         Return(Int(1))
     ])
 
 def approval_program():
     handle_creation = Seq([
-        App.globalPut(K_SEAT_NO, Bytes("NULL")),
-        App.globalPut(K_SEAT_AREA, Bytes("NULL")),
-        App.globalPut(K_SEAT_STATE, Bytes("NULL")),
-        App.globalPut(K_C1_NAME, Bytes("NULL")),
-        App.globalPut(K_C1_PARTY, Bytes("NULL")),
+        App.globalPut(K_SEAT_NO, Bytes("P045")),
+        App.globalPut(K_SEAT_AREA, Bytes("Bukit Mertajam")),
+        App.globalPut(K_SEAT_STATE, Bytes("Pulau Pinang")),
+        App.globalPut(K_C1_NAME, CAN1_NAME),
+        App.globalPut(K_C1_PARTY, CAN1_PARTY),
         App.globalPut(K_C1_VOTES, Int(0)),
-        App.globalPut(K_C2_NAME, Bytes("NULL")),
-        App.globalPut(K_C2_PARTY, Bytes("NULL")),
+        App.globalPut(K_C2_NAME, CAN2_NAME),
+        App.globalPut(K_C2_PARTY, CAN2_PARTY),
         App.globalPut(K_C2_VOTES, Int(0)),
-        App.globalPut(K_C3_NAME, Bytes("NULL")),
-        App.globalPut(K_C3_PARTY, Bytes("NULL")),
+        App.globalPut(K_C3_NAME, CAN3_NAME),
+        App.globalPut(K_C3_PARTY, CAN3_PARTY),
         App.globalPut(K_C3_VOTES, Int(0)),
         Return(Int(1))
     ])
@@ -73,18 +94,9 @@ def approval_program():
     handle_noop = Seq(
         Assert(Global.group_size() == Int(1)), 
         Cond(
-            [Txn.application_args[0] == Bytes("DebugLocal"), debugLocal()],
-            [Txn.application_args[0] == Bytes("DebugGlobal"), debugGlobal()],
-            [Txn.application_args[0] == Bytes("InitParliamentSeatDemp1"), init_parliament_seat_demo1()],
-            [Txn.application_args[0] == Bytes("InitParliamentSeatDemo2"), init_parliament_seat_demo2()],
-            [Txn.application_args[0] == Bytes("InitStateSeatDemo1"), init_state_seat_demo1()],
-            [Txn.application_args[0] == Bytes("InitStateSeatDemo2"), init_state_seat_demo2()],
             [Txn.application_args[0] == Bytes("VoteCandidate1"), voteCandidate1()],
             [Txn.application_args[0] == Bytes("VoteCandidate2"), voteCandidate2()],
             [Txn.application_args[0] == Bytes("VoteCandidate3"), voteCandidate3()],
-            [Txn.application_args[0] == Bytes("GetSeatNo"), getSeatNo()],
-            [Txn.application_args[0] == Bytes("GetSeatArea"), getSeatArea()],
-            [Txn.application_args[0] == Bytes("GetSeatState"), getSeatState()],
         )
     )
 
@@ -102,10 +114,10 @@ def clear_program():
     program = Return(Int(1))
     return compileTeal(program, Mode.Application, version=5)
 
-app = open('../artifacts/approval.teal', 'w')
+app = open('../artifacts/approval-parliament.teal', 'w')
 app.write(approval_program())
 app.close()
-clear = open('../artifacts/clear.teal', 'w')
+clear = open('../artifacts/clear-parliament.teal', 'w')
 clear.write(clear_program())
 clear.close()
 print("Compiled successfully")

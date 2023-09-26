@@ -7,12 +7,13 @@ import LandingPage from './LandingPage';
 import State from './State';
 import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
+import General from './General';
 
 // Create the PeraWalletConnect instance outside the component
 const peraWallet = new PeraWalletConnect();
 
 // The app ID on testnet
-const appIndex = 336171653;
+const appIndex = 385332013;
 
 // connect to the algorand node
 const algod = new algosdk.Algodv2('','https://testnet-api.algonode.cloud', 443);
@@ -22,11 +23,9 @@ function App() {
   const [currentCount, setCurrentCount] = useState(null);
   const [localCount, setLocalCount] = useState(null);
   const isConnectedToPeraWallet = !!accountAddress;
-  const [optInState, setOptInState] = useState(null);
+  const [isOptIn, setIsOptIn] = useState(null);
 
   useEffect(() => {
-    checkCounterState();
-    checkLocalCounterState();
     // reconnect to session when the component is mounted
     peraWallet.reconnectSession().then((accounts) => {
       // Setup disconnect event listener
@@ -45,15 +44,22 @@ function App() {
       <Header isConnectedToPeraWallet={isConnectedToPeraWallet} handleConnectWalletClick={handleConnectWalletClick} handleDisconnectWalletClick={handleDisconnectWalletClick}/>
       
       {isConnectedToPeraWallet 
-        ? <Dashboard callCounterApplication={callCounterApplication} currentCount={currentCount} localCount={localCount} optInToApp={optInToApp}/> 
-        : <Routes>
+        ? <Routes>
+            <Route path='/' element={<Dashboard optInToApp={optInToApp} isOptIn={isOptIn}/>}/>
+            <Route path='/state' element={<State callCounterApplication={callCounterApplication} isOptIn={isOptIn} isConnectedToPeraWallet={isConnectedToPeraWallet}/>}/>
+            <Route path='/general' element={<General callCounterApplication={callCounterApplication} isOptIn={isOptIn} isConnectedToPeraWallet={isConnectedToPeraWallet}/>}/>
+          </Routes>
+        : 
+        <Routes>
             <Route path='/' element={<LandingPage handleConnectWalletClick={handleConnectWalletClick} handleDisconnectWalletClick={handleDisconnectWalletClick}/>}/>
-            <Route path='/state' element={<State callCounterApplication={callCounterApplication} localCount={localCount} currentCount={currentCount}/>}/>
+            <Route path='/state' element={<State callCounterApplication={callCounterApplication} isOptIn={isOptIn} isConnectedToPeraWallet={isConnectedToPeraWallet}/>}/>
+            <Route path='/general' element={<General callCounterApplication={callCounterApplication} isOptIn={isOptIn} isConnectedToPeraWallet={isConnectedToPeraWallet}/>}/>
           </Routes>}
-          
-      <State callCounterApplication={callCounterApplication} localCount={localCount} currentCount={currentCount}/>
+
+      {/* Footer */} 
       <section className='bg-black p-4 text-white'>
           <h1 className='font-bold text-xl'>Ballot.</h1>
+          <h2>{App.can3VoteCount}</h2>
           <p>Made with love, Ballot&copy; {new Date().getFullYear()}. All rights reserved. By Malaysians, for Malaysians.</p>
       </section>
     </Container>
@@ -86,34 +92,7 @@ function App() {
     console.log(signedTx);
     const { txId } = await algod.sendRawTransaction(signedTx).do();
     const result = await waitForConfirmation(algod, txId, 2);
-
-  }
-
-  async function checkCounterState() {
-    try {
-      const counter = await algod.getApplicationByID(appIndex).do();
-      if (!!counter.params['global-state'][0].value.uint) {
-        setCurrentCount(counter.params['global-state'][0].value.uint);
-      } else {
-        setCurrentCount(0);
-      }
-    } catch (e) {
-      console.error('There was an error connecting to the algorand node: ', e)
-    }
-  }
-
-  async function checkLocalCounterState() {
-    try {
-      const accountInfo = await algod.accountApplicationInformation(accountAddress,appIndex).do();
-      if (!!accountInfo['app-local-state']['key-value'][0].value.uint) {
-        setLocalCount(accountInfo['app-local-state']['key-value'][0].value.uint);
-      } else {
-        setLocalCount(0);
-      }
-      console.log(accountInfo['app-local-state']['key-value'][0].value.uint);
-    } catch (e) {
-      console.error('There was an error connecting to the algorand node: ', e)
-    }
+    setIsOptIn(true);
   }
 
   async function callCounterApplication(action) {
@@ -135,8 +114,6 @@ function App() {
       console.log(signedTx);
       const { txId } = await algod.sendRawTransaction(signedTx).do();
       const result = await waitForConfirmation(algod, txId, 2);
-      checkCounterState();
-      checkLocalCounterState();
     
     } catch (e) {
       console.error(`There was an error calling the counter app: ${e}`);
