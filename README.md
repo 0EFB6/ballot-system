@@ -34,11 +34,11 @@ For any additional support or concerns, please reach out to our dedicated suppor
 
 ## Demo Guide
 
-Below, you'll find a guide for running a demo of the Ballot platform for both Parliament and State elections.
+Below, you'll find a guide for running a demo of the Ballot platform for both Parliament and State elections. **Node and npm is required** for this dApp to run.
 
 ### Parliament Election Demo
 
-Note: App ID (testnet) used for Parliament Election Demo is `385332013`. Node and npm is required for this dApp to run.
+Note: App ID (testnet) used for Parliament Election Demo is `385332013`. 
 
 To run a demo of the Parliament election on the Ballot platform, follow these steps:
 
@@ -67,6 +67,8 @@ To run a demo of the Parliament election on the Ballot platform, follow these st
    ```
 
 ### State Election Demo
+
+Note: App ID (testnet) used for Parliament Election Demo is `385343477`. 
 
 To run a demo of the State election on the Ballot platform, follow these steps:
 
