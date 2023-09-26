@@ -1,12 +1,10 @@
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import { useEffect, useState } from 'react';
-import App from './App';
 import algosdk, { waitForConfirmation } from 'algosdk';
 
 const appIndex = 382462844;
 const algod = new algosdk.Algodv2('','https://testnet-api.algonode.cloud', 443);
-
 
 export default function Dashboard({optInToApp, isOptIn}) { 
   const [can1VoteCount, setCan1VoteCount] = useState(null);
@@ -14,44 +12,28 @@ export default function Dashboard({optInToApp, isOptIn}) {
   const [can3VoteCount, setCan3VoteCount] = useState(null);
 
   async function checkVoteCountState() {
-    try {
+    try
+    {
       const counter = await algod.getApplicationByID(appIndex).do();
-      //console.log(counter);
-
       let can1Index = -1;
       let can2Index = -1;
       let can3Index = -1;
   
       for (let i = 0; i < counter.params['global-state'].length; i++) {
-        if (counter.params['global-state'][i].key == "QzFWb3Rlcw==") {
-          can1Index = i;
-        }
-        else if (counter.params['global-state'][i].key == "QzJWb3Rlcw==")
-        {
-          can2Index = i;
-        }
-        else if (counter.params['global-state'][i].key == "QzNWb3Rlcw==")
-        {
-          can3Index = i;
-        }
+        if (counter.params['global-state'][i].key == "QzFWb3Rlcw==") can1Index = i;
+        else if (counter.params['global-state'][i].key == "QzJWb3Rlcw==") can2Index = i;
+        else if (counter.params['global-state'][i].key == "QzNWb3Rlcw==") can3Index = i;
       }
 
-      if (can1Index !== -1) {
-        setCan1VoteCount(counter.params['global-state'][can1Index].value.uint);
-      } else {
-        setCan1VoteCount(69);
-      }
-      if (can2Index !== -1) {
-        setCan2VoteCount(counter.params['global-state'][can2Index].value.uint);
-      } else {
-        setCan2VoteCount(6969);
-      }
-      if (can3Index !== -1) {
-        setCan3VoteCount(counter.params['global-state'][can3Index].value.uint);
-      } else {
-        setCan3VoteCount(6996);
-      }
-    } catch (e) {
+      if (can1Index !== -1) setCan1VoteCount(counter.params['global-state'][can1Index].value.uint);
+      else setCan1VoteCount(69);
+      if (can2Index !== -1) setCan2VoteCount(counter.params['global-state'][can2Index].value.uint);
+      else setCan2VoteCount(6969);
+      if (can3Index !== -1) setCan3VoteCount(counter.params['global-state'][can3Index].value.uint);
+      else setCan3VoteCount(6996);
+    }
+    catch (e)
+    {
       console.error('There was an error connecting to the algorand node: ', e);
     }
   }
