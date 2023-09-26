@@ -4,11 +4,10 @@ Welcome to the Ballot Voting System GitHub repository, which acts as a codebase 
 
 ## Table of Contents
 - [About Ballot](#about-ballot)
-- [Getting Started](#getting-started)
   - [Connect Your Pera Wallet](#connect-your-pera-wallet-to-get-started)
-- [Election Results](#election-results)
-- [Security and Privacy](#security-and-privacy)
-- [Support](#support)
+  - [Election Results](#election-results)
+  - [Security and Privacy](#security-and-privacy)
+  - [Support](#support)
 - [Demo Guide](#demo-guide)
   - [Parliament Election](#parliament-election-demo)
   - [State Election](#state-election-demo)
