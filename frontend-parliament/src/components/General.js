@@ -8,9 +8,9 @@ export default function General({callCounterApplication, isConnectedToPeraWallet
     const Number = "P045"
     const State = "Pulau Pinang"
     const Candidates = [
-        {name:'STEVEN SIM CHEE KEONG', party:'PAKATAN HARAPAN (PH)', partyFlag:'https://mysprsemak.spr.gov.my/storage/logo_parti/PH_aCpmiWX717.png',img:'https://scontent.fkul8-3.fna.fbcdn.net/v/t39.30808-6/312231048_680968926727300_7318896265877536756_n.jpg?stp=dst-jpg_p526x296&_nc_cat=104&ccb=1-7&_nc_sid=813123&_nc_ohc=SQkoKwWUSUAAX8EgFpN&_nc_ht=scontent.fkul8-3.fna&oh=00_AfAwzRVOqSSyLwS5H2NepbTT3zuK04WBDwFcFs_zuAHPhw&oe=6512F934' },
+        {name:'STEVEN SIM CHEE KEONG', party:'PAKATAN HARAPAN (PH)', partyFlag:'https://mysprsemak.spr.gov.my/storage/logo_parti/PH_aCpmiWX717.png',img:'https://scontent.fkul3-4.fna.fbcdn.net/v/t39.30808-6/312231048_680968926727300_7318896265877536756_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=813123&_nc_ohc=kpIyJ-RjfCEAX8kNLWb&_nc_ht=scontent.fkul3-4.fna&oh=00_AfD7UalVY17UN_UYWAGFBAQt69PTyK6YlOqfnEAQWHPjFA&oe=651AE234' },
         {name:'AH PANG', party:'BARISAN NASIONAL (BN)', partyFlag:'https://mysprsemak.spr.gov.my/storage/logo_parti/BN.png', img:'https://img.astroawani.com/2022-11/61668486362_TBtanyangpeng.jpg'},
-        {name:'STEVEN KOH', party:'PERIKATAN NASIONAL (PN)', partyFlag:'https://mysprsemak.spr.gov.my/storage/logo_parti/PN.png', img:'https://scontent.fkul8-1.fna.fbcdn.net/v/t39.30808-6/364165315_258115340445733_2823740976136437526_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=a2f6c7&_nc_ohc=yflh_Dw242AAX-NuVGK&_nc_ht=scontent.fkul8-1.fna&oh=00_AfD_7XKhbtp-EJQupQxOvOlAmzuv0EHVopfQT-tNiXEHhg&oe=65138973'}
+        {name:'STEVEN KOH', party:'PERIKATAN NASIONAL (PN)', partyFlag:'https://mysprsemak.spr.gov.my/storage/logo_parti/PN.png', img:'https://scontent.fkul3-2.fna.fbcdn.net/v/t39.30808-6/364165315_258115340445733_2823740976136437526_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=a2f6c7&_nc_ohc=hn9SKs986aYAX-NbiKo&_nc_ht=scontent.fkul3-2.fna&oh=00_AfAq-WBgAR23wZZks3jNi76YiRXGoScT_X09fsPGJTl2jQ&oe=65197833'}
     ]
     return ((!isConnectedToPeraWallet) ? <div className="text-5xl font-bold min-h-screen text-white">You have yet to connect to Pera Wallet or opt in to Ballot.</div> 
     :<Container className="text-white min-h-screen">
