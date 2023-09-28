@@ -13,7 +13,7 @@ import General from './General';
 const peraWallet = new PeraWalletConnect();
 
 // The app ID on testnet
-const appIndex = 393983020;
+const appIndex = 394090783;
 
 // connect to the algorand node
 const algod = new algosdk.Algodv2('','https://testnet-api.algonode.cloud', 443);
