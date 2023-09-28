@@ -38,7 +38,7 @@ Below, you'll find a guide for running a demo of the Ballot platform for both Pa
 
 ### Parliament Election Demo
 
-Note: App ID (testnet) used for Parliament Election Demo is `394090783`. 
+Note: App ID (testnet) used for Parliament Election Demo is `394244713`. 
 
 To run a demo of the Parliament election on the Ballot platform, follow these steps:
 
