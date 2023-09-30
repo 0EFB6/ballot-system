@@ -46,7 +46,7 @@ def voteCandidate2():
             App.localGet(sender, K_VOTE) == Int(0),
             Seq(
                 App.globalPut(K_C2_VOTES, App.globalGet(K_C2_VOTES) + Int(1)),
-                App.localPut(sender, K_VOTE, isVoted + Int(1))
+                App.localPut(sender, K_VOTE, Int(1))
             )
         ),
         Return(Int(1))
@@ -58,7 +58,7 @@ def voteCandidate3():
             App.localGet(sender, K_VOTE) == Int(0),
             Seq(
                 App.globalPut(K_C3_VOTES, App.globalGet(K_C3_VOTES) + Int(1)),
-                App.localPut(sender, K_VOTE, isVoted + Int(1))
+                App.localPut(sender, K_VOTE, Int(1))
             )
         ),
         Return(Int(1))
