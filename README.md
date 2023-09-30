@@ -4,18 +4,23 @@ Welcome to the Ballot Voting System GitHub repository, which acts as a codebase 
 
 ## Table of Contents
 - [About Ballot](#about-ballot)
+- [Key Features](#key-features)
   - [Connect Your Pera Wallet](#connect-your-pera-wallet-to-get-started)
   - [Election Results](#election-results)
   - [Security and Privacy](#security-and-privacy)
   - [Support](#support)
+- [Data on The Blockchain](#data-on-the-blockchain)
+- [Data Off The Blockchain](#data-off-the-blockchain)
 - [Demo Guide](#demo-guide)
   - [Parliament Election](#parliament-election-demo)
   - [State Election](#state-election-demo)
+- [License](#license)
 
 ## About Ballot
 
-Ballot is a trusted voting platform designed to streamline the voting process, allowing users to cast their votes securely and conveniently from their own homes. Here are some key features of Ballot:
+Ballot is a trusted voting platform designed to streamline the voting process, allowing users to cast their votes securely and conveniently from their own homes.
 
+## Key Features
 ### Connect Your Pera Wallet to Get Started
 
 To begin using Ballot, you need to connect your Pera Wallet, which is the wallet for participating in elections. This wallet ensures the security and integrity of your vote based on Algorand Blockchain, and it's your gateway to participating in various elections.
@@ -31,6 +36,10 @@ Your privacy and the security of your vote are top priorities for Ballot. The pl
 ### Support
 
 For any additional support or concerns, please reach out to our dedicated support team. We are committed to providing lightning-fast support and will assist you as soon as possible to address any issues or questions you may have.
+
+## Data on The Blockchain
+
+## Data Off The Blockchain
 
 ## Demo Guide
 
