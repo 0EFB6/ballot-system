@@ -93,7 +93,18 @@ Voting results are announced shortly after the voting period concludes, ensuring
 
 ## Data on The Blockchain
 
+### Voter
+- Vote Status (Have Voted / Have Not Voted)
+- Address of voter
+
+### Global State
+- Candidate's Name
+- Candidate's Party
+- Candidate's Vote Count
+- Seat Details (Seat No, Seat Area, Seat State)
+
 ## Data Off The Blockchain
+- Voter's Details (For e-KYC verification purposes)
 
 ## Demo Guide
 
