@@ -38,7 +38,7 @@ Below, you'll find a guide for running a demo of the Ballot platform for both Pa
 
 ### Parliament Election Demo
 
-Note: App ID (testnet) used for Parliament Election Demo is `396413856`. 
+Note: App ID (testnet) used for Parliament Election Demo is `396413856`, it is already deployed and had been used for the purpose of demo recording (to be included in Video Submission). 
 
 To run a demo of the Parliament election on the Ballot platform, follow these steps:
 
@@ -51,7 +51,7 @@ To run a demo of the Parliament election on the Ballot platform, follow these st
 2. Navigate to the `frontend-parliament` directory.
 
    ```shell
-   cd ballot-system/frontend-parliament
+   cd frontend
    ```
 
 3. Install necessary dependencies.
@@ -68,33 +68,16 @@ To run a demo of the Parliament election on the Ballot platform, follow these st
 
 ### State Election Demo
 
-Note: App ID (testnet) used for Parliament Election Demo is `385343477`. 
+Note: State Election Demo is not included in the Video Submission, feel free to try it out manually. 
 
-To run a demo of the State election on the Ballot platform, follow these steps:
+To run a demo of the State election on the Ballot platform, please navigate to `archive` branch, compile the smart contract located at [`backend -> smart-contract -> contract_state.py`](https://raw.githubusercontent.com/0EFB6/ballot-system/main/backend/smart-contract/contract_state.py), then deploy the smart contract in your preferred way.
 
-1. Clone this GitHub repository to your local machine.
+Modified the App ID in these two files (located in `archive` branch, `frontend-state->src->components` folder):
+- App.js
+- Dashboard.js
 
-   ```shell
-   git clone https://github.com/0EFB6/ballot-system.git
-   ```
+Then run `npm i` and `npm start` in the `frontend-state` directory to test the Election Voting dApp.
 
-2. Navigate to the `frontend-state` directory.
-
-   ```shell
-   cd ballot-system/frontend-state
-   ```
-
-3. Install necessary dependencies.
-
-   ```shell
-   npm i
-   ```
-
-4. Start the Election Voting dApp.
-
-   ```shell
-   npm start
-   ```
 ## License
 
 Ballot© 2023. All rights reserved. By Malaysians, for Malaysians.

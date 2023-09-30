@@ -41,13 +41,11 @@ def voteCandidate1():
     ])
 
 def voteCandidate2():
-    currentVoteCount = App.globalGet(K_C2_VOTES)
-    isVoted = App.localGet(sender, K_VOTE)
     return Seq([
         If(
-            isVoted == Int(0),
+            App.localGet(sender, K_VOTE) == Int(0),
             Seq(
-                App.globalPut(K_C2_VOTES, currentVoteCount + Int(1)),
+                App.globalPut(K_C2_VOTES, App.globalGet(K_C2_VOTES) + Int(1)),
                 App.localPut(sender, K_VOTE, isVoted + Int(1))
             )
         ),
@@ -55,13 +53,11 @@ def voteCandidate2():
     ])
 
 def voteCandidate3():
-    currentVoteCount = App.globalGet(K_C3_VOTES)
-    isVoted = App.localGet(sender, K_VOTE)
     return Seq([
         If(
-            isVoted == Int(0),
+            App.localGet(sender, K_VOTE) == Int(0),
             Seq(
-                App.globalPut(K_C3_VOTES, currentVoteCount + Int(1)),
+                App.globalPut(K_C3_VOTES, App.globalGet(K_C3_VOTES) + Int(1)),
                 App.localPut(sender, K_VOTE, isVoted + Int(1))
             )
         ),
@@ -108,16 +104,22 @@ def approval_program():
         [Txn.on_completion() == OnComplete.DeleteApplication, handle_deleteion],
         [Txn.on_completion() == OnComplete.NoOp, handle_noop]
     )
+
+    # Compile the approval program
     return compileTeal(program, Mode.Application, version=5)
 
 def clear_program():
     program = Return(Int(1))
+
+    # Compile the clear program
     return compileTeal(program, Mode.Application, version=5)
 
-app = open('../artifacts/approval-parliament.teal', 'w')
+
+# Write the compiled program to disk
+app = open('./approval-parliament.teal', 'w')
 app.write(approval_program())
 app.close()
-clear = open('../artifacts/clear-parliament.teal', 'w')
+clear = open('./clear-parliament.teal', 'w')
 clear.write(clear_program())
 clear.close()
-print("Compiled successfully")
+print("Smart contract compiled successfully, you may proceed to deploy the dApp")
