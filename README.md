@@ -1,4 +1,4 @@
-# Ballot Voting System
+# Ballot (Election Voting System)
 
 Welcome to the Ballot Voting System GitHub repository, which acts as a codebase for the Algorand Blockchain Hackathon(Malaysia). Ballot is your trusted voting platform that allows you to easily and securely cast your vote in various elections from the comfort of your own home. This README.md file provides essential information about the platform, its features, and a guide for running a demo of the platform for both Parliament and State elections.
 
