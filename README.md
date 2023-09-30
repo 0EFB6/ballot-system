@@ -15,6 +15,7 @@ Welcome to the Ballot Voting System GitHub repository, which acts as a codebase 
   - [Voter Accessibility](#voter-accessibility)
   - [Queue Time](#queue-time)
   - [Limited Participation](#limited-participation)
+   - [Delay of Results Announcement](#delay-of-results-announcement)
 - [Our Solutions](#our-solutions)
 - [Data on The Blockchain](#data-on-the-blockchain)
 - [Data Off The Blockchain](#data-off-the-blockchain)
