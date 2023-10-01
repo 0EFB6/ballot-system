@@ -104,7 +104,7 @@ Voting results are announced shortly after the voting period concludes, ensuring
 - Seat Details (Seat No, Seat Area, Seat State)
 
 ## Data Off The Blockchain
-- Voter's Details (For e-KYC verification purposes)
+- Voter's Details (For e-KYC verification purposes) - Including IC No, name, age, gender etc.
 
 ## Demo Guide
 
