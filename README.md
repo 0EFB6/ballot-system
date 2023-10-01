@@ -144,7 +144,7 @@ To run a demo of the Parliament election on the Ballot platform, follow these st
 
 Note: State Election Demo is not included in the Video Submission, feel free to try it out manually. 
 
-To run a demo of the State election on the Ballot platform, please navigate to `archive` branch, compile the smart contract located at [`backend -> smart-contract -> contract_state.py`](https://raw.githubusercontent.com/0EFB6/ballot-system/main/backend/smart-contract/contract_state.py), then deploy the smart contract in your preferred way.
+To run a demo of the State election on the Ballot platform, please navigate to `archive` branch, compile the smart contract located at [`backend -> smart-contract -> contract_state.py`](https://raw.githubusercontent.com/0EFB6/ballot-system/archive/backend/smart-contract/contract_state.py), then deploy the smart contract in your preferred way.
 
 Modified the App ID in these two files (located in `archive` branch, `frontend-state->src->components` folder):
 - App.js
