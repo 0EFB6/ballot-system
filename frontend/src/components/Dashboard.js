@@ -3,7 +3,11 @@ import Button from 'react-bootstrap/Button';
 import { useEffect, useState } from 'react';
 import algosdk, { waitForConfirmation } from 'algosdk';
 
-const appIndex = 396413856;
+//const appIndex = 396413856;
+
+//Deployed yesterdat (21 October 2023 for Algohub Hackathon demo purposes)
+const appIndex = 447436774;
+
 const algod = new algosdk.Algodv2('','https://testnet-api.algonode.cloud', 443);
 
 export default function Dashboard({optInToApp, isOptIn}) { 
